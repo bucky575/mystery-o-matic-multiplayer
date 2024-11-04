@@ -527,7 +527,7 @@ class WasMurderedAutopsyClue(AbstractClue):
         return f"Un grito espeluznante de la víctima se escuchó a las {self.time1} o a las {self.time2}"
 
     def string_english(self):
-        return f"A blood-curdling scream of the victim was heard either at {self.time1} or at {self.time2}"
+        return f"A blood-curdling scream from the victim was heard at either {self.time1} or {self.time2}"
 
     def is_incriminating(self, killer, victim, place, time):
         return False
