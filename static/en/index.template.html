@@ -241,9 +241,35 @@
 			<p>
 				<div class="col-12 text-center">
 					<a onclick="clearTable('kitchen:tutorial-1'); clearTable('bathroom:tutorial-1')" class="btn btn-danger" role="button">Clear ♻️</a>
-					<a onclick="checkTutorialTable('kitchen:tutorial-1'); checkTutorialTable('bathroom:tutorial-1')" class="btn btn-info" role="button">Check 🎯</a>
+					<a onclick="checkTutorialTable('kitchen:tutorial-1');" class="btn btn-info" role="button">Check 🎯</a>
 				</div>
 			</p>
+
+			<p>Once we finish with these, other deductions are popping up! These two new ones are based on the fact that characters cannot be in two places at the same time:<br/></p>
+			<p>
+				<ul class="list-group">
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice was NOT in the bathroom at 10:15</li>
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was NOT in the bathroom at 10:15</li>
+				</ul>
+			</p>
+
+			<p>Let's add the missing ones:<br/></p>
+
+			<div class="col-12 text-center">
+				<canvas id="clues-table-kitchen:tutorial-2" oncontextmenu="return false" height="100" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+						Your browser does not support the HTML canvas tag.</canvas>
+			</div>
+			<div class="col-12 text-center">
+				<canvas id="clues-table-bathroom:tutorial-2" oncontextmenu="return false" height="70" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+							Your browser does not support the HTML canvas tag.</canvas>
+			</div>
+			<p>
+				<div class="col-12 text-center">
+					<a onclick="clearTable('kitchen:tutorial-2'); clearTable('bathroom:tutorial-2')" class="btn btn-danger" role="button">Clear ♻️</a>
+					<a onclick="checkTutorialTable('kitchen:tutorial-2'); checkTutorialTable('bathroom:tutorial-2')" class="btn btn-info" role="button">Check 🎯</a>
+				</div>
+			</p>
+
 			<p>An important question still remains: where was Alice at 10:00? The location graph also provides some clues:</p>
 			<div class="text-center">
 				<img src="locations_tutorial.svg" class="mx-auto" style="max-width: 100%; height: 100%;" alt="Location Graph">
@@ -263,11 +289,11 @@
 
 			<p><br/>Using this information, we can complete the clue table:</p>
 			<div class="col-12 text-center">
-					<canvas id="clues-table-kitchen:tutorial-2" height="100" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-kitchen:tutorial-3" height="100" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 							Your browser does not support the HTML canvas tag.</canvas>
 				</div>
 			<div class="col-12 text-center">
-				<canvas id="clues-table-bathroom:tutorial-2" height="70" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+				<canvas id="clues-table-bathroom:tutorial-3" height="70" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
 				<p>
