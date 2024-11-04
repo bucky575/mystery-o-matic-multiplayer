@@ -11,10 +11,6 @@ function showPage(page) {
 	document.getElementById("sleuth-o-meter").style.display = "none";
 	document.getElementById(page).style.display = "block";
 
-	if (emoji) {
-		document.body.innerHTML = emoji.replace_unified(document.body.innerHTML);
-	}
-
 	for (let i = 0; i < tables.length; i++) {
 		tables[i].redraw(true);
 		for (let j = 0; j < data[i].length; j++) {
@@ -22,6 +18,10 @@ function showPage(page) {
 			tables[i].getRow(row).getCells()[col].setValue(value);
 		}
 	}
+
+	/*if (emoji) {
+		document.body.innerHTML = emoji.replace_unified(document.body.innerHTML);
+	}*/
 
 	if (page != "home") {
 		document.getElementById("home-button").style.removeProperty("display");
