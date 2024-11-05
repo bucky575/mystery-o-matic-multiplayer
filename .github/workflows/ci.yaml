@@ -70,6 +70,7 @@ jobs:
         fc-cache -f -v
         fc-conflist
         fc-match -s emoji
+        fc-list | grep -i emoji
 
     - name: Install mystery-o-matic
       run: |
