@@ -68,6 +68,8 @@ jobs:
         mkdir ~/.config/fontconfig
         cp fonts/fonts.conf ~/.config/fontconfig
         fc-cache -f -v
+        fc-conflist
+        fc-match -s emoji
 
     - name: Install mystery-o-matic
       run: |
