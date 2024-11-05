@@ -59,6 +59,7 @@ jobs:
 
     - name: Install fonts
       run: |
+        sudo apt-get remove fonts-noto-color-emoji
         mkdir -p ~/.local/share/fonts
         unzip -u "fonts/Raleway.zip" -d ~/.local/share/fonts
         rm -Rf ~/.local/share/fonts/OFL.txt
