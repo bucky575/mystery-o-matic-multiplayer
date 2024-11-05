@@ -221,6 +221,8 @@ function toggleLinkTheme(usingLightTheme, element) {
 }
 
 function switchTheme() {
+	if (isKindle)
+		return;
 	var currentTheme = document.querySelector("html").getAttribute("data-bs-theme");
 	document.querySelector("html").setAttribute("data-bs-theme", currentTheme == "light" ? "dark" : "light");
 	var usingLightTheme = currentTheme == "light";
