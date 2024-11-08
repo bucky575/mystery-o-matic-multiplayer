@@ -20,14 +20,14 @@ def read_tex_template(filename):
     except UnicodeDecodeError:
         raise ValueError(f"Template file has invalid encoding: {filename}")
 
-def get_bullet_list(elements, name=""):
+def get_bullet_list(elements):
     r = "\\begin{itemize}\n"
     for element in elements:
         r += "\\item " + element + "\n"
     r += "\\end{itemize}"
     return r
 
-def get_enumeration_list(elements, name=""):
+def get_enumeration_list(elements):
     r = "\\begin{enumerate}\n"
     for element in elements:
         r += "\\item " + element + "\n"

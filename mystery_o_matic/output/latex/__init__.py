@@ -76,7 +76,7 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
             sub_bullets.append(clue)
 
         weapon_locations_bullets = mystery.weapon_locations_intro[language]
-        weapon_locations_bullets += get_bullet_list(sub_bullets, language)
+        weapon_locations_bullets += get_bullet_list(sub_bullets)
         bullets.append(weapon_locations_bullets)
         bullets.append(mystery.weapon_locations_outro[language])
 
@@ -87,7 +87,7 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
 
         final_locations_bullets = mystery.final_locations_intro[language]
         final_locations_bullets += get_bullet_list(sub_bullets)
-        bullets.append(final_locations_bullets)
+        #bullets.append(final_locations_bullets)
         bullets.append(NoOneElseStatement().string()[language])
 
         initial_clues = get_bullet_list(bullets)
@@ -119,6 +119,7 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
         args["introLocation"] = introLocation
         args["initialClues"] = initial_clues
         args["additionalClues"] = additional_clues_enumeration
+        args["finalLocations"] = get_bullet_list([final_locations_bullets])
         tables = ""
 
         for i in range(len(locations.weapon_locations.items())):
