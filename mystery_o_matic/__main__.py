@@ -212,7 +212,7 @@ def main() -> int:
     for room, name in locations.names['en'].items():
         print("  * {} is {}".format(room, name))
 
-    print("Solution:")
+    print("Solution:", mystery.get_answer())
     print(" Initial locations:")
     for c, p in mystery.initial_locations:
         print("  * {} was in the {}".format(c, p))

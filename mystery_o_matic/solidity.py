@@ -1,6 +1,7 @@
 from string import Template
-from datetime import timedelta
 from solidity_parser import parser
+from os import makedirs
+from contextlib import suppress
 
 from mystery_o_matic.time import Time
 
@@ -16,6 +17,9 @@ def read_sol_template(filename):
 
 
 def save_solidity(prefix, source):
+    with suppress(OSError):
+        makedirs(prefix)
+
     filename = prefix + "/model.sol"
     with open(filename, "w") as f:
         f.write(source)

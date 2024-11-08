@@ -34,6 +34,19 @@ def get_enumeration_list(elements):
     r += "\\end{enumerate}"
     return r
 
+
+def save_solution(outdir, solution):
+    with suppress(OSError):
+        makedirs(outdir)
+
+    filename = f"{outdir}/solution.txt"
+    try:
+        with open(filename, "w", encoding='utf-8') as f:
+            f.write(solution)
+    except OSError as e:
+        raise RuntimeError(f"Failed to save content to file: {e}")
+
+
 def save_tex(outdir, language, tex):
     output_dir = f"{outdir}/{language}"
     with suppress(OSError):

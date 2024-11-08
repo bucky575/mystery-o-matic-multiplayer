@@ -1,5 +1,5 @@
 from mystery_o_matic.output import create_template
-from mystery_o_matic.output.latex.utils import generate_latex_clue_table, generate_latex_weapons_table, get_bullet_list, get_enumeration_list, read_tex_template, create_tex_template, save_tex, get_char_name, get_emoji_name, replace_emojis
+from mystery_o_matic.output.latex.utils import generate_latex_clue_table, generate_latex_weapons_table, get_bullet_list, get_enumeration_list, read_tex_template, create_tex_template, save_tex, get_char_name, get_emoji_name, replace_emojis, save_solution
 from mystery_o_matic.clues import NoOneElseStatement
 
 def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_labels, locations, story_clue):
@@ -37,6 +37,7 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
         l = create_template("$" + l).substitute(names_txt)
         weapons_map[w] = l
 
+    save_solution(out_dir, mystery.get_answer())
     for language in languages:
 
         if language == "en":
