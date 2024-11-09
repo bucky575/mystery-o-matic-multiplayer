@@ -35,8 +35,9 @@ mystery-o-matic requires the usage of [echidna](https://github.com/crytic/echidn
 
 mystery-o-matic will always generate a fresh mystery to solve, but depending on the output mode (`--mode`) will produce different results:
 
-* `html`: it will generate a local copy of mystery-o-matic.com which contains the description of the case, some clues and the solution.
-* `text`: it will start an interactive version of a murder mystery to solve by specific commands. It can also start a Telegram bot if an API key is provided.
+* `html`: generates a local copy of mystery-o-matic.com which contains the description of the case, some clues and the solution.
+* `text`: starts an interactive version of a murder mystery to solve by specific commands. It can also start a Telegram bot if an API key is provided.
+* `latex`: generates a LaTeX output of the case. It is still very (incomplete)
 
 By default, it will use the `html` output to generate a new mystery in the default scenario:
 
