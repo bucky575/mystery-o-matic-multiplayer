@@ -229,9 +229,12 @@ contract StoryModel {
             if (!changedLocation[Char(char)])
                 return true;
         }
-        emit PoliceArrived(time + 15 minutes);
-        for (uint8 char = 1; char < numChars; char++)
+        time = time + 15 minutes;
+        emit PoliceArrived(time);
+        for (uint8 char = 1; char < numChars; char++) {
             emit FinalLocation(char, uint8(currentLocation[Char(char)]));
+            emit Stayed(char, uint8(currentLocation[Char(char)]), lastMovement[Char(char)], time);
+        }
 
         return false;
     }
