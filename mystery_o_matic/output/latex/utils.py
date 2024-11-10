@@ -34,7 +34,6 @@ def get_enumeration_list(elements):
     r += "\\end{enumerate}"
     return r
 
-
 def save_solution(outdir, solution):
     with suppress(OSError):
         makedirs(outdir)
@@ -45,7 +44,6 @@ def save_solution(outdir, solution):
             f.write(solution)
     except OSError as e:
         raise RuntimeError(f"Failed to save content to file: {e}")
-
 
 def save_tex(outdir, language, tex):
     output_dir = f"{outdir}/{language}"
@@ -78,6 +76,12 @@ def replace_emojis(text):
     no_emojis = no_emojis.replace(":)", "})")
     no_emojis = no_emojis.replace("_", "-")
     return no_emojis
+
+def replace_opening_quotes(text):
+    text = text.replace(' "', " ``")
+    if text.startswith('"'):
+        return "``" + text[1:]
+    return text
 
 def generate_latex_clue_table(name, num_columns, num_rows, include_header = True):
     # Define the LaTeX column specifier string

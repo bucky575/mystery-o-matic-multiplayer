@@ -1,5 +1,5 @@
 from mystery_o_matic.output import create_template
-from mystery_o_matic.output.latex.utils import generate_latex_clue_table, generate_latex_weapons_table, get_bullet_list, get_enumeration_list, read_tex_template, create_tex_template, save_tex, get_char_name, get_emoji_name, replace_emojis, save_solution
+from mystery_o_matic.output.latex.utils import generate_latex_clue_table, generate_latex_weapons_table, get_bullet_list, get_enumeration_list, read_tex_template, create_tex_template, save_tex, get_char_name, get_emoji_name, replace_emojis, replace_opening_quotes, save_solution
 from mystery_o_matic.clues import NoOneElseStatement
 
 def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_labels, locations, story_clue):
@@ -97,6 +97,7 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
 
         for i, clue in enumerate(mystery.additional_clues):
             clue = replace_emojis(create_template(clue[language]).substitute(names_html))
+            clue = replace_opening_quotes(clue)
             additional_clues.append(clue)
 
         additional_clues_enumeration = get_enumeration_list(additional_clues)
