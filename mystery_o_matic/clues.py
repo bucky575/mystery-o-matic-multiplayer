@@ -80,10 +80,10 @@ class FinalLocationsIntroStatement(AbstractStatement):
         self.time = time
 
     def string_english(self):
-        return f"When you arrived at {self.time}:\n"
+        return f"We know where everyone was at {self.time}:\n"
 
     def string_spanish(self):
-        return f"Cuando llegaste, a las {self.time}:\n"
+        return f"Sabemos donde estaban todos a las {self.time}:\n"
 
 class AbstractClue(ABC):
     subject = None

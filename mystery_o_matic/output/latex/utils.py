@@ -20,10 +20,13 @@ def read_tex_template(filename):
     except UnicodeDecodeError:
         raise ValueError(f"Template file has invalid encoding: {filename}")
 
-def get_bullet_list(elements):
+def get_bullet_list(elements, customItem = None):
     r = "\\begin{itemize}\n"
     for element in elements:
-        r += "\\item " + element + "\n"
+        if customItem is not None:
+            r += f"\\item[{customItem}] " + element + "\n"
+        else:
+            r += "\\item " + element + "\n"
     r += "\\end{itemize}"
     return r
 
@@ -83,7 +86,7 @@ def replace_opening_quotes(text):
         return "``" + text[1:]
     return text
 
-def generate_latex_clue_table(name, num_columns, num_rows, include_header = True):
+def generate_latex_clue_table(name, num_columns, num_rows, final_locs, victim, include_header = True):
     # Define the LaTeX column specifier string
     column_spec = '|c|c|' + '|'.join(['>{\\centering}m{0.04\\paperwidth}' for _ in range(num_columns)]) + '|'
 
@@ -111,7 +114,35 @@ def generate_latex_clue_table(name, num_columns, num_rows, include_header = True
 
     # Rows with $$CHAR1, $$CHAR2, $$CHAR3
     for char_num in range(1, num_rows + 1):
-        latex_code += f" & $$CHAR{char_num} & " + " & ".join([""] * num_columns) + " \\tabularnewline\n"
+        latex_code += f" & $$CHAR{char_num} "
+        if char_num % 2:
+            latex_code += " \\cellcolor{gray!20} "
+        else:
+            latex_code += " \\cellcolor{gray!5} "
+
+        latex_code += " & "
+
+        for i in range(num_columns - 1):
+            if char_num % 2:
+                latex_code += " \\cellcolor{gray!20} "
+            else:
+                latex_code += " \\cellcolor{gray!5} "
+            latex_code += " & "
+
+        if ("$CHAR" + str(char_num), "$"+name.replace("REP", "")) in final_locs.items():
+            if victim == "$CHAR" + str(char_num):
+                latex_code += " \\emoji{skull} "
+            else:
+                latex_code += " \\checkmark "
+        else:
+            latex_code += " \\texttt{X} "
+
+        if char_num % 2:
+            latex_code += " \\cellcolor{gray!20} "
+        else:
+            latex_code += " \\cellcolor{gray!5} "
+
+        latex_code += " \\tabularnewline\n"
 
         # Add individual clines for each column in the current row
         if (char_num < 3):
