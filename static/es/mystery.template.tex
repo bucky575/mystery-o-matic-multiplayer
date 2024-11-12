@@ -1,6 +1,6 @@
 \subsection*{\emoji{robot}Beep boop, a new mystery is up}
 
-$$introLocation $$firstClue
+$$firstClue
 
 \begin{mdframed}[style=initialCluesFrameStyle]
 \noindent\begin{minipage}[c]{1\columnwidth}%
@@ -16,23 +16,29 @@ $$introLocation $$firstClue
 \end{mdframed}
 
 \subsubsection*{\emoji{notebook}Detective’s Journal \& Clues}
-\noindent \begin{center}
 
-$$cluesTables
-
-$$weaponsTable
-
-\par\end{center}
 $$additionalClues
-\noindent\ovalbox{\begin{minipage}[t]{1\columnwidth - 2\fboxsep - 0.8pt}%
+
+\pagebreak{}
+
+\noindent\begin{minipage}[c][0.5\textheight]{1\columnwidth}%
+\vfill{}
+
+\noindent \begin{center}
+$$cluesTables
+$$weaponsTable
+\par\end{center}
+\end{minipage}
+
+\noindent\begin{minipage}[c][0.3\textheight]{1\textwidth}%
 \medskip{}
 
 \begin{center}
 \begin{tabular}{ccccc}
 The murderer was... &  & The weapon was... &  & Time of murder was...\tabularnewline
- &  &  &  & \tabularnewline
+    &  &  &  & \tabularnewline
 \cline{1-1} \cline{3-3} \cline{5-5}
- &  &  &  & \tabularnewline
+    &  &  &  & \tabularnewline
 \end{tabular}
 \par\end{center}%
-\end{minipage}}
+\end{minipage}
