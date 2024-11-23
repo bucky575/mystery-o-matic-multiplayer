@@ -11,7 +11,7 @@ from mystery_o_matic.output.html import produce_html_output
 from mystery_o_matic.output.text import produce_text_output
 from mystery_o_matic.output.latex import produce_tex_output
 from mystery_o_matic.echidna import create_outdir
-from mystery_o_matic.location import Locations, get_location_data
+from mystery_o_matic.location import Locations, TutorialLocations, get_location_data
 from mystery_o_matic.weapons import get_available_weapons
 from mystery_o_matic.mystery import Mystery, get_intervals_length_from_events
 from mystery_o_matic.model import Model
@@ -129,6 +129,11 @@ def main() -> int:
     location_name, location_data = get_location_data(args.location)
     print("Location selected is:", location_name)
     weapons_available, weapon_labels = get_available_weapons(number_places, location_name)
+
+    _, tutorial_location_data = get_location_data("mansion")
+    tutorial_locations = TutorialLocations(tutorial_location_data)
+    # Unused for now
+    #tutorial_locations.render_locations(out_dir + "/tutorial")
 
     while True:
         solidity_file = args.scenario

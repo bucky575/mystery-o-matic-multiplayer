@@ -491,3 +491,55 @@ class Locations:
                 activities[generic] = self.activities[concrete]
 
         return activities
+
+class TutorialLocations(Locations):
+    def __init__(self, location_data):
+        self.name = "tutorial"
+        _, names, representations, _ = location_data
+        self.number_places = 4
+        nodes = {}
+        for n in range(self.number_places):
+            nodes[n] = "ROOM" + str(n)
+
+        self.map = nodes
+        self.number_places = len(nodes)
+
+        nodes_list = list(nodes.values())
+        shuffle(nodes_list)
+
+        self.names = names
+        self.indices = {}
+        #self.names = {}
+        self.representations = {}
+
+        self.indices["ROOM0"] = "KITCHEN"
+        self.representations["ROOM0"] = representations["KITCHEN"]
+
+        self.indices["ROOM1"] = "DINING"
+        self.representations["ROOM1"] = representations["DINING"]
+
+        self.indices["ROOM2"] = "BEDROOM"
+        self.representations["ROOM2"] = representations["BEDROOM"]
+
+        self.indices["ROOM3"] = "BATHROOM"
+        self.representations["ROOM3"] = representations["BATHROOM"]
+
+        self.rindices = {v: k for k, v in self.indices.items()}
+        self.graph = self.create_locations_graph(nodes)
+
+    def create_locations_graph(self, nodes):
+        """
+        Creates a graph representing the connections between locations.
+
+        Parameters:
+        - nodes: A dictionary mapping node indices to location names.
+
+        Returns:
+        - graph: The created graph.
+        """
+        graph = Graph()
+        graph.add_edge("ROOM0", "ROOM1")
+        graph.add_edge("ROOM0", "ROOM2")
+        graph.add_edge("ROOM2", "ROOM3")
+        graph = relabel_nodes(graph, nodes)
+        return graph
