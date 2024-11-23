@@ -48,12 +48,12 @@ def save_solution(outdir, solution):
     except OSError as e:
         raise RuntimeError(f"Failed to save content to file: {e}")
 
-def save_tex(outdir, language, tex):
+def save_tex(outdir, language, tex, filename):
     output_dir = f"{outdir}/{language}"
     with suppress(OSError):
         makedirs(output_dir)
 
-    filename = f"{output_dir}/mystery.tex"
+    filename = f"{output_dir}/{filename}"
     try:
         with open(filename, "w", encoding='utf-8') as f:
             f.write(tex)
@@ -65,7 +65,7 @@ def save_tex(outdir, language, tex):
 def get_char_name(name):
     if name == "NOBODY":
         return name
-    return name.capitalize()
+    return "\\textbf{" + name.capitalize() + "}"
 
 def get_emoji_name(emoji_char):
     # Use emoji.demojize to get the name in the format ":emoji_name:"
@@ -156,11 +156,18 @@ def generate_latex_clue_table(name, num_columns, num_rows, final_locs, victim, i
     return latex_code
 
 def generate_latex_weapons_table(number_weapons):
-    latex_code = '\\begin{tabular}{|>{\centering}p{0.172\paperwidth}|>{\centering}p{0.172\paperwidth}|>{\centering}p{0.172\paperwidth}|>{\centering}p{0.172\paperwidth}|}\n'
+    # Dynamically set column format based on number_weapons
+    column_format = '|'.join(['>{\\centering}p{0.172\\paperwidth}'] * number_weapons)
+    latex_code = f'\\begin{{tabular}}{{|{column_format}|}}\n'
+
+    # Add the first row
     latex_code += "\\hline\n"
     for i in range(number_weapons):
         latex_code += f"$$ROOM{i}WEAPONREP & "
 
+    # Remove the last unnecessary "&" and add row end
     latex_code = latex_code[:-2] + " \\tabularnewline\n"
+
+    # Finish the table
     latex_code += "\\hline\n\\end{tabular}\n"
     return latex_code
