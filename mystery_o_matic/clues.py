@@ -125,22 +125,25 @@ class SawWhenArrivingClue(AbstractClue):
     def string_english(self):
         object = self.object
         r = randint(0, 2)
-        s = f'{self.subject} said "'
+        s = f'{self.subject}: "'
 
         if object == "$NOBODY":
+            if (r > 0):
+                s += f'The {self.place} was empty when I arrived at {self.time}"'
+                return s
             r = 0
 
         if r == 0:
-            s += "I saw "
+            s += "Saw "
         elif r == 1:
-            s += "I noticed "
+            s += "Noticed "
         elif r == 2:
-            s += "I spotted "
+            s += "Spotted "
         else:
             raise ValueError("Invalid random number: " + str(r))
 
         if not self.object_is_alive:
-            s += "the body of "
+            return f'{self.subject}: "I was horrified to discover {self.object}\'s body when I arrived to the {self.place} at {self.time}"'
 
         if self.foggy and self.object_is_alive:
             if object != "$NOBODY":
@@ -218,18 +221,17 @@ class NotSawWhenArrivingLeavingClue(AbstractClue):
 
     def string_english(self):
         r = randint(0, 2)
-        s = f'{self.subject} said: "'
+        s = f'{self.subject}: "'
 
         if r == 0:
-            s += ""
+            s += f'I\'m sure {self.object} was not with me in the {self.place} at {self.time}"'
         elif r == 1:
-            s += "I think "
+            s += f'I know {self.object} was not with me in the {self.place} at {self.time}"'
         elif r == 2:
-            s += "I'm sure "
+            s += f'{self.object} definitely was not with me in the {self.place} at {self.time}"'
         else:
             raise ValueError("Invalid random number: " + str(r))
 
-        s += f'{self.object} was not with me in the {self.place} at {self.time}"'
         return s
 
     def is_incriminating(self, killer, victim, place, time):
@@ -249,7 +251,7 @@ class SawVictimWhenArrivingClue(AbstractClue):
         super().__init__()
 
     def string_english(self):
-        s = f'{self.subject} said: "I saw '
+        s = f'{self.subject}: "Saw '
         if not self.object_is_alive:
             # This should never happen, since the victim produced this clue
             # when they were alive
@@ -292,7 +294,7 @@ class SawVictimWhenLeavingClue(AbstractClue):
         super().__init__()
 
     def string_english(self):
-        s = f'{self.subject} said: "I saw {self.object} leaving the {self.place} at {self.time}"'
+        s = f'{self.subject}: "Saw {self.object} leaving the {self.place} at {self.time}"'
         return s
 
     def string_spanish(self):
@@ -318,22 +320,25 @@ class SawWhenLeavingClue(AbstractClue):
     def string_english(self):
         object = self.object
         r = randint(0, 2)
-        s = f'{self.subject} said "'
+        s = f'{self.subject}: "'
 
         if object == "$NOBODY":
+            if (r > 0):
+                s += f'The {self.place} was empty when I left it at {self.time}"'
+                return s
             r = 0
 
         if r == 0:
-            s += "I saw "
+            s += "Saw "
         elif r == 1:
-            s += "I noticed "
+            s += "Noticed "
         elif r == 2:
-            s += "I spotted "
+            s += "Spotted "
         else:
             raise ValueError("Invalid random number: " + str(r))
 
         if not self.object_is_alive:
-            s += "the body of "
+            s = f'{self.subject}: "I was shocked to see the body of '
 
         if self.foggy and self.object_is_alive:
             if object != "$NOBODY":
@@ -424,18 +429,17 @@ class NotSawWhenLeavingClue(AbstractClue):
 
     def string_english(self):
         r = randint(0, 2)
-        s = f'{self.subject} said: "'
+        s = f'{self.subject}: "'
 
         if r == 0:
-            s += ""
+            s += f'{self.object} was not with me in the {self.place} at {self.time}"'
         elif r == 1:
-            s += "I think "
+            s += f'Not in the {self.place}, no. {self.object} was not there at {self.time}"'
         elif r == 2:
-            s += "I'm sure "
+            s += f'I was in the {self.place} at {self.time} but {self.object} was not there with me."'
         else:
             raise ValueError("Invalid random number: " + str(r))
 
-        s += f'{self.object} was not with me in the {self.place} at {self.time}"'
         return s
 
     def is_incriminating(self, killer, victim, place, time):
@@ -614,15 +618,17 @@ class StayedClue(AbstractClue):
 
     def string_english(self):
         r = randint(0, 2)
-
+        s = f'{self.subject}: "'
         if r == 0:
-            return f'{self.subject} said: "I was in the {self.place} from {self.time_start} to {self.time_end}"'
+            s += f'I was in the {self.place} from {self.time_start} to {self.time_end}"'
         elif r == 1:
-            return f'"I was in the {self.place} from {self.time_start} to {self.time_end}" stated {self.subject}'
+            s += f'I did not move from the {self.place} between {self.time_start} and {self.time_end}"'
         elif r == 2:
-            return f'"I stayed in the {self.place} from {self.time_start} to {self.time_end}" claimed {self.subject}'
+            s += f'Stayed in the {self.place} from {self.time_start} to {self.time_end}"'
         else:
             raise ValueError("Invalid random number: " + str(r))
+
+        return s
 
     def is_incriminating(self, killer, victim, place, time):
         if (
@@ -650,13 +656,11 @@ class InteractedClue(AbstractClue):
         return f'{self.subject0} dijo: "Hablé con {self.subject1} en {self.place}"'
 
     def string_english(self):
-        r = randint(0, 2)
+        r = randint(0, 1)
         if r == 0:
-            return f'{self.subject0} said: "I talked with {self.subject1} in the {self.place}"'
+            return f'{self.subject0}: "I talked with {self.subject1} in the {self.place}"'
         elif r == 1:
-            return f'"I talked with {self.subject1} in the {self.place}" said {self.subject0}'
-        elif r == 2:
-            return f'{self.subject0} said: "I chatted with {self.subject1} in the {self.place}"'
+            return f'{self.subject0}: "I chatted with {self.subject1} in the {self.place}"'
         else:
             raise ValueError("Invalid random number: " + str(r))
 
@@ -693,14 +697,7 @@ class HeardClue(AbstractClue):
             raise ValueError("Invalid random number: " + str(r))
 
     def string_english(self):
-        r = randint(0, 1)
-
-        if r == 0:
-            return f'{self.subject} said: "I {self.activity["en"]} at {self.time}"'
-        elif r == 1:
-            return f'"I {self.activity["en"]} at {self.time}" said {self.subject}'
-        else:
-            raise ValueError("Invalid random number: " + str(r))
+        return f'{self.subject}: "I {self.activity["en"]} at {self.time}"'
 
     def is_incriminating(self, killer, victim, place, time):
         return False
