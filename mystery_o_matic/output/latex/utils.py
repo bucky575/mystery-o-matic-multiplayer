@@ -116,17 +116,17 @@ def generate_latex_clue_table(name, num_columns, num_rows, final_locs, victim, i
     for char_num in range(1, num_rows + 1):
         latex_code += f" & $$CHAR{char_num} "
         if char_num % 2:
-            latex_code += " \\cellcolor{gray!20} "
+            latex_code += " \\cellcolor{Dark-Gray-Table} "
         else:
-            latex_code += " \\cellcolor{gray!5} "
+            latex_code += " \\cellcolor{Light-Gray-Table} "
 
         latex_code += " & "
 
         for i in range(num_columns - 1):
             if char_num % 2:
-                latex_code += " \\cellcolor{gray!20} "
+                latex_code += " \\cellcolor{Dark-Gray-Table} "
             else:
-                latex_code += " \\cellcolor{gray!5} "
+                latex_code += " \\cellcolor{Light-Gray-Table} "
             latex_code += " & "
 
         if ("$CHAR" + str(char_num), "$"+name.replace("REP", "")) in final_locs.items():
@@ -138,9 +138,9 @@ def generate_latex_clue_table(name, num_columns, num_rows, final_locs, victim, i
             latex_code += " \\texttt{X} "
 
         if char_num % 2:
-            latex_code += " \\cellcolor{gray!20} "
+            latex_code += " \\cellcolor{Dark-Gray-Table} "
         else:
-            latex_code += " \\cellcolor{gray!5} "
+            latex_code += " \\cellcolor{Light-Gray-Table} "
 
         latex_code += " \\tabularnewline\n"
 
