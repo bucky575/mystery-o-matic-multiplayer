@@ -69,7 +69,7 @@ class Mystery:
         self.weapon_locations = weapon_locations
         self.number_characters = len(initial_locations)
 
-        self.initial_time = Time(str(choice(range(1, 9))) + ":00")
+        self.initial_time = Time(str(choice(range(1, 7))) + ":00")
 
         for tx in txs:
             self.solution.append(get_tx(self.source, "StoryModel", tx))

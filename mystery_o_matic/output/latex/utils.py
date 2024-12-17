@@ -88,7 +88,7 @@ def replace_opening_quotes(text):
 
 def generate_latex_clue_table(name, num_columns, num_rows, final_locs, victim, include_header = True):
     # Define the LaTeX column specifier string
-    column_spec = '|c|c|' + '|'.join(['>{\\centering}m{0.04\\paperwidth}' for _ in range(num_columns)]) + '|'
+    column_spec = '|c|c|' + '|'.join(['>{\\centering}m{0.035\\paperwidth}' for _ in range(num_columns)]) + '|'
 
     # Start building the LaTeX table code
     latex_code = "\\begin{tabular}{" + column_spec + "}\n\\hline\n"
@@ -157,7 +157,14 @@ def generate_latex_clue_table(name, num_columns, num_rows, final_locs, victim, i
 
 def generate_latex_weapons_table(number_weapons):
     # Dynamically set column format based on number_weapons
-    column_format = '|'.join(['>{\\centering}p{0.172\\paperwidth}'] * number_weapons)
+    page_width = None
+
+    if number_weapons == 5:
+        page_width = 0.12
+    else:
+        page_width = 0.172
+
+    column_format = '|'.join(['>{\\centering}p{' + str(page_width) + '\\paperwidth}'] * number_weapons)
     latex_code = f'\\begin{{tabular}}{{|{column_format}|}}\n'
 
     # Add the first row
