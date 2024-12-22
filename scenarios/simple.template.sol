@@ -200,6 +200,9 @@ contract StoryModel {
         require(currentLocation[Char(killer)] == currentLocation[Char(victim)]);
         require(currentLocation[Char(victim)] == finalLocation[Char(victim)]);
 
+        require(changedLocation[Char(killer)]);
+        require(changedLocation[Char(victim)]);
+
         // No one is here, except victim and killer
         for (uint8 c = 1; c < numChars; c++) {
             if (c == killer || c == victim) continue;

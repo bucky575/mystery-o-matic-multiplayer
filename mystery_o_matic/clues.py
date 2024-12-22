@@ -217,10 +217,22 @@ class NotSawWhenArrivingLeavingClue(AbstractClue):
         super().__init__()
 
     def string_spanish(self):
-        return f'{self.subject} dijo: "No recuerdo que {self.object} estuviese conmigo en {self.place} a las {self.time}"'
+        r = randint(0, 2)
+        s = f'{self.subject}: "'
+
+        if r == 0:
+            s += f'Estoy seguro que {self.object} no estaba conmigo en {self.place} a las {self.time}"'
+        elif r == 1:
+            s += f'Se que {self.object} no estaba conmigo en {self.place} a las {self.time}"'
+        elif r == 2:
+            s += f'{self.object} definitivamente no estaba conmigo en {self.place} a las {self.time}"'
+        else:
+            raise ValueError("Invalid random number: " + str(r))
+
+        return s
 
     def string_english(self):
-        r = randint(0, 2)
+        r = randint(0, 5)
         s = f'{self.subject}: "'
 
         if r == 0:
@@ -229,16 +241,29 @@ class NotSawWhenArrivingLeavingClue(AbstractClue):
             s += f'I know {self.object} was not with me in the {self.place} at {self.time}"'
         elif r == 2:
             s += f'{self.object} definitely was not with me in the {self.place} at {self.time}"'
+        elif r == 3:
+            s += f'{self.object} was not with me in the {self.place} at {self.time}"'
+        elif r == 4:
+            s += f'Not in the {self.place}, no. {self.object} was not there with me at {self.time}"'
+        elif r == 5:
+            s += f'I was in the {self.place} at {self.time} but {self.object} was not there with me."'
         else:
             raise ValueError("Invalid random number: " + str(r))
 
         return s
 
     def is_incriminating(self, killer, victim, place, time):
+        # The subject is revealing that the object was not with them
+        # so if the subject is the killer, the place is the crime scene
+        # and the time is the time of the murder or later, then it is incriminating
+        if (self.subject == killer and self.place == place):
+            return True
         return False
 
     def manipulate(self, killer, victim, alibi_place):
-        raise ValueError("Invalid manipulation: " + str(self))
+        # we could manipulate this clue, but it will produce many false statements from the killer
+        # which will be much easier to detect
+        return None
 
 
 class SawVictimWhenArrivingClue(AbstractClue):
@@ -272,7 +297,7 @@ class SawVictimWhenArrivingClue(AbstractClue):
         return s
 
     def is_incriminating(self, killer, victim, place, time):
-        if self.subject == killer and self.object == victim:
+        if self.subject == killer and self.object == victim and self.place == place:
             return True
         return False
 
@@ -401,53 +426,6 @@ class SawWhenLeavingClue(AbstractClue):
 
             return self
         raise ValueError("Invalid manipulation: " + str(self))
-
-
-class NotSawWhenLeavingClue(AbstractClue):
-    def __init__(self, subject, object, place, time):
-        self.subject = subject
-        self.object = object
-        self.place = place
-        self.time = time
-        super().__init__()
-
-    def string_spanish(self):
-        r = randint(0, 2)
-        s = f'{self.subject} dijo: "'
-
-        if r == 0:
-            s += ""
-        elif r == 1:
-            s += "Recuerdo que "
-        elif r == 2:
-            s += "Estoy seguro que "
-        else:
-            raise ValueError("Invalid random number: " + str(r))
-
-        s += f'{self.object} no estaba conmigo en {self.place} a las {self.time}"'
-        return s
-
-    def string_english(self):
-        r = randint(0, 2)
-        s = f'{self.subject}: "'
-
-        if r == 0:
-            s += f'{self.object} was not with me in the {self.place} at {self.time}"'
-        elif r == 1:
-            s += f'Not in the {self.place}, no. {self.object} was not there at {self.time}"'
-        elif r == 2:
-            s += f'I was in the {self.place} at {self.time} but {self.object} was not there with me."'
-        else:
-            raise ValueError("Invalid random number: " + str(r))
-
-        return s
-
-    def is_incriminating(self, killer, victim, place, time):
-        return False
-
-    def manipulate(self, killer, victim, alibi_place):
-        raise ValueError("Invalid manipulation: " + str(self))
-
 
 class WasMurderedClue(AbstractClue):
     def __init__(self, victim, place, time):
@@ -675,7 +653,7 @@ class InteractedClue(AbstractClue):
         return False
 
     def manipulate(self, killer, victim, alibi_place):
-        return None # This clue is not incriminating to lie, just omitting information
+        return None # This clue is not incriminating enough to lie, just omitting information
 
 class HeardClue(AbstractClue):
     def __init__(self, subject, activity, time):
