@@ -135,7 +135,7 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
         tables = ""
 
         for i in range(len(locations.weapon_locations.items())):
-            tables += generate_latex_clue_table(f"ROOM{i}REP", len(intervals), len(mystery.get_characters()), mystery.final_locations, mystery.victim, i == 0) + "\n"
+            tables += generate_latex_clue_table(f"ROOM{i}REP", len(intervals), mystery.get_characters(), mystery.final_locations, mystery.victim, i == 0) + "\n"
 
         args["cluesTables"] = tables
         args["weaponsTable"] = generate_latex_weapons_table(len(weapons_options))

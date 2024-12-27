@@ -86,7 +86,8 @@ def replace_opening_quotes(text):
         return "``" + text[1:]
     return text
 
-def generate_latex_clue_table(name, num_columns, num_rows, final_locs, victim, include_header = True):
+def generate_latex_clue_table(name, num_columns, char_names, final_locs, victim, include_header = True):
+    num_rows = len(char_names)
     # Define the LaTeX column specifier string
     column_spec = '|c|c|' + '|'.join(['>{\\centering}m{0.035\\paperwidth}' for _ in range(num_columns)]) + '|'
 
@@ -112,10 +113,13 @@ def generate_latex_clue_table(name, num_columns, num_rows, final_locs, victim, i
             latex_code += f"\\cline{{{col}-{num_columns + 2}}} "
         latex_code += "\n"
 
+    # Sort the characters by name
+    char_nums = sorted(range(1, num_rows + 1), key=lambda k: char_names[k - 1])
     # Rows with $$CHAR1, $$CHAR2, $$CHAR3
-    for char_num in range(1, num_rows + 1):
+    for char_index, char_num in enumerate(char_nums):
+        char_index += 1 # Start from dark gray row
         latex_code += f" & $$CHAR{char_num} "
-        if char_num % 2:
+        if char_index % 2:
             latex_code += " \\cellcolor{Dark-Gray-Table} "
         else:
             latex_code += " \\cellcolor{Light-Gray-Table} "
@@ -123,7 +127,7 @@ def generate_latex_clue_table(name, num_columns, num_rows, final_locs, victim, i
         latex_code += " & "
 
         for i in range(num_columns - 1):
-            if char_num % 2:
+            if char_index % 2:
                 latex_code += " \\cellcolor{Dark-Gray-Table} "
             else:
                 latex_code += " \\cellcolor{Light-Gray-Table} "
@@ -137,7 +141,7 @@ def generate_latex_clue_table(name, num_columns, num_rows, final_locs, victim, i
         else:
             latex_code += " \\texttt{X} "
 
-        if char_num % 2:
+        if char_index % 2:
             latex_code += " \\cellcolor{Dark-Gray-Table} "
         else:
             latex_code += " \\cellcolor{Light-Gray-Table} "
@@ -145,7 +149,7 @@ def generate_latex_clue_table(name, num_columns, num_rows, final_locs, victim, i
         latex_code += " \\tabularnewline\n"
 
         # Add individual clines for each column in the current row
-        if (char_num < 3):
+        if (char_index < 3):
             for col in range(2, num_columns + 2):
                 latex_code += f"\\cline{{{col}-{num_columns + 2}}} "
             latex_code += "\n"

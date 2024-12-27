@@ -4,7 +4,7 @@ all_weapons = [
     {"$PISTOL": "🔫"},
     {"$KNIFE": "🔪", "$SCISSORS": "✂️", "$AXE": "🪓", "$SCREWDRIVER": "🪛"},
     {"$POISON": "⚗️"},
-    {"$HAMMER": "🔨", "$WRENCH": "🔧", "$CANDELABRUM": "🕯️"},
+    {"$HAMMER": "🔨", "$WRENCH": "🔧", "$CANDELSTICK": "🕯️"},
     {"$ROPE": "🪢", "$CHAIN": "⛓️"},
 ]
 
@@ -19,7 +19,7 @@ weapon_labels['en'] = {
     "$POISON": "poison",
     "$HAMMER": "hammer",
     "$WRENCH": "wrench",
-    "$CANDELABRUM": "candelabrum",
+    "$CANDELSTICK": "candelstick",
     "$ROPE": "rope",
     "$CHAIN": "chain",
     "$ARCHERY_BOW": "archery bow",
@@ -39,7 +39,7 @@ weapon_labels['es'] = {
     "$POISON": "el veneno",
     "$HAMMER": "el martillo",
     "$WRENCH": "la llave inglesa",
-    "$CANDELABRUM": "el candelabro",
+    "$CANDELSTICK": "el candelabro",
     "$ROPE": "la soga",
     "$CHAIN": "la cadena",
     "$ARCHERY_BOW": "el arco",
@@ -54,7 +54,7 @@ ship_weapons = [
     {"$ARCHERY_BOW": "🏹"},
     {"$DAGGER": "🗡️", "$TRIDENT": "🔱", "$SWORD": "⚔️"},
     {"$POISON": "⚗️"},
-    {"$HAMMER": "🔨", "$WRENCH": "🔧", "$CANDELABRUM": "🕯️"},
+    {"$HAMMER": "🔨", "$WRENCH": "🔧", "$CANDELSTICK": "🕯️"},
     {"$ROPE": "🪢", "$CHAIN": "⛓️"},
 ]
 
@@ -62,7 +62,7 @@ ancient_egypt_weapons = [
     {"$ARCHERY_BOW": "🏹"},
     {"$DAGGER": "🗡️"},
     {"$POISON": "⚗️", "$CURSE": "📜"},
-    {"$ROCK": "🪨", "$CANDELABRUM": "🕯️"},
+    {"$ROCK": "🪨", "$CANDELSTICK": "🕯️"},
     {"$ROPE": "🪢", "$CHAIN": "⛓️"},
 ]
 
@@ -70,7 +70,7 @@ medieval_castle_weapons = [
     {"$ARCHERY_BOW": "🏹"},
     {"$DAGGER": "🗡️", "$TRIDENT": "🔱", "$SWORD": "⚔️"},
     {"$POISON": "⚗️"},
-    {"$ROCK": "🪨", "$CANDELABRUM": "🕯️"},
+    {"$ROCK": "🪨", "$CANDELSTICK": "🕯️"},
     {"$ROPE": "🪢", "$CHAIN": "⛓️"},
 ]
 
@@ -130,7 +130,7 @@ def get_weapon_type(weapon):
         weapon == "$ROCK"
         or weapon == "$HAMMER"
         or weapon == "$WRENCH"
-        or weapon == "$CANDELABRUM"
+        or weapon == "$CANDELSTICK"
     ):
         return "blunt force"
     else:
