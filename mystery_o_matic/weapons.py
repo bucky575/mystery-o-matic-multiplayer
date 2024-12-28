@@ -1,6 +1,6 @@
 from random import shuffle, choice
 
-all_weapons = [
+classic_weapons = [
     {"$PISTOL": "🔫"},
     {"$KNIFE": "🔪", "$SCISSORS": "✂️", "$AXE": "🪓", "$SCREWDRIVER": "🪛"},
     {"$POISON": "⚗️"},
@@ -27,7 +27,9 @@ weapon_labels['en'] = {
     "$TRIDENT": "trident",
     "$SWORD": "sword",
     "$ROCK": "rock",
-    "$CURSE": "curse"
+    "$CURSE": "curse",
+    "$WIRE": "wire extension",
+    "$SONICBLASTER": "sonic blaster"
 }
 
 weapon_labels['es'] = {
@@ -47,7 +49,9 @@ weapon_labels['es'] = {
     "$TRIDENT": "el tridente",
     "$SWORD": "la espada",
     "$ROCK": "la roca",
-    "$CURSE": "la maldición"
+    "$CURSE": "la maldición",
+    "$WIRE": "el cable alargador",
+    "$SONICBLASTER": "el arma sónica"
 }
 
 ship_weapons = [
@@ -77,15 +81,15 @@ medieval_castle_weapons = [
 space_station_weapons = [
     {"$PISTOL": "🔫"},
     {"$KNIFE": "🔪", "$SCISSORS": "✂️", "$AXE": "🪓", "$SCREWDRIVER": "🪛"},
-    {"$POISON": "⚗️"},
+    {"$POISON": "⚗️", "$SONICBLASTER": "🔊"},
     {"$HAMMER": "🔨", "$WRENCH": "🔧"},
-    {"$ROPE": "🪢", "$CHAIN": "⛓️"},
+    {"$ROPE": "🪢", "$WIRE": "🔌"}
 ]
 
 def get_available_weapons(num_weapons, location_name):
 
     if location_name == "mansion":
-        weapons_sets = all_weapons[:]
+        weapons_sets = classic_weapons[:]
     elif location_name == "ship":
         weapons_sets = ship_weapons[:]
     elif location_name == "egypt":
@@ -93,7 +97,7 @@ def get_available_weapons(num_weapons, location_name):
     elif location_name == "castle":
         weapons_sets = medieval_castle_weapons[:]
     elif location_name == "train":
-        weapons_sets = all_weapons[:]
+        weapons_sets = classic_weapons[:]
     elif location_name == "space station":
         weapons_sets = space_station_weapons[:]
     else:
@@ -112,7 +116,7 @@ def get_available_weapons(num_weapons, location_name):
 def get_weapon_type(weapon):
     if weapon == "$PISTOL" or weapon == "$ARCHERY_BOW":
         return "projectile"
-    elif weapon == "$ROPE" or weapon == "$CHAIN":
+    elif weapon == "$ROPE" or weapon == "$CHAIN" or weapon == "$WIRE":
         return "strangulation"
     elif (
         weapon == "$KNIFE"
@@ -124,7 +128,7 @@ def get_weapon_type(weapon):
         or weapon == "$SWORD"
     ):
         return "sharp force"
-    elif weapon == "$POISON" or weapon == "$CURSE":
+    elif weapon == "$POISON" or weapon == "$CURSE" or weapon == "$SONICBLASTER":
         return "poisoning"
     elif (
         weapon == "$ROCK"

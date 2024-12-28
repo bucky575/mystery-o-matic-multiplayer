@@ -707,9 +707,9 @@ class WeaponNotUsedClue(AbstractClue):
         elif weapon_type == "sharp force":
             return s + "que no había puñaladas."
         elif weapon_type == "poisoning":
-            return s + " que " + weapon + " no era el arma homicida."
+            return s + "que " + weapon + " no era el arma homicida."
         elif weapon_type == "blunt force":
-            return s + " que no había signos de una contusión mortal."
+            return s + "que no había signos de una contusión mortal."
         else:
             raise ValueError("Unknown type of weapon: " + weapon)
 
@@ -732,9 +732,9 @@ class WeaponNotUsedClue(AbstractClue):
         elif weapon_type == "sharp force":
             return s + "no signs of stabbing."
         elif weapon_type == "poisoning":
-            return s + " that the " + weapon + " was not the murderer weapon."
+            return s + "that the " + weapon + " was not the murderer weapon."
         elif weapon_type == "blunt force":
-            return s + " no signs of contusion."
+            return s + "no signs of contusion."
         else:
             raise ValueError("Unknown type of weapon: " + weapon)
 
