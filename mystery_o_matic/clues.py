@@ -190,6 +190,8 @@ class SawWhenArrivingClue(AbstractClue):
     def is_incriminating(self, killer, victim, place, time):
         if self.subject == killer and self.object == victim:
             return True
+        if self.subject == killer and self.place == place and self.time.seconds <= time.seconds:
+            return True
         return False
 
     def manipulate(self, killer, victim, alibi_place):
@@ -205,6 +207,7 @@ class SawWhenArrivingClue(AbstractClue):
             self.place = alibi_place
 
             return self
+        return None
         raise ValueError("Invalid manipulation: " + str(self))
 
 

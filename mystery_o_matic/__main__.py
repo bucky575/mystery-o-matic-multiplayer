@@ -71,6 +71,10 @@ def main() -> int:
     parser.add_argument(
         "--location", action="store", default=None, help="use a specific location"
     )
+    parser.add_argument(
+        "--nmoves", type=int, action="store", default=1, help="minimum number of moves"
+    )
+
     parser.add_argument("--mode", action="store", default="html", help="output mode")
 
     parser.add_argument(
@@ -109,6 +113,12 @@ def main() -> int:
     max_time_slots = args.max_time_slots
     telegram_api_key = args.telegram_api_key
 
+    if args.nmoves < 1:
+        print("Invalid number of moves")
+        return -1
+
+    nmoves = args.nmoves
+
     # Check if the mode is valid
     if mode not in ["html", "text", "latex"]:
         print("Invalid mode", mode)
@@ -143,7 +153,7 @@ def main() -> int:
         weapon_locations = locations.weapon_locations
         activities = locations.get_activities()
 
-        model = Model("StoryModel", locations, out_dir, solidity_file)
+        model = Model("StoryModel", locations, nmoves, out_dir, solidity_file)
         model.generate_enums(number_characters)
         (initial_locations_pairs, used_weapon_location) = model.generate_conditions()
         solidity_file = model.generate_solidity()

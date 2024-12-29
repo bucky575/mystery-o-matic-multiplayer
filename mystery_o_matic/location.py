@@ -115,7 +115,7 @@ egypt_labels['en'] = {
 
 egypt_labels['es'] = {
     "THRONE ROOM": "el cuarto del trono",
-    "BURIAL PLACE": "la camara funeraria",
+    "BURIAL PLACE": "la cámara funeraria",
     "TEMPLE": "el templo",
     "DESERT": "el desierto",
     "GARDEN": "el jardín",

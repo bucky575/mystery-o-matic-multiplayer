@@ -89,7 +89,7 @@ def replace_opening_quotes(text):
 def generate_latex_clue_table(name, num_columns, char_names, final_locs, victim, include_header = True):
     num_rows = len(char_names)
     # Define the LaTeX column specifier string
-    column_spec = '|c|c|' + '|'.join(['>{\\centering}m{0.035\\paperwidth}' for _ in range(num_columns)]) + '|'
+    column_spec = '|>{\\centering}m{0.025\\paperwidth}|c|' + '|'.join(['>{\\centering}m{0.030\\paperwidth}' for _ in range(num_columns)]) + '|'
 
     # Start building the LaTeX table code
     latex_code = "\\begin{tabular}{" + column_spec + "}\n\\hline\n"
@@ -100,12 +100,12 @@ def generate_latex_clue_table(name, num_columns, char_names, final_locs, victim,
     if (include_header):
         multirow_number += 1
 
-    latex_code += "\\multirow{ "+ str(multirow_number) + "}{*}{ $$" + name + " } "
+    latex_code += "\\multirow{ "+ str(multirow_number) + "}{*}{ \\negthickspace{}$$" + name + " } "
 
     if (include_header):
-        latex_code += "& \\emoji{mantelpiece-clock} & "
+        latex_code += "& {\\footnotesize{}\\emoji{mantelpiece-clock}} & "
         # Add the $$TIME elements in the first row
-        time_cells = [f"$$TIME{i}" for i in range(num_columns)]
+        time_cells = ["{\\footnotesize{}"+  f"$$TIME{i}" + "}" for i in range(num_columns)]
         latex_code += " & ".join(time_cells) + " \\tabularnewline\n"
 
         # Add individual clines for each column from the second to the last
@@ -118,7 +118,7 @@ def generate_latex_clue_table(name, num_columns, char_names, final_locs, victim,
     # Rows with $$CHAR1, $$CHAR2, $$CHAR3
     for char_index, char_num in enumerate(char_nums):
         char_index += 1 # Start from dark gray row
-        latex_code += f" & $$CHAR{char_num} "
+        latex_code += "& {\\footnotesize{}" + f" $$CHAR{char_num} " + "}"
         if char_index % 2:
             latex_code += " \\cellcolor{Dark-Gray-Table} "
         else:

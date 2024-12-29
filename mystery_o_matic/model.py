@@ -34,9 +34,10 @@ class Model:
     number_characters = 0
     char_enum = ""
 
-    def __init__(self, contract_name, locations, outdir, solidity_file):
+    def __init__(self, contract_name, locations, nmoves, outdir, solidity_file):
         self.contract_name = contract_name
         self.locations = locations
+        self.nmoves = nmoves
         self.outdir = outdir
         # self.source = read_solidity(solidity_file)
         self.template = read_sol_template(solidity_file)
@@ -69,7 +70,7 @@ class Model:
         self.initial_locations_conditions = self.generate_location_conditions(
             initial_locations_pairs, "currentLocation"
         )
-
+        self.minNumberOfMoves = f"minNumberOfMoves = {self.nmoves};"
         return (initial_locations_pairs, self.used_weapon_location)
 
     def generate_solidity(self):
@@ -79,6 +80,7 @@ class Model:
             locationWeapon=self.weapon_location_condition,
             charEnum=self.char_enum,
             placeEnum=self.place_enum,
+            minNumberOfMoves=self.minNumberOfMoves
         )
         solidity_filename = save_solidity(self.outdir, solidity_source)
         self.source = read_solidity(solidity_filename)

@@ -47,7 +47,7 @@ contract StoryModel {
         //$currentLocations
 
         //$locationWeapon
-        minNumberOfMoves = 1;
+        //$minNumberOfMoves
         // End of generated code
     }
 
@@ -124,7 +124,6 @@ contract StoryModel {
 
     function stay() internal {
         time = time + 15 minutes;
-        numberOfMoves++;
 
         for (uint8 c0 = 1; c0 < numChars; c0++) {
             for (uint8 c1 = c0; c1 < numChars; c1++) {
