@@ -224,7 +224,7 @@ def main() -> int:
         print("  * {} is {}".format("CHAR" + str(i + 1), char.lower()))
 
     print("Locations:")
-    for room, name in locations.names['en'].items():
+    for room, name in locations.indices.items():
         print("  * {} is {}".format(room, name))
 
     print("Solution:", mystery.get_answer())

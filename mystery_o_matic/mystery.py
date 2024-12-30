@@ -193,11 +193,15 @@ class Mystery:
 
         # The killer selects a place for their alibi
         self.murder_place = self.final_locations[self.victim]
+        final_location_killer = self.final_locations[self.killer]
         places = list(self.weapon_locations.keys())
         self.alibi_place = "$" + choice(places)
-        while self.alibi_place == self.murder_place:
+        # avoid using the alibi location as the place of the murder
+        # also avoid using the final location of the killer to minimize the chance of incoherent statements
+        while self.alibi_place == self.murder_place or self.alibi_place == final_location_killer:
             self.alibi_place = "$" + choice(places)
 
+        print("Alibi location is:", self.alibi_place)
         # Filter additional clues
         additional_clues = []
         #print(self.final_locations)

@@ -212,11 +212,12 @@ class SawWhenArrivingClue(AbstractClue):
 
 
 class NotSawWhenArrivingLeavingClue(AbstractClue):
-    def __init__(self, subject, object, place, time):
+    def __init__(self, subject, object, place, time, mode):
         self.subject = subject
         self.object = object
         self.place = place
         self.time = time
+        self.mode = mode
         super().__init__()
 
     def string_spanish(self):
@@ -258,9 +259,16 @@ class NotSawWhenArrivingLeavingClue(AbstractClue):
     def is_incriminating(self, killer, victim, place, time):
         # The subject is revealing that the object was not with them
         # so if the subject is the killer, the place is the crime scene
-        # and the time is the time of the murder or later, then it is incriminating
-        if (self.subject == killer and self.place == place):
-            return True
+        if self.subject == killer and self.place == place:
+            if self.mode == "arriving":
+                # Arriving before the crime is incriminating
+                return self.time.seconds <= time.seconds
+            elif self.mode == "leaving":
+                # Leaving after the crime is incriminating
+                return self.time.seconds >= time.seconds
+            else:
+                raise ValueError("Invalid mode: " + self.mode)
+
         return False
 
     def manipulate(self, killer, victim, alibi_place):
@@ -305,11 +313,7 @@ class SawVictimWhenArrivingClue(AbstractClue):
         return False
 
     def manipulate(self, killer, victim, alibi_place):
-        if self.subject == killer and self.object == victim:
-            return SawVictimWhenLeavingClue(
-                self.subject, self.object, self.object_is_alive, alibi_place, self.time
-            )
-        raise ValueError("Invalid manipulation: " + str(self))
+        return None # Too risky to manipulate this clue
 
 
 class SawVictimWhenLeavingClue(AbstractClue):
@@ -416,19 +420,7 @@ class SawWhenLeavingClue(AbstractClue):
         return False
 
     def manipulate(self, killer, victim, alibi_place):
-        if self.subject == killer and self.object == victim:
-            if not self.object_is_alive:
-                # If the body was seen, it is too suspicious to change
-                return None
-
-            # r = randint(0, 1)
-            # if r == 0:
-            self.object = "$NOBODY"
-            # elif r == 1:
-            self.place = alibi_place
-
-            return self
-        raise ValueError("Invalid manipulation: " + str(self))
+        return None # Too risky to manipulate this clue
 
 class WasMurderedClue(AbstractClue):
     def __init__(self, victim, place, time):
@@ -748,7 +740,7 @@ def create_clue(call):
         return SawWhenArrivingClue(call[1], call[2], call[3], call[4], call[5])
     elif call[0] == "NotSawWhenArriving":
         assert len(call) == 5
-        return NotSawWhenArrivingLeavingClue(call[1], call[2], call[3], call[4])
+        return NotSawWhenArrivingLeavingClue(call[1], call[2], call[3], call[4], "arriving")
     elif call[0] == "SawVictimWhenArriving":
         assert len(call) == 6
         return SawVictimWhenArrivingClue(call[1], call[2], call[3], call[4], call[5])
@@ -760,7 +752,7 @@ def create_clue(call):
         return SawWhenLeavingClue(call[1], call[2], call[3], call[4], call[5])
     elif call[0] == "NotSawWhenLeaving":
         assert len(call) == 5
-        return NotSawWhenArrivingLeavingClue(call[1], call[2], call[3], call[4])
+        return NotSawWhenArrivingLeavingClue(call[1], call[2], call[3], call[4], "leaving")
     elif call[0] == "WasMurdered":
         assert len(call) == 4
         return WasMurderedClue(call[1], call[2], call[3])
