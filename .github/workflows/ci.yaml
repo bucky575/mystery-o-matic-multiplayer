@@ -31,10 +31,10 @@ jobs:
         python-version: '3.8'
 
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         repository: mystery-o-matic/story
         path: story

@@ -52,8 +52,8 @@ contract StoryModel {
     }
 
     function takesWeapon(uint8 char) public {
-        require(char > 0);
         char = char % numChars;
+        require(char > 0); // No nobodies
         require(Char(char) != victimIdentity);
         require(currentLocation[Char(char)] == locationWeapon);
 
@@ -156,8 +156,8 @@ contract StoryModel {
     }
 
     function move(uint8 char, uint8 place) public {
-        require(char > 0);
         char = char % numChars;
+        require(char > 0); // No nobodies
         require(Char(char) != victimIdentity);
 
         place = place % numPlaces;

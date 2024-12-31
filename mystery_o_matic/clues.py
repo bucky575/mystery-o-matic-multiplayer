@@ -561,6 +561,7 @@ class EvidenceClue(AbstractClue):
             raise ValueError("Invalid random number: " + str(r))
 
     def is_incriminating(self, killer, victim, place, time):
+        # this can be incriminating, but the killer cannot manipulate them
         return False
 
     def manipulate(self, killer, victim, alibi_place):
