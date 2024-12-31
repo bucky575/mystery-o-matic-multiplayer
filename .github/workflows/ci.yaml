@@ -89,7 +89,7 @@ jobs:
         sed -ie "s/\${DATE}/$(date -I)/" out/sitemap.xml
 
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
+      uses: actions/upload-pages-artifact@v3
       with:
           # Upload the resulting folder
           path: 'out'
