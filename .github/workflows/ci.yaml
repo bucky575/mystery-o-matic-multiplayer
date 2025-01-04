@@ -23,7 +23,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -43,7 +43,7 @@ jobs:
     - name: Install packages
       run: |
         sudo apt-get update
-        sudo apt-get install libsecp256k1-dev graphviz graphviz-dev
+        sudo apt-get install libsecp256k1-0 graphviz graphviz-dev
         sudo cp /usr/lib/x86_64-linux-gnu/libsecp256k1.so.0 /usr/lib/x86_64-linux-gnu/libsecp256k1.so.2
 
     - name: Install Echidna
