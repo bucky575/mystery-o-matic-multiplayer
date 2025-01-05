@@ -1,0 +1,82 @@
+# mystery-o-matic puzzle of the day
+
+## Introduction
+
+Get ready to solve a fresh murder mystery! Your goal is to figure out who did it, when it happened, and what weapon was used.
+
+mystery-o-matic is a website that offers free murder mysteries for daily solving.
+It was created by two passionate individuals who share a deep love for mystery and a strong
+dedication to offering a unique experience to fellow detectives.
+
+Unlike typical games, the daily mysteries on this website require deductive thinking, but they are
+designed to mirror the unpredictability of real-life scenarios, making them more challenging and
+varied in difficulty. Instead of following a predefined deduction path,
+each daily mystery is synthesized through random exploration,
+offering a refreshing twist compared to traditional deductive logic games.
+
+In this murder mystery, the suspects and the killer will always tell the truth.
+
+## Tutorial
+
+### Basic Deductions
+
+In our murder mystery, characters move between rooms every 15 minutes, allowing us to track their locations over time through their statements.
+
+For example, let's say we have the following clue:
+
+* Alice said: 'I saw Bob when I arrived in the kitchen at 10:15'
+
+From this clue, if we have two locations (kitchen and bathroom), we can deduce:
+
+* Alice was in the kitchen at 10:15
+* Bob was in the kitchen at 10:15
+* Bob was alive at 10:15 (if he were the victim)
+* Alice was NOT in the kitchen at 10:00
+
+Once we finish with these, other deductions are popping up! These two new ones are based on the fact that characters cannot be in two places at the same time:
+
+* Alice was NOT in the bathroom at 10:15
+* Bob was NOT in the bathroom at 10:15
+
+An important question still remains: where was Alice at 10:00? The location graph also provides some clues:
+
+* The kitchen is connected with dinning room, the bedroom.
+* The dinning room is connected with the kitchen.
+* The bedroom is connected with with the kitchen and the bathroom.
+* The bathroom is connected with the bedroom.
+
+When a suspect announces leaving or arriving at a room, they can only move to a directly connected room. Since the kitchen is linked to both the dining room and the bedroom, we can't determine Alice's exact location before 10:00.
+However, we can draw the following deduction:
+
+* Alice was NOT in the bathroom at 10:00
+
+### Determining Time of Death
+
+It is important to establish correctly the time of death. You must pay attention to the clues. Typically, the victim screams when they are murdered but the exact time is rarely available. For instance:
+
+* A blood-curdling scream from the victim was heard between 1:00 and 1:30
+
+This means that either the murder was committed at 1:00, 1:15 or 1:30.  Other clues will confirm or discard with the correct time.
+
+If we discard, for instance, 1:15 and 1:30, then crime was committed at 1:00.
+
+
+## Initial Clues
+
+$introLocation
+
+$initialClues
+
+## Locations
+
+$locationConnections
+
+## Statements & Clues
+
+$additionalClues
+
+Determinate who did it, which weapon was used and the time of the murder. Make sure the time of murder is precise (e.g. no intervals), and it only uses steps of 15 minutes. If you are not completely sure about the solution, tell me and I will give you more clues.
+
+## Solution
+
+$solution

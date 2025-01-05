@@ -10,6 +10,7 @@ from os.path import isfile
 from mystery_o_matic.output.html import produce_html_output
 from mystery_o_matic.output.text import produce_text_output
 from mystery_o_matic.output.latex import produce_tex_output
+from mystery_o_matic.output.llm import produce_llm_output
 from mystery_o_matic.echidna import create_outdir
 from mystery_o_matic.location import Locations, TutorialLocations, get_location_data
 from mystery_o_matic.weapons import get_available_weapons
@@ -59,6 +60,13 @@ def main() -> int:
         action="store_const",
         const=True,
         help="generate the mystery for the day",
+    )
+
+    parser.add_argument(
+        "--llm",
+        action="store_const",
+        const=True,
+        help="generate a llms.txt file with the mystery",
     )
 
     parser.add_argument("--season", action="store", default=1, help="season number")
@@ -111,6 +119,7 @@ def main() -> int:
     number_characters = args.nchars
     date = datetime.today().strftime("%d-%m-%Y")
     mode = args.mode
+    llm_output = args.llm
     difficulty = args.difficulty
     max_time_slots = args.max_time_slots
     telegram_api_key = args.telegram_api_key
@@ -199,6 +208,11 @@ def main() -> int:
     )
     mystery.load_events(events)
     mystery.process_clues()
+
+    if llm_output:
+        produce_llm_output(
+            static_dir, out_dir, 'en', mystery, weapons_available, weapon_labels, locations
+        )
 
     if mode == "html":
         produce_html_output(

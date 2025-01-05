@@ -18,6 +18,7 @@ setup(
         "mystery_o_matic.output.html",
         "mystery_o_matic.output.text",
         "mystery_o_matic.output.latex",
+        "mystery_o_matic.output.llm",
     ],
     license="AGPL3",
     entry_points="""
