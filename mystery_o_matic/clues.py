@@ -493,17 +493,31 @@ class WasMurderedBodyTwoOptionsClue(AbstractClue):
         raise ValueError("Invalid manipulation: " + str(self))
 
 class WasVictimDeadAtClue(AbstractClue): # UNUSED
-    time = None
+    time = Time(0)
+    alternative = False
 
-    def __init__(self, time):
+    def __init__(self, time, alternative):
         self.time = time
+        self.alternative = alternative
         super().__init__()
 
     def string_spanish(self):
-        return f"TODO"
+        if self.alternative:
+            r = "Inspeccionando la escena del crimen se revela que la victima estaba muerta a las "
+        else:
+            r = "Un examen minucioso del cuerpo revela que la victima estaba muerta a las "
+
+        r += f"{self.time}"
+        return r
 
     def string_english(self):
-        return f"A close examination of the body reveals that the victim was dead at {self.time}"
+        if self.alternative:
+            r = "Inspecting the crime scene reveals that the victim was dead at "
+        else:
+            r = "A close examination of the body reveals that the victim was dead at "
+
+        r += f"{self.time}"
+        return r
 
     def is_incriminating(self, killer, victim, place, time):
         return False
@@ -511,18 +525,32 @@ class WasVictimDeadAtClue(AbstractClue): # UNUSED
     def manipulate(self, killer, victim, alibi_place):
         raise ValueError("Invalid manipulation: " + str(self))
 
-class WasVictimAliveAtClue(AbstractClue): # UNUSED
-    time = None
+class WasVictimAliveAtClue(AbstractClue):
+    time = Time(0)
+    alternative = False
 
-    def __init__(self, time):
+    def __init__(self, time, alternative):
         self.time = time
+        self.alternative = alternative
         super().__init__()
 
     def string_spanish(self):
-        return f"TODO"
+        if self.alternative:
+            r = "Inspeccionando la escena del crimen se revela que la victima estaba viva a las "
+        else:
+            r = "Un examen minucioso del cuerpo revela que la victima estaba viva a las "
+
+        r += f"{self.time}"
+        return r
 
     def string_english(self):
-        return f"A close examination of the body reveals that the victim was alive at {self.time}"
+        if self.alternative:
+            r = "Inspecting the crime scene reveals that the victim was alive at "
+        else:
+            r = "A close examination of the body reveals that the victim was alive at "
+
+        r += f"{self.time}"
+        return r
 
     def is_incriminating(self, killer, victim, place, time):
         return False
@@ -531,7 +559,7 @@ class WasVictimAliveAtClue(AbstractClue): # UNUSED
         raise ValueError("Invalid manipulation: " + str(self))
 
 class WasMurderedAfterClue(AbstractClue):
-    time = None
+    time = Time(0)
     positive = False
     alternative = False
 
@@ -578,7 +606,7 @@ class WasMurderedAfterClue(AbstractClue):
 
 
 class WasMurderedBeforeClue(AbstractClue):
-    time = None
+    time = Time(0)
     positive = False
     alternative = False
 
@@ -906,6 +934,12 @@ def create_clue(call):
     elif call[0] == "WasMurderedAfter":
         assert len(call) == 5
         return WasMurderedAfterClue(call[1], call[2], call[3], call[4])
+    elif call[0] == "WasVictimAliveAt":
+        assert len(call) == 3
+        return WasVictimAliveAtClue(call[1], call[2])
+    elif call[0] == "WasVictimDeadAt":
+        assert len(call) == 3
+        return WasVictimDeadAtClue(call[1], call[2])
     elif call[0] == "PoliceArrived":
         assert len(call) == 2
         return PoliceArrivedClue(call[1])
@@ -929,7 +963,7 @@ def create_murder_time_clues(murder_time, interval_size, difficulty):
     if difficulty == "easy":
         r = randint(0, 1) # Only the first two types of clues are used
     else:
-        r = randint(2, 3)
+        r = randint(2, 6)
 
     third_clue = None
     if r == 0:
@@ -1016,7 +1050,72 @@ def create_murder_time_clues(murder_time, interval_size, difficulty):
                 True, # Use alternative form
             ]
         )
-
+    elif r == 4:
+        first_clue = create_clue(
+            [
+                "WasMurderedScream",
+                Time(murder_time.seconds - 2 * interval_size),
+                murder_time,
+            ]
+        )
+        second_clue = create_clue(
+            [
+                "WasVictimAliveAt",
+                Time(murder_time.seconds - 2 * interval_size),
+                False
+            ]
+        )
+        third_clue = create_clue(
+            [
+                "WasVictimAliveAt",
+                Time(murder_time.seconds - interval_size),
+                True # Use alternative form
+            ]
+        )
+    elif r == 5:
+        first_clue = create_clue(
+            [
+                "WasMurderedScream",
+                murder_time,
+                Time(murder_time.seconds + 2 * interval_size),
+            ]
+        )
+        second_clue = create_clue(
+            [
+                "WasVictimDeadAt",
+                Time(murder_time.seconds + 2 * interval_size),
+                False
+            ]
+        )
+        third_clue = create_clue(
+            [
+                "WasVictimDeadAt",
+                Time(murder_time.seconds + interval_size),
+                True # Use alternative form
+            ]
+        )
+    elif r == 6:
+        first_clue = create_clue(
+            [
+                "WasMurderedScream",
+                Time(murder_time.seconds - interval_size),
+                Time(murder_time.seconds + interval_size),
+            ]
+        )
+        second_clue = create_clue(
+            [
+                "WasVictimAliveAt",
+                Time(murder_time.seconds - interval_size),
+                False
+            ]
+        )
+        third_clue = create_clue(
+            [
+                "WasVictimDeadAt",
+                Time(murder_time.seconds + interval_size),
+                True # Use alternative form
+            ]
+        )
     else:
         raise ValueError("Invalid random number: " + str(r))
 
