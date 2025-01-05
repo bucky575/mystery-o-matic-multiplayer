@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from random import randint, choice
 
 from mystery_o_matic.weapons import get_weapon_type
+from mystery_o_matic.time import Time
 
 class AbstractStatement(ABC):
     def __init__(self):
@@ -470,7 +471,7 @@ class WasMurderedInitialClue(AbstractClue):
         raise ValueError("Invalid manipulation: " + str(self))
 
 
-class WasMurderedInspectionClue(AbstractClue):
+class WasMurderedBodyTwoOptionsClue(AbstractClue):
     time1 = None
     time2 = None
 
@@ -491,7 +492,140 @@ class WasMurderedInspectionClue(AbstractClue):
     def manipulate(self, killer, victim, alibi_place):
         raise ValueError("Invalid manipulation: " + str(self))
 
-class WasMurderedAutopsyClue(AbstractClue):
+class WasVictimDeadAtClue(AbstractClue): # UNUSED
+    time = None
+
+    def __init__(self, time):
+        self.time = time
+        super().__init__()
+
+    def string_spanish(self):
+        return f"TODO"
+
+    def string_english(self):
+        return f"A close examination of the body reveals that the victim was dead at {self.time}"
+
+    def is_incriminating(self, killer, victim, place, time):
+        return False
+
+    def manipulate(self, killer, victim, alibi_place):
+        raise ValueError("Invalid manipulation: " + str(self))
+
+class WasVictimAliveAtClue(AbstractClue): # UNUSED
+    time = None
+
+    def __init__(self, time):
+        self.time = time
+        super().__init__()
+
+    def string_spanish(self):
+        return f"TODO"
+
+    def string_english(self):
+        return f"A close examination of the body reveals that the victim was alive at {self.time}"
+
+    def is_incriminating(self, killer, victim, place, time):
+        return False
+
+    def manipulate(self, killer, victim, alibi_place):
+        raise ValueError("Invalid manipulation: " + str(self))
+
+class WasMurderedAfterClue(AbstractClue):
+    time = None
+    positive = False
+    alternative = False
+
+    def __init__(self, time, interval_size, positive, alternative):
+        self.time = time
+        self.interval_size = interval_size
+        self.positive = positive
+        self.alternative = alternative
+        super().__init__()
+
+    def string_spanish(self):
+        if self.alternative:
+            r = "Inspeccionando la escena del crimen se revela que el asesinato tuvo lugar "
+        else:
+            r = "Un examen minucioso del cuerpo revela que el asesinato tuvo lugar "
+        if self.positive:
+            t = Time(self.time.seconds)
+            r += f"después de las {t}"
+        else:
+            t = Time(self.time.seconds + self.interval_size)
+            r += f"no antes de las {t}"
+
+        return r
+
+    def string_english(self):
+        if self.alternative:
+            r = "Inspecting the crime scene reveals that the victim was murdered "
+        else:
+            r = "A close examination of the body reveals that the victim was murdered "
+        if self.positive:
+            t = Time(self.time.seconds)
+            r += f"after {t}"
+        else:
+            t = Time(self.time.seconds + self.interval_size)
+            r += f"not before {t}"
+
+        return r
+
+    def is_incriminating(self, killer, victim, place, time):
+        return False
+
+    def manipulate(self, killer, victim, alibi_place):
+        raise ValueError("Invalid manipulation: " + str(self))
+
+
+class WasMurderedBeforeClue(AbstractClue):
+    time = None
+    positive = False
+    alternative = False
+
+    def __init__(self, time, interval_size, positive, alternative):
+        self.time = time
+        self.interval_size = interval_size
+        self.positive = positive
+        self.alternative = alternative
+        super().__init__()
+
+    def string_spanish(self):
+        if self.alternative:
+            r = "Inspeccionando la escena del crimen se revela que el asesinato tuvo lugar "
+        else:
+            r = "Un examen minucioso del cuerpo revela que el asesinato tuvo lugar "
+        if self.positive:
+            t = Time(self.time.seconds)
+            r += f"antes de las {t}"
+        else:
+            t = Time(self.time.seconds + self.interval_size)
+            r += f"no después de las {t}"
+
+        return r
+
+    def string_english(self):
+        if self.alternative:
+            r = "Inspecting the crime scene reveals that the victim was murdered "
+        else:
+            r = "A close examination of the body reveals that the victim was murdered "
+
+        if self.positive:
+            t = Time(self.time.seconds)
+            r += f"before {t}"
+        else:
+            t = Time(self.time.seconds - self.interval_size)
+            r += f"not after {t}"
+
+        return r
+
+    def is_incriminating(self, killer, victim, place, time):
+        return False
+
+    def manipulate(self, killer, victim, alibi_place):
+        raise ValueError("Invalid manipulation: " + str(self))
+
+
+class WasMurderedScreamClue(AbstractClue):
     time1 = None
     time2 = None
 
@@ -501,10 +635,10 @@ class WasMurderedAutopsyClue(AbstractClue):
         super().__init__()
 
     def string_spanish(self):
-        return f"Un grito espeluznante de la víctima se escuchó a las {self.time1} o a las {self.time2}"
+        return f"Un grito espeluznante de la víctima se escuchó entre las {self.time1} y las {self.time2}"
 
     def string_english(self):
-        return f"A blood-curdling scream from the victim was heard at either {self.time1} or {self.time2}"
+        return f"A blood-curdling scream from the victim was heard between {self.time1} and {self.time2}"
 
     def is_incriminating(self, killer, victim, place, time):
         return False
@@ -760,12 +894,18 @@ def create_clue(call):
     elif call[0] == "WasMurderedInitial":
         assert len(call) == 5
         return WasMurderedInitialClue(call[1], call[2], call[3], call[4])
-    elif call[0] == "WasMurderedInspection":
+    elif call[0] == "WasMurderedBodyTwoOptions":
         assert len(call) == 3
-        return WasMurderedInspectionClue(call[1], call[2])
-    elif call[0] == "WasMurderedAutopsy":
+        return WasMurderedBodyTwoOptionsClue(call[1], call[2])
+    elif call[0] == "WasMurderedScream":
         assert len(call) == 3
-        return WasMurderedAutopsyClue(call[1], call[2])
+        return WasMurderedScreamClue(call[1], call[2])
+    elif call[0] == "WasMurderedBefore":
+        assert len(call) == 5
+        return WasMurderedBeforeClue(call[1], call[2], call[3], call[4])
+    elif call[0] == "WasMurderedAfter":
+        assert len(call) == 5
+        return WasMurderedAfterClue(call[1], call[2], call[3], call[4])
     elif call[0] == "PoliceArrived":
         assert len(call) == 2
         return PoliceArrivedClue(call[1])
@@ -782,3 +922,110 @@ def create_clue(call):
     # Heard is missing
     else:
         raise ValueError("Invalid clue!: " + str(call))
+
+
+def create_murder_time_clues(murder_time, interval_size, difficulty):
+    r = -1
+    if difficulty == "easy":
+        r = randint(0, 1) # Only the first two types of clues are used
+    else:
+        r = randint(2, 3)
+
+    third_clue = None
+    if r == 0:
+        first_clue = create_clue(
+            [
+                "WasMurderedScream",
+                murder_time,
+                Time(murder_time.seconds + interval_size),
+            ]
+        )
+        second_clue = create_clue(
+            [
+                "WasMurderedBodyTwoOptions",
+                Time(murder_time.seconds - interval_size),
+                murder_time,
+            ]
+        )
+    elif r == 1:
+        first_clue = create_clue(
+            [
+                "WasMurderedScream",
+                Time(murder_time.seconds - interval_size),
+                murder_time,
+            ]
+        )
+        second_clue = create_clue(
+            [
+                "WasMurderedBodyTwoOptions",
+                murder_time,
+                Time(murder_time.seconds + interval_size),
+            ]
+        )
+    elif r == 2:
+        first_clue = create_clue(
+            [
+                "WasMurderedScream",
+                Time(murder_time.seconds - 2 * interval_size),
+                murder_time,
+            ]
+        )
+        positive = randint(0, 1)
+        second_clue = create_clue(
+            [
+                "WasMurderedBefore",
+                Time(murder_time.seconds + 2 * interval_size),
+                interval_size,
+                positive,
+                False
+            ]
+        )
+        third_clue = create_clue(
+            [
+                "WasMurderedAfter",
+                Time(murder_time.seconds - interval_size),
+                interval_size,
+                not positive,
+                True # Use alternative form
+            ]
+        )
+    elif r == 3:
+        first_clue = create_clue(
+            [
+                "WasMurderedScream",
+                murder_time,
+                Time(murder_time.seconds + 2 * interval_size),
+            ]
+        )
+        positive = randint(0, 1)
+        second_clue = create_clue(
+            [
+                "WasMurderedBefore",
+                Time(murder_time.seconds + interval_size),
+                interval_size,
+                positive,
+                False,
+            ]
+        )
+        third_clue = create_clue(
+            [
+                "WasMurderedAfter",
+                Time(murder_time.seconds - 3 * interval_size),
+                interval_size,
+                not positive,
+                True, # Use alternative form
+            ]
+        )
+
+    else:
+        raise ValueError("Invalid random number: " + str(r))
+
+    #print("Murder time:", str(murder_time))
+    #print(first_clue.string_english())
+    #print(second_clue.string_english())
+    #if third_clue is not None:
+    #    print(third_clue.string_english())
+    #assert False
+
+    return first_clue, second_clue, third_clue
+

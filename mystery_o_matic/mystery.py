@@ -3,8 +3,7 @@ from hashlib import sha256
 
 from mystery_o_matic.clues import *
 from mystery_o_matic.solidity import get_tx, get_event
-from mystery_o_matic.time import Time  # parse_time, print_time
-
+from mystery_o_matic.time import Time
 
 def get_intervals_length_from_events(source, contract_name, events):
     """
@@ -29,6 +28,7 @@ def get_intervals_length_from_events(source, contract_name, events):
 
 
 class Mystery:
+    difficulty = ""
     source = None
     solution = []
     characters = []
@@ -47,12 +47,13 @@ class Mystery:
     number_characters = 0
 
     def __init__(
-        self, initial_locations, weapon_locations, weapon_used, activities, source, txs
+        self, difficulty, initial_locations, weapon_locations, weapon_used, activities, source, txs
     ):
         """
         Initialize the Mystery class.
 
         Args:
+            difficulty (string): Difficulty
             initial_locations (list): List of initial locations.
             weapon_locations (dict): Dictionary of weapon locations.
             weapon_used (str): The weapon used.
@@ -62,6 +63,7 @@ class Mystery:
         Returns:
             None
         """
+        self.difficulty = difficulty
         self.source = source
         self.initial_locations = initial_locations
         self.final_locations = dict()
@@ -237,37 +239,11 @@ class Mystery:
         # The player needs more hints to fully determinate when the murdered took place
         assert self.murder_time != "", "Time of murder is missing"
 
-        rand_bool = randint(0, 1)
-        if rand_bool:
-            first_clue = create_clue(
-                [
-                    "WasMurderedInspection",
-                    self.murder_time,
-                    Time(self.murder_time.seconds + self.interval_size),
-                ]
-            )
-            second_clue = create_clue(
-                [
-                    "WasMurderedAutopsy",
-                    Time(self.murder_time.seconds - self.interval_size),
-                    self.murder_time,
-                ]
-            )
-        else:
-            first_clue = create_clue(
-                [
-                    "WasMurderedInspection",
-                    Time(self.murder_time.seconds - self.interval_size),
-                    self.murder_time,
-                ]
-            )
-            second_clue = create_clue(
-                [
-                    "WasMurderedAutopsy",
-                    self.murder_time,
-                    Time(self.murder_time.seconds + self.interval_size),
-                ]
-            )
+        first_clue, second_clue, third_clue = create_murder_time_clues(self.murder_time, self.interval_size, self.difficulty)
+
+        if third_clue is not None:
+            self.additional_clues.append(third_clue)
+            self.additional_clues_with_lies.append(third_clue)
 
         shuffle(self.additional_clues)
         shuffle(self.additional_clues_with_lies)

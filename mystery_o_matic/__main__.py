@@ -62,6 +62,7 @@ def main() -> int:
     )
 
     parser.add_argument("--season", action="store", default=1, help="season number")
+    parser.add_argument("--difficulty", action="store", default="hard", help="difficulty level")
     parser.add_argument(
         "--nplaces", type=int, action="store", default=4, help="number of rooms"
     )
@@ -110,6 +111,7 @@ def main() -> int:
     number_characters = args.nchars
     date = datetime.today().strftime("%d-%m-%Y")
     mode = args.mode
+    difficulty = args.difficulty
     max_time_slots = args.max_time_slots
     telegram_api_key = args.telegram_api_key
 
@@ -187,6 +189,7 @@ def main() -> int:
 
     weapon_used = locations.weapon_locations[used_weapon_location]
     mystery = Mystery(
+        difficulty,
         initial_locations_pairs,
         weapon_locations,
         weapon_used,
