@@ -46,15 +46,22 @@ class WeaponLocationStatement(AbstractStatement):
         return f"{self.weapon} en {self.vplace}"
 
 class CharacterLocationStatement(AbstractStatement):
-    def __init__(self, subject, place):
+    def __init__(self, subject, place, victim):
         self.subject = subject
+        self.victim = victim
         self.place = place
 
     def string_english(self):
-        return f"{self.subject} was in the {self.place}"
+        if self.subject == self.victim:
+            return f"The body of {self.subject} was in the {self.place}"
+        else:
+            return f"{self.subject} was in the {self.place}"
 
     def string_spanish(self):
-        return f"{self.subject} estaba en {self.place}"
+        if self.subject == self.victim:
+            return f"El cuerpo de {self.subject} estaba en {self.place}"
+        else:
+            return f"{self.subject} estaba en {self.place}"
 
 class NoOneElseStatement(AbstractStatement):
     def string_english(self):

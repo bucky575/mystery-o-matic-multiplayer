@@ -280,7 +280,7 @@ class Mystery:
         self.final_locations_clues = []
         # Load final locations clues
         for c, p in self.final_locations.items():
-            self.final_locations_clues.append(CharacterLocationStatement(c, p))
+            self.final_locations_clues.append(CharacterLocationStatement(c, p, self.victim))
 
         # Convert all statements/clues to strings
         self.weapon_locations_intro = self.weapon_locations_intro.string()
