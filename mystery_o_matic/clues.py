@@ -71,7 +71,7 @@ class WeaponLocationsIntroStatement(AbstractStatement):
 
 class WeaponLocationsOutroStatement(AbstractStatement):
     def string_english(self):
-        return "No one saw the killer retriving the murder weapon"
+        return "No one saw the killer retrieving the murder weapon"
 
     def string_spanish(self):
         return "Nadie vió al asesino tomar el arma homicida"
@@ -503,9 +503,9 @@ class WasVictimDeadAtClue(AbstractClue): # UNUSED
 
     def string_spanish(self):
         if self.alternative:
-            r = "Inspeccionando la escena del crimen se revela que la victima estaba muerta a las "
+            r = "Inspeccionando la escena del crimen se revela que la víctima estaba muerta a las "
         else:
-            r = "Un examen minucioso del cuerpo revela que la victima estaba muerta a las "
+            r = "Un examen minucioso del cuerpo revela que la víctima estaba muerta a las "
 
         r += f"{self.time}"
         return r
@@ -536,9 +536,9 @@ class WasVictimAliveAtClue(AbstractClue):
 
     def string_spanish(self):
         if self.alternative:
-            r = "Inspeccionando la escena del crimen se revela que la victima estaba viva a las "
+            r = "Inspeccionando la escena del crimen se revela que la víctima estaba viva a las "
         else:
-            r = "Un examen minucioso del cuerpo revela que la victima estaba viva a las "
+            r = "Un examen minucioso del cuerpo revela que la víctima estaba viva a las "
 
         r += f"{self.time}"
         return r
@@ -714,7 +714,7 @@ class EvidenceClue(AbstractClue):
         r = randint(0, 2)
 
         if r == 0:
-            return f"A recent footstep matching {self.subject} shoes was found in the {self.place}"
+            return f"A recent footprint matching {self.subject}'s shoe was found in the {self.place}"
         elif r == 1:
             return f"A fingerprint of {self.subject} was found in the {self.place}. It looks very fresh"
         elif r == 2:
