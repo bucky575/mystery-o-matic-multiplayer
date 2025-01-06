@@ -26,7 +26,7 @@ def get_bullet_list(elements, level):
     return r
 
 def remove_emojis(text):
-    return replace_emoji(text, "")
+    return replace_emoji(text, "").replace("()", "")
 
 def save_txt(outdir, txt, filename):
     output_dir = f"{outdir}"
