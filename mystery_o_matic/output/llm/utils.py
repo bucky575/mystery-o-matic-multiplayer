@@ -1,6 +1,7 @@
 from contextlib import suppress
 from os import makedirs
 from string import Template
+from emoji import replace_emoji
 
 def create_txt_template(str):
     return Template(str)
@@ -23,6 +24,9 @@ def get_bullet_list(elements, level):
         else:
             r += "    - " + element + "\n"
     return r
+
+def remove_emojis(text):
+    return replace_emoji(text, "")
 
 def save_txt(outdir, txt, filename):
     output_dir = f"{outdir}"

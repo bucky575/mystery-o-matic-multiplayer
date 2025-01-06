@@ -2,6 +2,7 @@ from mystery_o_matic.output import create_template
 from mystery_o_matic.output.llm.utils import (
     read_txt_template,
     get_bullet_list,
+    remove_emojis,
     save_txt
 )
 from mystery_o_matic.clues import NoOneElseStatement
@@ -13,16 +14,16 @@ def produce_llm_output(static_dir, out_dir, language, mystery, weapons, weapon_l
         connections = []
         for dst in locations.graph[src]:
             connections.append("$"+dst)
-        connections_list.append("$"+src + " is connected with " + ", ".join(connections))
+        connections_list.append("The $"+src + " is connected with " + ", ".join(connections))
 
     connections_list = get_bullet_list(connections_list, 0)
 
     names_txt = {}
     for i, char in enumerate(mystery.get_characters()):
-        names_txt["CHAR" + str(i + 1)] = char.lower()
+        names_txt["CHAR" + str(i + 1)] = char.capitalize()
 
     for room, name in locations.indices.items():
-        names_txt[room] = locations.names['en'][name]
+        names_txt[room] = locations.names[language][name]
 
     final_locations_map = {}
     for c, p in mystery.final_locations.items():
@@ -109,7 +110,7 @@ def produce_llm_output(static_dir, out_dir, language, mystery, weapons, weapon_l
     args["introLocation"] = introLocation
     args["initialClues"] = initial_clues_list
     args["locationConnections"] = connections_list
-    args["additionalClues"] = additional_clues_list
+    args["additionalClues"] = remove_emojis(additional_clues_list)
     args["solution"] = mystery.get_answer()
 
     txt_template = read_txt_template(static_dir + f"/llms.template.txt")
