@@ -150,7 +150,7 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
             args[index + "REP"] = get_emoji_name(locations.representations[index])
 
         for l, w in locations.weapon_locations.items():
-            args[l + "WEAPONREP"] = get_emoji_name(locations.representations[l]) + " " + get_emoji_name(weapons[w])
+            args[l + "WEAPONREP"] = get_emoji_name(weapons[w]) + " " + get_emoji_name(locations.representations[l]))
 
         for (i, time) in enumerate(intervals):
             args[f"TIME{i}"] = time
