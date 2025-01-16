@@ -1,6 +1,6 @@
 from random import shuffle, choice
 
-from networkx import gnr_graph, relabel_nodes, Graph
+from networkx import gnp_random_graph, relabel_nodes, Graph, is_planar, is_connected
 from networkx.drawing.nx_agraph import to_agraph
 
 locations = ["egypt", "castle", "train", "ship", "space station", "mansion"]
@@ -402,12 +402,18 @@ class Locations:
         Returns:
         - graph: The created graph.
         """
-        if self.name == "train":
-            graph = Graph()
-            for n in range(self.number_places - 1):
-                graph.add_edge("ROOM" + str(n), "ROOM" + str(n + 1))
-        else:
-            graph = gnr_graph(self.number_places, 0.5).to_undirected()
+        keepGenerating = True
+
+        while keepGenerating:
+            if self.name == "train":
+                graph = Graph()
+                for n in range(self.number_places - 1):
+                    graph.add_edge("ROOM" + str(n), "ROOM" + str(n + 1))
+            else:
+                graph = gnp_random_graph(self.number_places, 0.5)
+
+            keepGenerating = not (is_planar(graph) and is_connected(graph))
+
         graph = relabel_nodes(graph, nodes)
         return graph
 
