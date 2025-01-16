@@ -53,7 +53,7 @@ class CharacterLocationStatement(AbstractStatement):
 
     def string_english(self):
         if self.subject == self.victim:
-            return f"The body of {self.subject} was in the {self.place}"
+            return f"{self.subject}'s body was in the {self.place}"
         else:
             return f"{self.subject} was in the {self.place}"
 

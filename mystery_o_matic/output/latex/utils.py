@@ -100,7 +100,7 @@ def generate_latex_clue_table(name, num_columns, char_names, final_locs, victim,
     if (include_header):
         multirow_number += 1
 
-    latex_code += "\\multirow{ "+ str(multirow_number) + "}{*}{ \\negthickspace{}$$" + name + " } "
+    latex_code += "\\multirow{ "+ str(multirow_number) + "}{*}{ \\negthinspace\\negthickspace{}$$" + name + " } "
 
     if (include_header):
         latex_code += "& {\\footnotesize{}\\emoji{mantelpiece-clock}} & "
@@ -135,11 +135,11 @@ def generate_latex_clue_table(name, num_columns, char_names, final_locs, victim,
 
         if ("$CHAR" + str(char_num), "$"+name.replace("REP", "")) in final_locs.items():
             if victim == "$CHAR" + str(char_num):
-                latex_code += " \\emoji{skull} "
+                latex_code += " \\D "
             else:
-                latex_code += " \\checkmark "
+                latex_code += " \\Y "
         else:
-            latex_code += " \\texttt{X} "
+            latex_code += " \\N "
 
         if char_index % 2:
             latex_code += " \\cellcolor{Dark-Gray-Table} "
@@ -169,7 +169,8 @@ def generate_latex_weapons_table(number_weapons):
         page_width = 0.172
 
     column_format = '|'.join(['>{\\centering}p{' + str(page_width) + '\\paperwidth}'] * number_weapons)
-    latex_code = f'\\begin{{tabular}}{{|{column_format}|}}\n'
+    latex_code = '\\renewcommand{\\arraystretch}{1.4}\n'
+    latex_code += f'\\begin{{tabular}}{{|{column_format}|}}\n'
 
     # Add the first row
     latex_code += "\\hline\n"
@@ -181,4 +182,5 @@ def generate_latex_weapons_table(number_weapons):
 
     # Finish the table
     latex_code += "\\hline\n\\end{tabular}\n"
+    latex_code += '\\renewcommand{\\arraystretch}{1.4}\n'
     return latex_code

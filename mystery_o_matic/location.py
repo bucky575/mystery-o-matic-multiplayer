@@ -469,7 +469,7 @@ class Locations:
         g.graph_attr.update(
             bgcolor="transparent", nodesep="0.1", ranksep="0.1", margin="0"
         )
-        g.edge_attr.update(color="gray", labeldistance="0.1")
+        g.edge_attr.update(color="dimgrey", labeldistance="0.1")
 
         g.node_attr.update(
             fontname="Raleway", shape="plaintext", width="0.2", fixedsize="true"
