@@ -1,10 +1,33 @@
 from random import shuffle
 
 from mystery_o_matic.output import create_template
-from mystery_o_matic.output.latex.utils import generate_latex_clue_table, generate_latex_weapons_table, get_bullet_list, get_enumeration_list, read_tex_template, create_tex_template, save_tex, get_char_name, get_emoji_name, replace_emojis, replace_opening_quotes, save_solution
+from mystery_o_matic.output.latex.utils import (
+    generate_latex_clue_table,
+    generate_latex_weapons_table,
+    get_bullet_list,
+    get_enumeration_list,
+    read_tex_template,
+    create_tex_template,
+    save_tex,
+    get_char_name,
+    get_emoji_name,
+    replace_emojis,
+    replace_opening_quotes,
+    save_solution,
+)
 from mystery_o_matic.clues import NoOneElseStatement
 
-def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_labels, locations, story_clue):
+
+def produce_tex_output(
+    static_dir,
+    out_dir,
+    languages,
+    mystery,
+    weapons,
+    weapon_labels,
+    locations,
+    story_clue,
+):
     intervals = mystery.get_intervals()
     suspects = mystery.get_suspects()
 
@@ -23,7 +46,7 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
         names_txt["CHAR" + str(i + 1)] = char.lower()
 
     for room, name in locations.indices.items():
-        names_txt[room] = locations.names['en'][name]
+        names_txt[room] = locations.names["en"][name]
 
     final_locations_map = {}
     for c, p in mystery.final_locations.items():
@@ -56,38 +79,42 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
 
         characters = list(map(lambda char: char.capitalize(), mystery.get_characters()))
         introLocation = ", ".join(characters[:-1]) + " and " + characters[-1]
-        introLocation += " !TODO" #locations.intro[language]
+        introLocation += " !TODO"  # locations.intro[language]
 
         for room, name in locations.names[language].items():
             if room not in locations.rindices:
-                continue # skip any missing place
+                continue  # skip any missing place
             index = locations.rindices[room]
-            names_html[index] = name + " (" + get_emoji_name(locations.representations[index]) + ")"
+            names_html[index] = (
+                name + " (" + get_emoji_name(locations.representations[index]) + ")"
+            )
         for weapon, label in weapon_labels[language].items():
             if weapon not in weapons:
                 continue
             if language == "es":
                 label = label.capitalize()
-            names_html[weapon.replace("$", "")] = label + " (" + get_emoji_name(weapons[weapon]) + ")"
+            names_html[weapon.replace("$", "")] = (
+                label + " (" + get_emoji_name(weapons[weapon]) + ")"
+            )
 
-        #print(names_html)
+        # print(names_html)
         firstClue = mystery.initial_clues[0]
         firstClue = create_template(firstClue[language]).substitute(names_html)
 
-        #bullets = []
-        #for i, clue in enumerate(mystery.initial_clues[:1]):
+        # bullets = []
+        # for i, clue in enumerate(mystery.initial_clues[:1]):
         #    clue = create_template(clue[language]).substitute(names_html)
         #    bullets.append(clue)
 
-        #sub_bullets = []
-        #for clue in mystery.weapon_locations_clues:
+        # sub_bullets = []
+        # for clue in mystery.weapon_locations_clues:
         #    clue = create_template(clue[language]).substitute(names_html)
         #    sub_bullets.append(clue)
 
-        #weapon_locations_bullets = mystery.weapon_locations_intro[language]
-        #weapon_locations_bullets += get_bullet_list(sub_bullets)
-        #bullets.append(weapon_locations_bullets)
-        #bullets.append(mystery.weapon_locations_outro[language])
+        # weapon_locations_bullets = mystery.weapon_locations_intro[language]
+        # weapon_locations_bullets += get_bullet_list(sub_bullets)
+        # bullets.append(weapon_locations_bullets)
+        # bullets.append(mystery.weapon_locations_outro[language])
 
         sub_bullets = []
         for clue in mystery.final_locations_clues:
@@ -96,27 +123,35 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
 
         final_locations_bullets = mystery.final_locations_intro[language]
         final_locations_bullets += get_bullet_list(sub_bullets, "")
-        #bullets.append(final_locations_bullets)
-        #bullets.append(NoOneElseStatement().string()[language])
+        # bullets.append(final_locations_bullets)
+        # bullets.append(NoOneElseStatement().string()[language])
 
-        #initial_clues = get_bullet_list(bullets)
+        # initial_clues = get_bullet_list(bullets)
 
         additional_clues = []
 
         for clue in mystery.additional_clues:
-            clue = replace_emojis(create_template(clue[language]).substitute(names_html))
+            clue = replace_emojis(
+                create_template(clue[language]).substitute(names_html)
+            )
             clue = replace_opening_quotes(clue)
             additional_clues.append(clue)
 
-        additional_clues_enumeration = get_bullet_list(additional_clues, customItem="\\ding{43}")
+        additional_clues_enumeration = get_bullet_list(
+            additional_clues, customItem="\\ding{43}"
+        )
 
         additional_clues_with_lies = []
         for clue in mystery.additional_clues_with_lies:
-            clue = replace_emojis(create_template(clue[language]).substitute(names_html))
+            clue = replace_emojis(
+                create_template(clue[language]).substitute(names_html)
+            )
             clue = replace_opening_quotes(clue)
             additional_clues_with_lies.append(clue)
 
-        additional_clues_with_lies_enumeration = get_bullet_list(additional_clues_with_lies, customItem="\\ding{43}")
+        additional_clues_with_lies_enumeration = get_bullet_list(
+            additional_clues_with_lies, customItem="\\ding{43}"
+        )
 
         # populate the weapon options
         weapons_options = []
@@ -124,7 +159,7 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
             # use the labels in the current language but the values in english
             weapons_options.append((weapon_labels[language][w], weapon_labels["en"][w]))
 
-        #select_weapons = get_options_selector(weapons_options)
+        # select_weapons = get_options_selector(weapons_options)
 
         args = {}
         args["introLocation"] = introLocation
@@ -135,7 +170,17 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
         tables = ""
 
         for i in range(len(locations.weapon_locations.items())):
-            tables += generate_latex_clue_table(f"ROOM{i}REP", len(intervals), mystery.get_characters(), mystery.final_locations, mystery.victim, i == 0) + "\n"
+            tables += (
+                generate_latex_clue_table(
+                    f"ROOM{i}REP",
+                    len(intervals),
+                    mystery.get_characters(),
+                    mystery.final_locations,
+                    mystery.victim,
+                    i == 0,
+                )
+                + "\n"
+            )
 
         args["cluesTables"] = tables
         args["weaponsTable"] = generate_latex_weapons_table(len(weapons_options))
@@ -145,17 +190,23 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
 
         for room in locations.names[language]:
             if room not in locations.rindices:
-                continue # skip any missing place
+                continue  # skip any missing place
             index = locations.rindices[room]
             args[index + "REP"] = get_emoji_name(locations.representations[index])
 
         for l, w in locations.weapon_locations.items():
-            args[l + "WEAPONREP"] = get_emoji_name(weapons[w]) + " " + get_emoji_name(locations.representations[l])
+            args[l + "WEAPONREP"] = (
+                get_emoji_name(weapons[w])
+                + " "
+                + get_emoji_name(locations.representations[l])
+            )
 
-        for (i, time) in enumerate(intervals):
+        for i, time in enumerate(intervals):
             args[f"TIME{i}"] = time
 
-        tex_template = read_tex_template(static_dir + f"/{language}/mystery.template.tex")
+        tex_template = read_tex_template(
+            static_dir + f"/{language}/mystery.template.tex"
+        )
 
         tex_source = tex_template.substitute(args)
         tex_source = create_tex_template(tex_source).substitute(args)
@@ -166,4 +217,3 @@ def produce_tex_output(static_dir, out_dir, languages, mystery, weapons, weapon_
         tex_source = tex_template.substitute(args)
         tex_source = create_tex_template(tex_source).substitute(args)
         save_tex(out_dir, language, tex_source, "mystery.lies.tex")
-

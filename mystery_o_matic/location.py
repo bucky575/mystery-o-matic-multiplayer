@@ -1,12 +1,19 @@
 from random import shuffle, choice
 
-from networkx import gnp_random_graph, relabel_nodes, Graph, is_planar, is_connected, planar_layout
+from networkx import (
+    gnp_random_graph,
+    relabel_nodes,
+    Graph,
+    is_planar,
+    is_connected,
+    planar_layout,
+)
 from networkx.drawing.nx_agraph import to_agraph
 
 locations = ["egypt", "castle", "train", "ship", "space station", "mansion"]
 
 mansions_labels = {}
-mansions_labels['en'] = {
+mansions_labels["en"] = {
     "KITCHEN": "kitchen",
     "DINING": "dining room",
     "BEDROOM": "bedroom",
@@ -14,7 +21,7 @@ mansions_labels['en'] = {
     "GARDEN": "garden",
 }
 
-mansions_labels['es'] = {
+mansions_labels["es"] = {
     "KITCHEN": "la cocina",
     "DINING": "el comedor",
     "BEDROOM": "el dormitorio",
@@ -23,8 +30,8 @@ mansions_labels['es'] = {
 }
 
 mansion_intro = {}
-mansion_intro['en'] = " are back into <b>the mansion where everything started</b>!"
-mansion_intro['es'] = " han vuelto a <b>la mansión donde todo comenzó</b>!"
+mansion_intro["en"] = " are back into <b>the mansion where everything started</b>!"
+mansion_intro["es"] = " han vuelto a <b>la mansión donde todo comenzó</b>!"
 
 mansion_representations = {
     "KITCHEN": "🍲",
@@ -36,28 +43,46 @@ mansion_representations = {
 
 mansion_activities = {
     "KITCHEN": [
-        {"en" : "noticed someone cooking", "es" : "noté a alguien cocinando"},
-        {"en" : "heard someone washing the dishes", "es" : "escuché a alguien lavando los platos"},
+        {"en": "noticed someone cooking", "es": "noté a alguien cocinando"},
+        {
+            "en": "heard someone washing the dishes",
+            "es": "escuché a alguien lavando los platos",
+        },
     ],
     "BATHROOM": [
-        { "en" : "heard someone brushing their teeth", "es" : "escuché a alguien cepillándose los dientes"},
-        { "en" : "heard someone flushing the toilet", "es" : "escuché a alguien tirando de la cadena"},
+        {
+            "en": "heard someone brushing their teeth",
+            "es": "escuché a alguien cepillándose los dientes",
+        },
+        {
+            "en": "heard someone flushing the toilet",
+            "es": "escuché a alguien tirando de la cadena",
+        },
     ],
     "GARDEN": [
-        { "en" : "heard someone whistling in the garden (🌳)", "es" : "escuché a alguien silvando en el jardín (🌳)" },
-        { "en": "looked outside and saw someone pruning the bushes", "es" : "miré afuera y vi a alguien podando los arbustos" },
+        {
+            "en": "heard someone whistling in the garden (🌳)",
+            "es": "escuché a alguien silvando en el jardín (🌳)",
+        },
+        {
+            "en": "looked outside and saw someone pruning the bushes",
+            "es": "miré afuera y vi a alguien podando los arbustos",
+        },
     ],
     "DINING": [
-        { "en" : "heard someone playing the piano in the dining room (🪑)", "es" : "escuché a alguien tocando el piano en el comedor (🪑)" }
+        {
+            "en": "heard someone playing the piano in the dining room (🪑)",
+            "es": "escuché a alguien tocando el piano en el comedor (🪑)",
+        }
     ],
 }
 
 ship_intro = {}
-ship_intro['en'] = " are transported back in time to <b>a pirate ship</b>!"
-ship_intro['es'] = " han sido transportados en el tiempo a <b>un barco pirata</b>!"
+ship_intro["en"] = " are transported back in time to <b>a pirate ship</b>!"
+ship_intro["es"] = " han sido transportados en el tiempo a <b>un barco pirata</b>!"
 
 ship_labels = {}
-ship_labels['en'] = {
+ship_labels["en"] = {
     "GALLEY": "galley",
     "NAVIGATION ROOM": "navigation room",
     "CAPTAIN CABIN": "captain cabin",
@@ -65,7 +90,7 @@ ship_labels['en'] = {
     "CARGO HOLD": "cargo hold",
 }
 
-ship_labels['es'] = {
+ship_labels["es"] = {
     "GALLEY": "la cocina",
     "NAVIGATION ROOM": "la sala de navegación",
     "CAPTAIN CABIN": "la cabina del capitán",
@@ -83,29 +108,43 @@ ship_representations = {
 
 ship_activities = {
     "GALLEY": [
-        { "en" : "noticed someone cooking",
-          "es" : "noté a alguien cocinando" },
-        { "en" : "heard someone washing the dishes",
-          "es" : "escuché a alguien lavando los platos" }
+        {"en": "noticed someone cooking", "es": "noté a alguien cocinando"},
+        {
+            "en": "heard someone washing the dishes",
+            "es": "escuché a alguien lavando los platos",
+        },
     ],
     "NAVIGATION ROOM": [
-        { "en" : "saw someone looking at a map", "es" : "vi a alguien mirando un mapa" },
+        {"en": "saw someone looking at a map", "es": "vi a alguien mirando un mapa"},
     ],
     "MAIN DECK": [
-        { "en" : "heard someone loading a cannon", "es" : "escuché a alguien cargando un cañón" },
-        { "en" : "heard someone adjusting the sails", "es" : "escuché a alguien ajustando las velas" }
+        {
+            "en": "heard someone loading a cannon",
+            "es": "escuché a alguien cargando un cañón",
+        },
+        {
+            "en": "heard someone adjusting the sails",
+            "es": "escuché a alguien ajustando las velas",
+        },
     ],
     "CARGO HOLD": [
-        { "en" : "heard someone rummaging in the cargo hold (📦)", "es" : "escuché a alguien revisando la bodega de carga (📦)" }
+        {
+            "en": "heard someone rummaging in the cargo hold (📦)",
+            "es": "escuché a alguien revisando la bodega de carga (📦)",
+        }
     ],
 }
 
 egypt_intro = {}
-egypt_intro['en'] = " are transported back in time to <b>a pyramid in the Ancient Egypt</b>!"
-egypt_intro['es'] = " han sido transportados en el tiempo a <b>una pirámide en el Antiguo Egipto</b>!"
+egypt_intro["en"] = (
+    " are transported back in time to <b>a pyramid in the Ancient Egypt</b>!"
+)
+egypt_intro["es"] = (
+    " han sido transportados en el tiempo a <b>una pirámide en el Antiguo Egipto</b>!"
+)
 
 egypt_labels = {}
-egypt_labels['en'] = {
+egypt_labels["en"] = {
     "THRONE ROOM": "throne room",
     "BURIAL PLACE": "burial chamber",
     "TEMPLE": "temple",
@@ -113,7 +152,7 @@ egypt_labels['en'] = {
     "GARDEN": "garden",
 }
 
-egypt_labels['es'] = {
+egypt_labels["es"] = {
     "THRONE ROOM": "el cuarto del trono",
     "BURIAL PLACE": "la cámara funeraria",
     "TEMPLE": "el templo",
@@ -131,31 +170,59 @@ egypt_representations = {
 
 egypt_activities = {
     "THRONE ROOM": [
-        { "en" : "saw someone from a distance sitting on the throne", "es" : "vi a alguien sentado en el trono a lo lejos" },
-        { "en" : "saw someone from afar polishing the throne", "es" : "vi a alguien puliendo el trono a lo lejos" }
+        {
+            "en": "saw someone from a distance sitting on the throne",
+            "es": "vi a alguien sentado en el trono a lo lejos",
+        },
+        {
+            "en": "saw someone from afar polishing the throne",
+            "es": "vi a alguien puliendo el trono a lo lejos",
+        },
     ],
     "BURIAL PLACE": [
-        {"en" : "saw someone at a distance praying in the burial chamber (⚰️)", "es" : "vi a alguien rezando en la cámara funeraria a lo lejos (⚰️)"},
-        ],
+        {
+            "en": "saw someone at a distance praying in the burial chamber (⚰️)",
+            "es": "vi a alguien rezando en la cámara funeraria a lo lejos (⚰️)",
+        },
+    ],
     "TEMPLE": [
-        { "en" : "saw someone at a distance praying in the temple (📿)", "es" : "vi a alguien a la distancia rezando en el templo (📿)"},
-        { "en" : "saw someone from afar lighting candles in the temple (📿)", "es" : "vi a alguien a la distancia encendiendo velas en el templo (📿)"}
+        {
+            "en": "saw someone at a distance praying in the temple (📿)",
+            "es": "vi a alguien a la distancia rezando en el templo (📿)",
+        },
+        {
+            "en": "saw someone from afar lighting candles in the temple (📿)",
+            "es": "vi a alguien a la distancia encendiendo velas en el templo (📿)",
+        },
     ],
     "DESERT": [
-        {"en" : "looked outside and saw someone riding a camel in the desert (🏜️)", "es" : "miré afuera y vi a alguien montando un camello en el desierto (🏜️)"},
-        ],
+        {
+            "en": "looked outside and saw someone riding a camel in the desert (🏜️)",
+            "es": "miré afuera y vi a alguien montando un camello en el desierto (🏜️)",
+        },
+    ],
     "GARDEN": [
-        { "en" : "heard someone whistling in the garden (🌳)", "es" : "escuché a alguien silbando en el jardín (🌳)" },
-        { "en" : "looked outside and saw someone pruning the bushes", "es" : "miré afuera y vi a alguien podando los arbustos" }
+        {
+            "en": "heard someone whistling in the garden (🌳)",
+            "es": "escuché a alguien silbando en el jardín (🌳)",
+        },
+        {
+            "en": "looked outside and saw someone pruning the bushes",
+            "es": "miré afuera y vi a alguien podando los arbustos",
+        },
     ],
 }
 
 medieval_castle_intro = {}
-medieval_castle_intro['en'] = " are transported back in time to <b>a castle in the Middle Ages</b>!"
-medieval_castle_intro['es'] = " han sido transportados en el tiempo a <b>un castillo en la Edad Media</b>!"
+medieval_castle_intro["en"] = (
+    " are transported back in time to <b>a castle in the Middle Ages</b>!"
+)
+medieval_castle_intro["es"] = (
+    " han sido transportados en el tiempo a <b>un castillo en la Edad Media</b>!"
+)
 
 medieval_castle_labels = {}
-medieval_castle_labels['en'] = {
+medieval_castle_labels["en"] = {
     "GREAT HALL": "great hall",
     "BED CHAMBER": "bed chamber",
     "DUNGEON": "dungeon",
@@ -163,7 +230,7 @@ medieval_castle_labels['en'] = {
     "GARDEN": "garden",
 }
 
-medieval_castle_labels['es'] = {
+medieval_castle_labels["es"] = {
     "GREAT HALL": "el gran salón",
     "BED CHAMBER": "el dormitorio principal",
     "DUNGEON": "la mazmorra",
@@ -181,25 +248,47 @@ medieval_castle_representations = {
 
 medieval_castle_activities = {
     "GREAT HALL": [
-        { "en": "heard someone playing the harp in the great hall (🍷)", "es" : "escuché a alguien tocando el arpa en el gran salón (🍷)" },
-        { "en": "saw someone from a distance dancing in the great hall (🍷)", "es" : "vi a alguien bailando en el gran salón (🍷) a lo lejos" }
+        {
+            "en": "heard someone playing the harp in the great hall (🍷)",
+            "es": "escuché a alguien tocando el arpa en el gran salón (🍷)",
+        },
+        {
+            "en": "saw someone from a distance dancing in the great hall (🍷)",
+            "es": "vi a alguien bailando en el gran salón (🍷) a lo lejos",
+        },
     ],
     "ARMORY": [
-        { "en": "saw someone from afar sharpening a sword in the armory (🛡️)", "es" : "vi a alguien afilando una espada en la armería (🛡️) a lo lejos " },
-        { "en": "saw someone at a distance polishing a shield in the armory (🛡️)", "es" : "vi a alguien puliendo un escudo en la armería (🛡️) a lo lejos" }
+        {
+            "en": "saw someone from afar sharpening a sword in the armory (🛡️)",
+            "es": "vi a alguien afilando una espada en la armería (🛡️) a lo lejos ",
+        },
+        {
+            "en": "saw someone at a distance polishing a shield in the armory (🛡️)",
+            "es": "vi a alguien puliendo un escudo en la armería (🛡️) a lo lejos",
+        },
     ],
     "GARDEN": [
-        { "en" : "heard someone whistling in the garden (🌳)", "es" : "escuché a alguien silbando en el jardín (🌳)" },
-        { "en" : "looked outside and saw someone pruning the bushes", "es" : "miré afuera y vi a alguien podando los arbustos" }
+        {
+            "en": "heard someone whistling in the garden (🌳)",
+            "es": "escuché a alguien silbando en el jardín (🌳)",
+        },
+        {
+            "en": "looked outside and saw someone pruning the bushes",
+            "es": "miré afuera y vi a alguien podando los arbustos",
+        },
     ],
 }
 
 train_intro = {}
-train_intro['en'] = " are transported back in time into <b>the famous Orient Express</b> during its last voyage!"
-train_intro['es'] = " han sido transportados en el tiempo al <b>famoso Orient Express</b> durante su último viaje!"
+train_intro["en"] = (
+    " are transported back in time into <b>the famous Orient Express</b> during its last voyage!"
+)
+train_intro["es"] = (
+    " han sido transportados en el tiempo al <b>famoso Orient Express</b> durante su último viaje!"
+)
 
 train_labels = {}
-train_labels['en'] = {
+train_labels["en"] = {
     "LOCOMOTIVE": "locomotive",
     "LUGGAGE": "luggage carriage",
     "DINING": "dining carriage",
@@ -207,7 +296,7 @@ train_labels['en'] = {
     "LOUNGE": "lounge carriage",
 }
 
-train_labels['es'] = {
+train_labels["es"] = {
     "LOCOMOTIVE": "la locomotora",
     "LUGGAGE": "el vagón de equipaje",
     "DINING": "el vagón comedor",
@@ -225,27 +314,49 @@ train_representations = {
 
 train_activities = {
     "LOCOMOTIVE": [
-        { "en" : "glanced out my window and saw someone fueling the locomotive (🚂)", "es" : "miré por la ventana y vi a alguien repostando la locomotora (🚂)" },
-        { "en" : "heard the whistle of the locomotive", "es" : "escuché el silbido de la locomotora" }
+        {
+            "en": "glanced out my window and saw someone fueling the locomotive (🚂)",
+            "es": "miré por la ventana y vi a alguien repostando la locomotora (🚂)",
+        },
+        {
+            "en": "heard the whistle of the locomotive",
+            "es": "escuché el silbido de la locomotora",
+        },
     ],
     "LUGGAGE": [
-        { "en" : "heard someone rummaging in luggage carriage (🧳)", "es" : "escuché a alguien revisando el vagón de carga (🧳)" }
+        {
+            "en": "heard someone rummaging in luggage carriage (🧳)",
+            "es": "escuché a alguien revisando el vagón de carga (🧳)",
+        }
     ],
     "DINING": [
-        { "en" : "glanced out my window and saw someone eating in the dining carriage (🍽️)", "es" : "miré por la ventana y vi a alguien comiendo en el vagón comedor (🍽️)"},
-        { "en" : "heard someone playing the piano in the dining carriage (🍽️)", "es" : "escuché a alguien tocando el piano en el vagón comedor (🍽️)" },
+        {
+            "en": "glanced out my window and saw someone eating in the dining carriage (🍽️)",
+            "es": "miré por la ventana y vi a alguien comiendo en el vagón comedor (🍽️)",
+        },
+        {
+            "en": "heard someone playing the piano in the dining carriage (🍽️)",
+            "es": "escuché a alguien tocando el piano en el vagón comedor (🍽️)",
+        },
     ],
     "LOUNGE": [
-        { "en" : "glanced out my window and saw someone reading in the lounge carriage (🪑)", "es" : "miré por la ventana y vi a alguien leyendo en el vagón salón (🪑)"},
+        {
+            "en": "glanced out my window and saw someone reading in the lounge carriage (🪑)",
+            "es": "miré por la ventana y vi a alguien leyendo en el vagón salón (🪑)",
+        },
     ],
 }
 
 space_station_intro = {}
-space_station_intro['en'] = " are transported into the future to <b>a high-tech space station</b> orbiting an unknown planet!"
-space_station_intro['es'] = " han sido transportados al futuro a <b>una estación espacial de alta tecnología</b> orbitando un planeta desconocido!"
+space_station_intro["en"] = (
+    " are transported into the future to <b>a high-tech space station</b> orbiting an unknown planet!"
+)
+space_station_intro["es"] = (
+    " han sido transportados al futuro a <b>una estación espacial de alta tecnología</b> orbitando un planeta desconocido!"
+)
 
 space_station_labels = {}
-space_station_labels['en'] = {
+space_station_labels["en"] = {
     "COMMAND": "command module",
     "LAB": "lab module",
     "AIRLOCK": "airlock module",
@@ -253,7 +364,7 @@ space_station_labels['en'] = {
     "GARDEN": "garden module",
 }
 
-space_station_labels['es'] = {
+space_station_labels["es"] = {
     "COMMAND": "el módulo de comando",
     "LAB": "el módulo de laboratorio",
     "AIRLOCK": "el módulo de esclusa",
@@ -270,6 +381,7 @@ space_station_representations = {
 }
 
 space_station_activities = {}
+
 
 def get_location_data(selected_location):
     if selected_location is None:
@@ -367,16 +479,16 @@ class Locations:
 
         nodes_list = list(nodes.values())
         shuffle(nodes_list)
-        names_list = list(names['en'].keys())
+        names_list = list(names["en"].keys())
 
         self.names = names
         self.indices = {}
-        #self.names = {}
+        # self.names = {}
         self.representations = {}
 
         if location_name == "train":
             self.indices["ROOM0"] = "LOCOMOTIVE"
-            #self.names["ROOM0"] = names["LOCOMOTIVE"]
+            # self.names["ROOM0"] = names["LOCOMOTIVE"]
             self.representations["ROOM0"] = representations["LOCOMOTIVE"]
 
             names_list = [x for x in names_list if x != "LOCOMOTIVE"]
@@ -384,7 +496,7 @@ class Locations:
 
         for generic, concrete in zip(nodes_list, names_list):
             self.indices[generic] = concrete
-            #self.names[generic] = names[concrete]
+            # self.names[generic] = names[concrete]
             self.representations[generic] = representations[concrete]
 
         self.rindices = {v: k for k, v in self.indices.items()}
@@ -458,13 +570,13 @@ class Locations:
         relabeled_graph = relabel_nodes(self.graph, labels)
         g = to_agraph(relabeled_graph)
 
-        if (g.number_of_nodes() > 3):
+        if g.number_of_nodes() > 3:
             pos = planar_layout(g)
 
             # Apply the planar layout to the PyGraphviz graph
             for node, (x, y) in pos.items():
                 n = g.get_node(node)
-                n.attr['pos'] = f"{x},{y}"
+                n.attr["pos"] = f"{x},{y}"
 
         g.graph_attr.update(bgcolor="transparent")
         g.node_attr.update(
@@ -483,13 +595,13 @@ class Locations:
         relabeled_graph = relabel_nodes(self.graph, labels)
         g = to_agraph(relabeled_graph)
 
-        if (g.number_of_nodes() > 3):
+        if g.number_of_nodes() > 3:
             pos = planar_layout(g)
 
             # Apply the planar layout to the PyGraphviz graph
             for node, (x, y) in pos.items():
                 n = g.get_node(node)
-                n.attr['pos'] = f"{x},{y}"
+                n.attr["pos"] = f"{x},{y}"
 
         g.graph_attr.update(
             bgcolor="transparent", nodesep="0.1", ranksep="0.1", margin="0"
@@ -518,6 +630,7 @@ class Locations:
 
         return activities
 
+
 class TutorialLocations(Locations):
     def __init__(self, location_data):
         self.name = "tutorial"
@@ -535,7 +648,7 @@ class TutorialLocations(Locations):
 
         self.names = names
         self.indices = {}
-        #self.names = {}
+        # self.names = {}
         self.representations = {}
 
         self.indices["ROOM0"] = "KITCHEN"

@@ -10,7 +10,7 @@ classic_weapons = [
 
 weapon_labels = {}
 
-weapon_labels['en'] = {
+weapon_labels["en"] = {
     "$PISTOL": "pistol",
     "$KNIFE": "knife",
     "$SCISSORS": "scissors",
@@ -29,10 +29,10 @@ weapon_labels['en'] = {
     "$ROCK": "rock",
     "$CURSE": "curse",
     "$WIRE": "wire extension",
-    "$SONICBLASTER": "sonic blaster"
+    "$SONICBLASTER": "sonic blaster",
 }
 
-weapon_labels['es'] = {
+weapon_labels["es"] = {
     "$PISTOL": "la pistola",
     "$KNIFE": "el cuchillo",
     "$SCISSORS": "las tijeras",
@@ -51,7 +51,7 @@ weapon_labels['es'] = {
     "$ROCK": "la roca",
     "$CURSE": "la maldición",
     "$WIRE": "el cable alargador",
-    "$SONICBLASTER": "el arma sónica"
+    "$SONICBLASTER": "el arma sónica",
 }
 
 ship_weapons = [
@@ -83,8 +83,9 @@ space_station_weapons = [
     {"$KNIFE": "🔪", "$SCISSORS": "✂️", "$AXE": "🪓", "$SCREWDRIVER": "🪛"},
     {"$POISON": "⚗️", "$SONICBLASTER": "🔊"},
     {"$HAMMER": "🔨", "$WRENCH": "🔧"},
-    {"$ROPE": "🪢", "$WIRE": "🔌"}
+    {"$ROPE": "🪢", "$WIRE": "🔌"},
 ]
+
 
 def get_available_weapons(num_weapons, location_name):
 

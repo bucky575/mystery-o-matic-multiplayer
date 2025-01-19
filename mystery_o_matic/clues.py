@@ -4,6 +4,7 @@ from random import randint, choice
 from mystery_o_matic.weapons import get_weapon_type
 from mystery_o_matic.time import Time
 
+
 class AbstractStatement(ABC):
     def __init__(self):
         pass
@@ -17,16 +18,16 @@ class AbstractStatement(ABC):
         return ""
 
     def string(self):
-        return {
-            'en': self.string_english(),
-            'es': self.string_spanish()
-        }
+        return {"en": self.string_english(), "es": self.string_spanish()}
+
 
 class MurderWasAloneStatement(AbstractStatement):
     def string_english(self):
         return "The murderer was alone with their victim, and the body remained unmoved"
+
     def string_spanish(self):
         return "El asesino estaba a solas con la víctima y el cuerpo no se movió"
+
 
 class MurderWasNotFoundWithBodyStatement(AbstractStatement):
     def string_english(self):
@@ -35,15 +36,18 @@ class MurderWasNotFoundWithBodyStatement(AbstractStatement):
     def string_spanish(self):
         return "El asesino no fue encontrado con el cuerpo"
 
+
 class WeaponLocationStatement(AbstractStatement):
     def __init__(self, weapon, vplace):
         self.vplace = vplace
         self.weapon = weapon
+
     def string_english(self):
         return f"The {self.weapon} from the {self.vplace}"
 
     def string_spanish(self):
         return f"{self.weapon} en {self.vplace}"
+
 
 class CharacterLocationStatement(AbstractStatement):
     def __init__(self, subject, place, victim):
@@ -63,18 +67,24 @@ class CharacterLocationStatement(AbstractStatement):
         else:
             return f"{self.subject} estaba en {self.place}"
 
+
 class NoOneElseStatement(AbstractStatement):
     def string_english(self):
         return "No one else was present in the location."
+
     def string_spanish(self):
         return "No había nadie más en el lugar"
+
 
 class WeaponLocationsIntroStatement(AbstractStatement):
     def string_english(self):
         return "The killer retrieved the murder weapon from one of these places:\n"
 
     def string_spanish(self):
-        return "El asesino consiguió el arma homicida de uno de los siguientes lugares:\n"
+        return (
+            "El asesino consiguió el arma homicida de uno de los siguientes lugares:\n"
+        )
+
 
 class WeaponLocationsOutroStatement(AbstractStatement):
     def string_english(self):
@@ -82,6 +92,7 @@ class WeaponLocationsOutroStatement(AbstractStatement):
 
     def string_spanish(self):
         return "Nadie vió al asesino tomar el arma homicida"
+
 
 class FinalLocationsIntroStatement(AbstractStatement):
     def __init__(self, time):
@@ -92,6 +103,7 @@ class FinalLocationsIntroStatement(AbstractStatement):
 
     def string_spanish(self):
         return f"Sabemos donde estaban todos a las {self.time}:\n"
+
 
 class AbstractClue(ABC):
     subject = None
@@ -116,10 +128,8 @@ class AbstractClue(ABC):
         return ""
 
     def string(self):
-        return {
-            'en': self.string_english(),
-            'es': self.string_spanish()
-        }
+        return {"en": self.string_english(), "es": self.string_spanish()}
+
 
 class SawWhenArrivingClue(AbstractClue):
     def __init__(self, subject, object, object_is_alive, place, time):
@@ -136,7 +146,7 @@ class SawWhenArrivingClue(AbstractClue):
         s = f'{self.subject}: "'
 
         if object == "$NOBODY":
-            if (r > 0):
+            if r > 0:
                 s += f'The {self.place} was empty when I arrived at {self.time}"'
                 return s
             r = 0
@@ -198,7 +208,11 @@ class SawWhenArrivingClue(AbstractClue):
     def is_incriminating(self, killer, victim, place, time):
         if self.subject == killer and self.object == victim:
             return True
-        if self.subject == killer and self.place == place and self.time.seconds <= time.seconds:
+        if (
+            self.subject == killer
+            and self.place == place
+            and self.time.seconds <= time.seconds
+        ):
             return True
         return False
 
@@ -248,7 +262,7 @@ class NotSawWhenArrivingLeavingClue(AbstractClue):
         s = f'{self.subject}: "'
 
         if r == 0:
-            s += f'I\'m sure {self.object} was not with me in the {self.place} at {self.time}"'
+            s += f"I'm sure {self.object} was not with me in the {self.place} at {self.time}\""
         elif r == 1:
             s += f'I know {self.object} was not with me in the {self.place} at {self.time}"'
         elif r == 2:
@@ -321,7 +335,7 @@ class SawVictimWhenArrivingClue(AbstractClue):
         return False
 
     def manipulate(self, killer, victim, alibi_place):
-        return None # Too risky to manipulate this clue
+        return None  # Too risky to manipulate this clue
 
 
 class SawVictimWhenLeavingClue(AbstractClue):
@@ -363,7 +377,7 @@ class SawWhenLeavingClue(AbstractClue):
         s = f'{self.subject}: "'
 
         if object == "$NOBODY":
-            if (r > 0):
+            if r > 0:
                 s += f'The {self.place} was empty when I left it at {self.time}"'
                 return s
             r = 0
@@ -428,7 +442,8 @@ class SawWhenLeavingClue(AbstractClue):
         return False
 
     def manipulate(self, killer, victim, alibi_place):
-        return None # Too risky to manipulate this clue
+        return None  # Too risky to manipulate this clue
+
 
 class WasMurderedClue(AbstractClue):
     def __init__(self, victim, place, time):
@@ -499,7 +514,8 @@ class WasMurderedBodyTwoOptionsClue(AbstractClue):
     def manipulate(self, killer, victim, alibi_place):
         raise ValueError("Invalid manipulation: " + str(self))
 
-class WasVictimDeadAtClue(AbstractClue): # UNUSED
+
+class WasVictimDeadAtClue(AbstractClue):  # UNUSED
     time = Time(0)
     alternative = False
 
@@ -531,6 +547,7 @@ class WasVictimDeadAtClue(AbstractClue): # UNUSED
 
     def manipulate(self, killer, victim, alibi_place):
         raise ValueError("Invalid manipulation: " + str(self))
+
 
 class WasVictimAliveAtClue(AbstractClue):
     time = Time(0)
@@ -564,6 +581,7 @@ class WasVictimAliveAtClue(AbstractClue):
 
     def manipulate(self, killer, victim, alibi_place):
         raise ValueError("Invalid manipulation: " + str(self))
+
 
 class WasMurderedAfterClue(AbstractClue):
     time = Time(0)
@@ -681,6 +699,7 @@ class WasMurderedScreamClue(AbstractClue):
     def manipulate(self, killer, victim, alibi_place):
         raise ValueError("Invalid manipulation: " + str(self))
 
+
 class PoliceArrivedClue(AbstractClue):
     def __init__(self, time):
         self.time = time
@@ -736,6 +755,7 @@ class EvidenceClue(AbstractClue):
     def manipulate(self, killer, victim, alibi_place):
         raise ValueError("Invalid manipulation: " + str(self))
 
+
 class StayedClue(AbstractClue):
     def __init__(self, subject, place, time_start, time_end):
         self.subject = subject
@@ -767,7 +787,9 @@ class StayedClue(AbstractClue):
         elif r == 1:
             s += f'I did not move from the {self.place} between {self.time_start} and {self.time_end}"'
         elif r == 2:
-            s += f'Stayed in the {self.place} from {self.time_start} to {self.time_end}"'
+            s += (
+                f'Stayed in the {self.place} from {self.time_start} to {self.time_end}"'
+            )
         else:
             raise ValueError("Invalid random number: " + str(r))
 
@@ -787,6 +809,7 @@ class StayedClue(AbstractClue):
         self.place = alibi_place
         return self
 
+
 class InteractedClue(AbstractClue):
     def __init__(self, subject0, subject1, place, time):
         self.subject0 = subject0
@@ -801,9 +824,13 @@ class InteractedClue(AbstractClue):
     def string_english(self):
         r = randint(0, 1)
         if r == 0:
-            return f'{self.subject0}: "I talked with {self.subject1} in the {self.place}"'
+            return (
+                f'{self.subject0}: "I talked with {self.subject1} in the {self.place}"'
+            )
         elif r == 1:
-            return f'{self.subject0}: "I chatted with {self.subject1} in the {self.place}"'
+            return (
+                f'{self.subject0}: "I chatted with {self.subject1} in the {self.place}"'
+            )
         else:
             raise ValueError("Invalid random number: " + str(r))
 
@@ -818,7 +845,8 @@ class InteractedClue(AbstractClue):
         return False
 
     def manipulate(self, killer, victim, alibi_place):
-        return None # This clue is not incriminating enough to lie, just omitting information
+        return None  # This clue is not incriminating enough to lie, just omitting information
+
 
 class HeardClue(AbstractClue):
     def __init__(self, subject, activity, time):
@@ -827,7 +855,6 @@ class HeardClue(AbstractClue):
         assert "en" in activity and "es" in activity
         self.time = time
         super().__init__()
-
 
     def string_spanish(self):
         r = randint(0, 1)
@@ -847,6 +874,7 @@ class HeardClue(AbstractClue):
 
     def manipulate(self, killer, victim, alibi_place):
         raise ValueError("Invalid manipulation: " + str(self))
+
 
 class WeaponNotUsedClue(AbstractClue):
     def __init__(self, weapon):
@@ -910,7 +938,9 @@ def create_clue(call):
         return SawWhenArrivingClue(call[1], call[2], call[3], call[4], call[5])
     elif call[0] == "NotSawWhenArriving":
         assert len(call) == 5
-        return NotSawWhenArrivingLeavingClue(call[1], call[2], call[3], call[4], "arriving")
+        return NotSawWhenArrivingLeavingClue(
+            call[1], call[2], call[3], call[4], "arriving"
+        )
     elif call[0] == "SawVictimWhenArriving":
         assert len(call) == 6
         return SawVictimWhenArrivingClue(call[1], call[2], call[3], call[4], call[5])
@@ -922,7 +952,9 @@ def create_clue(call):
         return SawWhenLeavingClue(call[1], call[2], call[3], call[4], call[5])
     elif call[0] == "NotSawWhenLeaving":
         assert len(call) == 5
-        return NotSawWhenArrivingLeavingClue(call[1], call[2], call[3], call[4], "leaving")
+        return NotSawWhenArrivingLeavingClue(
+            call[1], call[2], call[3], call[4], "leaving"
+        )
     elif call[0] == "WasMurdered":
         assert len(call) == 4
         return WasMurderedClue(call[1], call[2], call[3])
@@ -968,7 +1000,7 @@ def create_clue(call):
 def create_murder_time_clues(murder_time, interval_size, difficulty):
     r = -1
     if difficulty == "easy":
-        r = randint(0, 1) # Only the first two types of clues are used
+        r = randint(0, 1)  # Only the first two types of clues are used
     else:
         r = randint(2, 6)
 
@@ -1018,7 +1050,7 @@ def create_murder_time_clues(murder_time, interval_size, difficulty):
                 Time(murder_time.seconds + 2 * interval_size),
                 interval_size,
                 positive,
-                False
+                False,
             ]
         )
         third_clue = create_clue(
@@ -1027,7 +1059,7 @@ def create_murder_time_clues(murder_time, interval_size, difficulty):
                 Time(murder_time.seconds - interval_size),
                 interval_size,
                 not positive,
-                True # Use alternative form
+                True,  # Use alternative form
             ]
         )
     elif r == 3:
@@ -1054,7 +1086,7 @@ def create_murder_time_clues(murder_time, interval_size, difficulty):
                 Time(murder_time.seconds - 3 * interval_size),
                 interval_size,
                 not positive,
-                True, # Use alternative form
+                True,  # Use alternative form
             ]
         )
     elif r == 4:
@@ -1066,17 +1098,13 @@ def create_murder_time_clues(murder_time, interval_size, difficulty):
             ]
         )
         second_clue = create_clue(
-            [
-                "WasVictimAliveAt",
-                Time(murder_time.seconds - 2 * interval_size),
-                False
-            ]
+            ["WasVictimAliveAt", Time(murder_time.seconds - 2 * interval_size), False]
         )
         third_clue = create_clue(
             [
                 "WasVictimAliveAt",
                 Time(murder_time.seconds - interval_size),
-                True # Use alternative form
+                True,  # Use alternative form
             ]
         )
     elif r == 5:
@@ -1088,17 +1116,13 @@ def create_murder_time_clues(murder_time, interval_size, difficulty):
             ]
         )
         second_clue = create_clue(
-            [
-                "WasVictimDeadAt",
-                Time(murder_time.seconds + 2 * interval_size),
-                False
-            ]
+            ["WasVictimDeadAt", Time(murder_time.seconds + 2 * interval_size), False]
         )
         third_clue = create_clue(
             [
                 "WasVictimDeadAt",
                 Time(murder_time.seconds + interval_size),
-                True # Use alternative form
+                True,  # Use alternative form
             ]
         )
     elif r == 6:
@@ -1110,28 +1134,23 @@ def create_murder_time_clues(murder_time, interval_size, difficulty):
             ]
         )
         second_clue = create_clue(
-            [
-                "WasVictimAliveAt",
-                Time(murder_time.seconds - interval_size),
-                False
-            ]
+            ["WasVictimAliveAt", Time(murder_time.seconds - interval_size), False]
         )
         third_clue = create_clue(
             [
                 "WasVictimDeadAt",
                 Time(murder_time.seconds + interval_size),
-                True # Use alternative form
+                True,  # Use alternative form
             ]
         )
     else:
         raise ValueError("Invalid random number: " + str(r))
 
-    #print("Murder time:", str(murder_time))
-    #print(first_clue.string_english())
-    #print(second_clue.string_english())
-    #if third_clue is not None:
+    # print("Murder time:", str(murder_time))
+    # print(first_clue.string_english())
+    # print(second_clue.string_english())
+    # if third_clue is not None:
     #    print(third_clue.string_english())
-    #assert False
+    # assert False
 
     return first_clue, second_clue, third_clue
-

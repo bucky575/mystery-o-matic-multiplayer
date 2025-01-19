@@ -3,18 +3,23 @@ from mystery_o_matic.output.llm.utils import (
     read_txt_template,
     get_bullet_list,
     remove_emojis,
-    save_txt
+    save_txt,
 )
 from mystery_o_matic.clues import NoOneElseStatement
 
-def produce_llm_output(static_dir, out_dir, language, mystery, weapons, weapon_labels, locations):
+
+def produce_llm_output(
+    static_dir, out_dir, language, mystery, weapons, weapon_labels, locations
+):
 
     connections_list = []
     for src in locations.graph.nodes:
         connections = []
         for dst in locations.graph[src]:
-            connections.append("$"+dst)
-        connections_list.append("The $"+src + " is connected with " + ", ".join(connections))
+            connections.append("$" + dst)
+        connections_list.append(
+            "The $" + src + " is connected with " + ", ".join(connections)
+        )
 
     connections_list = get_bullet_list(connections_list, 0)
 
@@ -56,7 +61,7 @@ def produce_llm_output(static_dir, out_dir, language, mystery, weapons, weapon_l
 
     for room, name in locations.names[language].items():
         if room not in locations.rindices:
-            continue # skip any missing place
+            continue  # skip any missing place
         index = locations.rindices[room]
         names_txt[index] = name
 
@@ -67,7 +72,7 @@ def produce_llm_output(static_dir, out_dir, language, mystery, weapons, weapon_l
             label = label.capitalize()
         names_txt[weapon.replace("$", "")] = label
 
-    #print(names_html)
+    # print(names_html)
     bullets = []
     for i, clue in enumerate(mystery.initial_clues):
         bullets.append(clue[language])

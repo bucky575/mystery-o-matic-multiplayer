@@ -80,7 +80,7 @@ class Model:
             locationWeapon=self.weapon_location_condition,
             charEnum=self.char_enum,
             placeEnum=self.place_enum,
-            minNumberOfMoves=self.minNumberOfMoves
+            minNumberOfMoves=self.minNumberOfMoves,
         )
         solidity_filename = save_solidity(self.outdir, solidity_source)
         self.source = read_solidity(solidity_filename)

@@ -5,6 +5,7 @@ from mystery_o_matic.clues import *
 from mystery_o_matic.solidity import get_tx, get_event
 from mystery_o_matic.time import Time
 
+
 def get_intervals_length_from_events(source, contract_name, events):
     """
     Calculates the length of intervals between events.
@@ -47,7 +48,14 @@ class Mystery:
     number_characters = 0
 
     def __init__(
-        self, difficulty, initial_locations, weapon_locations, weapon_used, activities, source, txs
+        self,
+        difficulty,
+        initial_locations,
+        weapon_locations,
+        weapon_used,
+        activities,
+        source,
+        txs,
     ):
         """
         Initialize the Mystery class.
@@ -200,13 +208,16 @@ class Mystery:
         self.alibi_place = "$" + choice(places)
         # avoid using the alibi location as the place of the murder
         # also avoid using the final location of the killer to minimize the chance of incoherent statements
-        while self.alibi_place == self.murder_place or self.alibi_place == final_location_killer:
+        while (
+            self.alibi_place == self.murder_place
+            or self.alibi_place == final_location_killer
+        ):
             self.alibi_place = "$" + choice(places)
 
         print("Alibi location is:", self.alibi_place)
         # Filter additional clues
         additional_clues = []
-        #print(self.final_locations)
+        # print(self.final_locations)
         for clue in self.additional_clues:
             if isinstance(clue, EvidenceClue):
                 if self.final_locations[clue.subject] == clue.place:
@@ -239,7 +250,9 @@ class Mystery:
         # The player needs more hints to fully determinate when the murdered took place
         assert self.murder_time != "", "Time of murder is missing"
 
-        first_clue, second_clue, third_clue = create_murder_time_clues(self.murder_time, self.interval_size, self.difficulty)
+        first_clue, second_clue, third_clue = create_murder_time_clues(
+            self.murder_time, self.interval_size, self.difficulty
+        )
 
         if third_clue is not None:
             self.additional_clues.append(third_clue)
@@ -273,14 +286,16 @@ class Mystery:
         # Load weapon locations clues
         for loc, weapon in self.weapon_locations.items():
             self.weapon_locations_clues.append(
-                WeaponLocationStatement(weapon, "$"+loc)
+                WeaponLocationStatement(weapon, "$" + loc)
             )
 
         self.final_locations_intro = FinalLocationsIntroStatement(self.final_time)
         self.final_locations_clues = []
         # Load final locations clues
         for c, p in self.final_locations.items():
-            self.final_locations_clues.append(CharacterLocationStatement(c, p, self.victim))
+            self.final_locations_clues.append(
+                CharacterLocationStatement(c, p, self.victim)
+            )
 
         # Convert all statements/clues to strings
         self.weapon_locations_intro = self.weapon_locations_intro.string()
@@ -332,13 +347,7 @@ class Mystery:
         index = int("".join(filter(str.isdigit, self.killer))) - 1
         weapon = self.weapon_used.replace("$", "").lower()
         weapon = weapon.replace("_", " ")
-        return (
-            self.characters[index]
-            + "-"
-            + weapon
-            + "-"
-            + str(self.murder_time)
-        )
+        return self.characters[index] + "-" + weapon + "-" + str(self.murder_time)
 
     def get_answer_hash(self):
         """

@@ -9,7 +9,17 @@ from mystery_o_matic.output.html.utils import (
 )
 from mystery_o_matic.clues import NoOneElseStatement
 
-def produce_html_output(static_dir, out_dir, languages, mystery, weapons, weapon_labels, locations, story_clue):
+
+def produce_html_output(
+    static_dir,
+    out_dir,
+    languages,
+    mystery,
+    weapons,
+    weapon_labels,
+    locations,
+    story_clue,
+):
     intervals = mystery.get_intervals()
     suspects = mystery.get_suspects()
     select_suspects = get_options_selector(zip(suspects, suspects))
@@ -27,7 +37,7 @@ def produce_html_output(static_dir, out_dir, languages, mystery, weapons, weapon
         names_txt["CHAR" + str(i + 1)] = char.lower()
 
     for room, name in locations.indices.items():
-        names_txt[room] = locations.names['en'][name]
+        names_txt[room] = locations.names["en"][name]
 
     final_locations_map = {}
     for c, p in mystery.final_locations.items():
@@ -78,7 +88,7 @@ def produce_html_output(static_dir, out_dir, languages, mystery, weapons, weapon
 
         for room, name in locations.names[language].items():
             if room not in locations.rindices:
-                continue # skip any missing place
+                continue  # skip any missing place
             index = locations.rindices[room]
             names_html[index] = name + " (" + locations.representations[index] + ")"
         for weapon, label in weapon_labels[language].items():
@@ -88,7 +98,7 @@ def produce_html_output(static_dir, out_dir, languages, mystery, weapons, weapon
                 label = label.capitalize()
             names_html[weapon.replace("$", "")] = label + " (" + weapons[weapon] + ")"
 
-        #print(names_html)
+        # print(names_html)
         bullets = []
         for i, clue in enumerate(mystery.initial_clues):
             bullets.append(clue[language])
@@ -116,7 +126,9 @@ def produce_html_output(static_dir, out_dir, languages, mystery, weapons, weapon
         additional_clues = []
 
         for i, clue in enumerate(mystery.additional_clues):
-            additional_clues.append(create_template(clue[language]).substitute(names_html))
+            additional_clues.append(
+                create_template(clue[language]).substitute(names_html)
+            )
 
         additional_clues_with_lies = []
 
@@ -141,7 +153,9 @@ def produce_html_output(static_dir, out_dir, languages, mystery, weapons, weapon
         args["selectWeapon"] = select_weapons
         args["storyClue"] = story_clue
 
-        html_template = read_html_template(static_dir + f"/{language}/index.template.html")
+        html_template = read_html_template(
+            static_dir + f"/{language}/index.template.html"
+        )
         html_source = html_template.substitute(args)
         html_source = create_template(html_source).substitute(names_html)
         build_website(out_dir, static_dir, language, html_source)

@@ -70,7 +70,9 @@ def main() -> int:
     )
 
     parser.add_argument("--season", action="store", default=1, help="season number")
-    parser.add_argument("--difficulty", action="store", default="hard", help="difficulty level")
+    parser.add_argument(
+        "--difficulty", action="store", default="hard", help="difficulty level"
+    )
     parser.add_argument(
         "--nplaces", type=int, action="store", default=4, help="number of rooms"
     )
@@ -149,12 +151,14 @@ def main() -> int:
     create_outdir(out_dir)
     location_name, location_data = get_location_data(args.location)
     print("Location selected is:", location_name)
-    weapons_available, weapon_labels = get_available_weapons(number_places, location_name)
+    weapons_available, weapon_labels = get_available_weapons(
+        number_places, location_name
+    )
 
     _, tutorial_location_data = get_location_data("mansion")
     tutorial_locations = TutorialLocations(tutorial_location_data)
     # Unused for now
-    #tutorial_locations.render_locations(out_dir + "/tutorial")
+    # tutorial_locations.render_locations(out_dir + "/tutorial")
 
     while True:
         solidity_file = args.scenario
@@ -211,16 +215,36 @@ def main() -> int:
 
     if llm_output:
         produce_llm_output(
-            static_dir, out_dir, 'en', mystery, weapons_available, weapon_labels, locations
+            static_dir,
+            out_dir,
+            "en",
+            mystery,
+            weapons_available,
+            weapon_labels,
+            locations,
         )
 
     if mode == "html":
         produce_html_output(
-            static_dir, out_dir, ['en', 'es'], mystery, weapons_available, weapon_labels, locations, story_clue
+            static_dir,
+            out_dir,
+            ["en", "es"],
+            mystery,
+            weapons_available,
+            weapon_labels,
+            locations,
+            story_clue,
         )
     elif mode == "latex":
         produce_tex_output(
-            static_dir, out_dir, ['en', 'es'], mystery, weapons_available, weapon_labels, locations, story_clue
+            static_dir,
+            out_dir,
+            ["en", "es"],
+            mystery,
+            weapons_available,
+            weapon_labels,
+            locations,
+            story_clue,
         )
     elif mode == "text":
         produce_text_output(
