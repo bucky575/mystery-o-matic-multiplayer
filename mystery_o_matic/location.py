@@ -1,6 +1,6 @@
 from random import shuffle, choice
 
-from networkx import gnp_random_graph, relabel_nodes, Graph, is_planar, is_connected
+from networkx import gnp_random_graph, relabel_nodes, Graph, is_planar, is_connected, planar_layout
 from networkx.drawing.nx_agraph import to_agraph
 
 locations = ["egypt", "castle", "train", "ship", "space station", "mansion"]
@@ -457,14 +457,24 @@ class Locations:
 
         relabeled_graph = relabel_nodes(self.graph, labels)
         g = to_agraph(relabeled_graph)
+
+        if (g.number_of_nodes() > 3):
+            pos = planar_layout(g)
+
+            # Apply the planar layout to the PyGraphviz graph
+            for node, (x, y) in pos.items():
+                n = g.get_node(node)
+                n.attr['pos'] = f"{x},{y}"
+
         g.graph_attr.update(bgcolor="transparent")
         g.node_attr.update(
             fontname="Raleway", color="lightblue2", style="filled", shape="Mrecord"
         )
+        g.layout(prog="dot")
         g.edge_attr.update(color="gray")
-        g.draw(outdir + f"/{language}/locations_big.svg", prog="dot")
+        g.draw(outdir + f"/{language}/locations_big.svg")
         g.graph_attr.update(dpi="200")
-        g.draw(outdir + f"/{language}/locations_big.png", prog="dot")
+        g.draw(outdir + f"/{language}/locations_big.png")
 
         labels = {}
         for place, name in names.items():
@@ -472,17 +482,27 @@ class Locations:
 
         relabeled_graph = relabel_nodes(self.graph, labels)
         g = to_agraph(relabeled_graph)
+
+        if (g.number_of_nodes() > 3):
+            pos = planar_layout(g)
+
+            # Apply the planar layout to the PyGraphviz graph
+            for node, (x, y) in pos.items():
+                n = g.get_node(node)
+                n.attr['pos'] = f"{x},{y}"
+
         g.graph_attr.update(
             bgcolor="transparent", nodesep="0.1", ranksep="0.1", margin="0"
         )
-        g.edge_attr.update(color="dimgrey", labeldistance="0.1")
+        g.edge_attr.update(color="dimgrey", labeldistance="0.05")
 
         g.node_attr.update(
             fontname="Raleway", shape="plaintext", width="0.2", fixedsize="true"
         )
-        g.draw(outdir + f"/{language}/locations_small.svg", prog="dot")
+        g.layout(prog="dot")
+        g.draw(outdir + f"/{language}/locations_small.svg")
         g.graph_attr.update(dpi="200")
-        g.draw(outdir + f"/{language}/locations_small.png", prog="dot")
+        g.draw(outdir + f"/{language}/locations_small.png")
 
     def get_activities(self):
         """
