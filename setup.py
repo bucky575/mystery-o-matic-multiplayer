@@ -33,6 +33,7 @@ setup(
         "yattag",
         "emoji",
         "python-telegram-bot",
+        "numpy"
     ],
     extras_require=extra_require,
     url="https://github.com/mystery-o-matic/mystery-o-matic.github.io",
