@@ -51,15 +51,52 @@ function createTables() {
 		places.set(roomName, getEmoji(tutorialData.locationIcons[roomName]));
 	}
 
-	createCluesTable("kitchen:tutorial-1", "kitchen:tutorial-1", 6, tutorialData.timeOffset, true, true);
-	createCluesTable("bathroom:tutorial-1", "bathroom:tutorial-1", 6, tutorialData.timeOffset, false, true);
-	createCluesTable("kitchen:tutorial-2", "kitchen:tutorial-2", 6, tutorialData.timeOffset, true, true);
-	createCluesTable("bathroom:tutorial-2", "bathroom:tutorial-2", 6, tutorialData.timeOffset, false, true);
-	createCluesTable("kitchen:tutorial-3", "kitchen:tutorial-3", 6, tutorialData.timeOffset, true, true);
-	createCluesTable("bathroom:tutorial-3", "bathroom:tutorial-3", 6, tutorialData.timeOffset, false, true);
+	createCluesTable("kitchen:tutorial-0", "kitchen:tutorial-0", 7, tutorialData.timeOffset, true, true);
+	createCluesTable("bedroom:tutorial-0", "bedroom:tutorial-0", 7, tutorialData.timeOffset, false, true);
+	createCluesTable("dining room:tutorial-0", "dining room:tutorial-0", 7, tutorialData.timeOffset, false, true);
+	createCluesTable("bathroom:tutorial-0", "bathroom:tutorial-0", 7, tutorialData.timeOffset, false, true);
+
+	createCluesTable("bedroom:tutorial-1", "bedroom:tutorial-1", 7, tutorialData.timeOffset, true, true);
+
+	createCluesTable("kitchen:tutorial-2", "kitchen:tutorial-2", 7, tutorialData.timeOffset, true, true);
+	createCluesTable("dining room:tutorial-2", "dining room:tutorial-2", 7, tutorialData.timeOffset, false, true);
+	createCluesTable("bathroom:tutorial-2", "bathroom:tutorial-2", 7, tutorialData.timeOffset, false, true);
+
+	createCluesTable("dining room:tutorial-3", "dining room:tutorial-3", 7, tutorialData.timeOffset, true, true);
+
+	createCluesTable("kitchen:tutorial-4", "kitchen:tutorial-4", 7, tutorialData.timeOffset, true, true);
+	createCluesTable("bedroom:tutorial-4", "bedroom:tutorial-4", 7, tutorialData.timeOffset, false, true);
+	createCluesTable("dining room:tutorial-4", "dining room:tutorial-4", 7, tutorialData.timeOffset, false, true);
+	createCluesTable("bathroom:tutorial-4", "bathroom:tutorial-4", 7, tutorialData.timeOffset, false, true);
+
+	createCluesTable("kitchen:tutorial-5", "kitchen:tutorial-5", 7, tutorialData.timeOffset, true, true);
+	createCluesTable("bedroom:tutorial-5", "bedroom:tutorial-5", 7, tutorialData.timeOffset, false, true);
+	createCluesTable("dining room:tutorial-5", "dining room:tutorial-5", 7, tutorialData.timeOffset, false, true);
+	createCluesTable("bathroom:tutorial-5", "bathroom:tutorial-5", 7, tutorialData.timeOffset, false, true);
+
+	createCluesTable("kitchen:tutorial-6", "kitchen:tutorial-6", 7, tutorialData.timeOffset, true, true);
+	createCluesTable("bedroom:tutorial-6", "bedroom:tutorial-6", 7, tutorialData.timeOffset, false, true);
+	createCluesTable("dining room:tutorial-6", "dining room:tutorial-6", 7, tutorialData.timeOffset, false, true);
+	createCluesTable("bathroom:tutorial-6", "bathroom:tutorial-6", 7, tutorialData.timeOffset, false, true);
+
+	createCluesTable("kitchen:tutorial-7", "kitchen:tutorial-7", 7, tutorialData.timeOffset, true, true);
+
+
+	createCluesTable("kitchen:tutorial-final", "kitchen:tutorial-final", 7, tutorialData.timeOffset, true, true);
+	createCluesTable("bedroom:tutorial-final", "bedroom:tutorial-final", 7, tutorialData.timeOffset, false, true);
+	createCluesTable("dining room:tutorial-final", "dining room:tutorial-final", 7, tutorialData.timeOffset, false, true);
+	createCluesTable("bathroom:tutorial-final", "bathroom:tutorial-final", 7, tutorialData.timeOffset, false, true);
+
+	tables.get("kitchen:tutorial-final").readOnly = true;
+	tables.get("bedroom:tutorial-final").readOnly = true;
+	tables.get("dining room:tutorial-final").readOnly = true;
+	tables.get("bathroom:tutorial-final").readOnly = true;
+
 	createCluesTableWeapons("weapons");
-	createCluesTableWeapons("weapons:tutorial-1");
-	createCluesTableWeapons("weapons:tutorial-2");
+	createCluesTableWeapons("weapons:tutorial-0");
+	createCluesTableWeapons("weapons:tutorial-final");
+	crossClueTable(3, '#770000', 2, 0, tables.get("weapons:tutorial-final"));
+	tables.get("weapons:tutorial-final").readOnly = true;
 }
 
 function getTableData() {
@@ -206,6 +243,7 @@ function createCluesTableWeapons(name) {
 		data: [...Array(nColumns)].map(e => Array(nRows).fill("")),
 		extra: [...Array(nColumns)].map(e => Array(nRows).fill("")),
 		isTutorial: isTutorial,
+		readOnly: false,
 	};
 
 	if (isKindle) {
@@ -233,11 +271,14 @@ function createCluesTableWeapons(name) {
 }
 
 function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTutorial) {
-	var rowNames = []
+	var completeName = name;
+	var rowNames = data.characterNames;
+	var victim = data.victim;
+	var locationMap = data.locationMap;
 	if (isTutorial) {
-		rowNames = rowNames.concat(['alice', 'bob']);
-	} else {
-		rowNames = rowNames.concat(data.characterNames);
+		rowNames = tutorialData.characterNames;
+		victim = tutorialData.victim;
+		locationMap = tutorialData.locationMap;
 	}
 	rowNames.sort();
 
@@ -279,6 +320,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 		height: height,
 		data: [...Array(nColumns)].map(e => Array(nRows).fill("")),
 		isTutorial: isTutorial,
+		readOnly: false,
 	};
 
 	if (isKindle) {
@@ -325,22 +367,28 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 	table.data[0][3] = " ";
 	table.data[0][placeLabelPosition] = places.get(name);
 
-	if (!table.isTutorial) {
-		var startRow = 0;
-		if (headerVisible)
-			startRow = 1
-		for (let i = startRow; i < nRows; i++) {
-			fillClueTable("✗", columnSize / 3, '#000000', nColumns - 1, i, table);
-		}
+	var startRow = 0;
+	if (headerVisible)
+		startRow = 1
+	for (let i = startRow; i < nRows; i++) {
+		fillClueTable("✗", columnSize / 3, '#000000', nColumns - 1, i, table);
+	}
 
-		for (let i = startRow; i < startRow + rowNames.length; i++) {
-			var character = rowNames[i - startRow];
-			roomName = data.locationMap[character];
-			var color = (character == data.victim) ? '#cc0000' : '#000000';
-			var symbol = (character == data.victim && isKindle) ? "☠︎" : "✓";
-			if (roomName == name) {
-				clearClueTable(nColumns - 1, i, table);
-				fillClueTable(symbol, columnSize / 3, color, nColumns - 1, i, table);
+	for (let i = startRow; i < startRow + rowNames.length; i++) {
+		var character = rowNames[i - startRow];
+		roomName = locationMap[character];
+		var color = (character == victim) ? '#cc0000' : '#000000';
+		var symbol = (character == victim && isKindle) ? "☠︎" : "✓";
+		if (roomName == name) {
+			clearClueTable(nColumns - 1, i, table);
+			fillClueTable(symbol, columnSize / 3, color, nColumns - 1, i, table);
+		}
+	}
+
+	if (isTutorial && tutorialData.initialData[completeName] != undefined) {
+		for (let i = 0; i < (headerVisible ? nRows - 1 : nRows); i++) {
+			for (let j = 0; j < nColumns - 3; j++) {
+				fillClueTable(tutorialData.initialData[completeName][i][j], columnSize / 3, '#000000', j + 2, headerVisible ? i + 1 : i, table);
 			}
 		}
 	}
@@ -359,6 +407,8 @@ function findPositionTable(table, x, y) {
 function checkWeaponClicked(c, x, y) {
 	var name = c.id.replace("clues-table-", "");
 	var table = tables.get(name);
+	if (table.readOnly)
+		return;
 	var position = findPositionTable(table, x, y);
 	var value = table.extra[position[0]][position[1]];
 	var weapon = table.data[position[0]][position[1]];
@@ -380,12 +430,12 @@ function sleep(ms) {
 async function checkCellClicked(c, x, y) {
 	var name = c.id.replace("clues-table-", "");
 	var table = tables.get(name);
+	if (table.readOnly)
+		return;
 	var position = findPositionTable(table, x, y);
 	//console.log(name);
-	if (!table.isTutorial) {
-		if (position[0] == table.nColumns - 1)
+	if (position[0] == table.nColumns - 1)
 		return;
-	}
 
 	//console.log(table.data);
 	var value = table.data[position[0]][position[1]];
@@ -425,16 +475,17 @@ async function checkCellClicked(c, x, y) {
 }
 
 function clearTable(c) {
-	var name = c.replace("clues-table-", "");
-	var table = tables.get(name);
+	for (const [tableName, table] of tables.entries()) {
+		if (!tableName.includes(c))
+			continue;
 
-	var data = tutorialData.expectedData[name];
-	for (let i = 0; i < table.nColumns; i++) {
-		for (let j = 0; j < table.nRows; j++) {
-			var value = table.data[i][j];
-			if (value == "✓" || value == "✗" || value == "?") {
-				clearClueTable(i, j, table);
-				fillClueTable("", table.columnSize / 3, '#000000', i, j, table);
+		for (let i = 0; i < table.nColumns - 1; i++) {
+			for (let j = 0; j < table.nRows; j++) {
+				var value = table.data[i][j];
+				if (value == "✓" || value == "✗" || value == "?") {
+					clearClueTable(i, j, table);
+					fillClueTable("", table.columnSize / 3, '#000000', i, j, table);
+				}
 			}
 		}
 	}
