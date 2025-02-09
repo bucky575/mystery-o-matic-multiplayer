@@ -357,7 +357,8 @@
 			<p>The second we finished adding these into the timetable, other deductions start popping up! Since our suspects haven't mastered the art of being in two places at once, we can also figure out where they weren't:<br/></p>
 			<p>
 				<ul class="list-group">
-					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Neither Alice nor Bob could have been in the bathroom, kitchen, or dining room at 8:15</li>
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice was not in the bathroom, kitchen, or dining room at 8:15 </li>
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was not in the bathroom, kitchen, or dining room at 8:15</li>
 				</ul>
 			</p>
 
@@ -377,12 +378,12 @@
 			</div>
 			<p>
 				<div class="col-12 text-center">
-					<a onclick="clearTable('kitchen:tutorial-2'); clearTable('bathroom:tutorial-2')" class="btn btn-danger" role="button">Clear ♻️</a>
+					<a onclick="clearTable(':tutorial-2');" class="btn btn-danger" role="button">Clear ♻️</a>
 					<!-- <a onclick="checkTutorialTable('kitchen:tutorial-2'); checkTutorialTable('bathroom:tutorial-2')" class="btn btn-info" role="button">Check 🎯</a>-->
 				</div>
 			</p>
 
-			<p>But where was Alice at 8:00? This is where our room layout comes in handy:</p>
+			<p>But where was Bob at 8:00? This is where our room layout comes in handy:</p>
 
 
 			<ul class="list-group">
@@ -391,7 +392,9 @@
 				</div>
 			</ul>
 
-			<p>Since the bedroom connects to both the kitchen and bathroom, Alice could have come from either one. But here's a solid deduction – <b>Bob couldn't have been in the dining room at 8:00 because it doesn't connect to the bedroom!</b></p>
+			<p>
+			In this map, the bedroom has solid lines connecting it to the kitchen and bathroom. These solid lines represent direct connections - rooms that characters can move between in one 15-minute interval. The dotted line to the dining room shows an indirect connection - characters need to go through another room first to get there.
+				Since the bedroom connects to both the kitchen and bathroom, Bob could have come from either one. But here's a solid deduction – <b>Bob couldn't have been in the dining room at 8:00 because it doesn't connect to the bedroom!</b></p>
 			<p>
 				Using this information, we can add another deduction into the timeline board:
 			</p>

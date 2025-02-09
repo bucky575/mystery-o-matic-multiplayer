@@ -479,15 +479,25 @@ function clearTable(c) {
 		if (!tableName.includes(c))
 			continue;
 
-		for (let i = 0; i < table.nColumns - 1; i++) {
-			for (let j = 0; j < table.nRows; j++) {
-				var value = table.data[i][j];
-				if (value == "✓" || value == "✗" || value == "?") {
-					clearClueTable(i, j, table);
-					fillClueTable("", table.columnSize / 3, '#000000', i, j, table);
+		if (table.nRows == 1) {
+			for (let i = 0; i < table.nColumns; i++) {
+				var weapon = table.data[i][0]
+				clearClueTable(i, 0, table);
+				fillClueTable(weapon, table.columnSize / 6, '#000000', i, 0, table);
+				table.extra[i][0] = "";
+			}
+		} else {
+			for (let i = 0; i < table.nColumns - 1; i++) {
+				for (let j = 0; j < table.nRows; j++) {
+					var value = table.data[i][j];
+					if (value == "✓" || value == "✗" || value == "?") {
+						clearClueTable(i, j, table);
+						fillClueTable("", table.columnSize / 3, '#000000', i, j, table);
+					}
 				}
 			}
 		}
+
 	}
 }
 
