@@ -201,21 +201,21 @@
 				Our mission is to solve a murder mystery by uncovering <b>who</b> the killer is, <b>which</b> weapon was used, and <b>when</b> the crime occurred. It’s up to you to piece together the puzzle by examining the following key elements:
 
 				<ul>
-					<li><b>The suspects</b>: you'll meet a colorful cast of characters including Alice, Bob, Carol, Dave, Frida and Eddie. One of them has met an unfortunate end while some of the others are our prime suspects. Spoiler alert: in this tutorial, poor Alice is our victim so we'll focus on Bob and Carol.</li>
-					<li><b>The crime</b>: a gruesome murder has taken place, and we need to determine how it happened. Once the fatal act occurs, the victim's body remains exactly where they fell–this is a crucial detail for your investigation.</li>
-					<li><b>The location</b>: each location can be connected with the others, allowing characters to move freely. For this tutorial, we’ll explore a chilling mystery set in an eerie Victorian mansion, where people has been mysteriously disappearing from time to time. The layout changes from case to case, with three to five rooms to explore. For our tutorial, here's how the rooms connect:
+					<li><b>The suspects</b>: you'll meet a colorful cast of characters including <b>Alice, Bob, Carol, Dave, Frida and Eddie</b>. One of them has met an unfortunate end while some of the others are our prime suspects. Spoiler alert: in this tutorial, poor Alice is our victim so we'll focus on Bob and Carol as suspects.</li>
+					<li><b>The crime</b>: a gruesome murder has taken place, and we need to determine how it happened. Once the fatal act occurs, <b>the victim's body remains exactly where they fell</b>–this is a crucial detail for your investigation.</li>
+					<li><b>The location</b>: each place can be connected with the others, allowing characters to move freely. For this tutorial, we’ll explore a chilling mystery set in an eerie Victorian mansion, where people has been mysteriously disappearing from time to time. The layout changes from case to case, with three to five rooms to explore. Here's how the rooms connect:
 						<div class="text-center">
 							<img src="locations_tutorial.svg" class="mx-auto" style="max-width: 60%; max-height: 200px;" alt="Location Graph">
 						</div>
 					</li>
-					<li><b>The weapons</b>: various weapons are scattered throughout the rooms and the killer will pick up one of the weapons, but don't expect them to be where they "should" be. That hammer? It might be in the bathroom instead of a workshop. Logic won't help you here!</li>
+					<li><b>The weapons</b>: various weapons are scattered throughout the rooms and <b>the killer will pick up one of the weapons before the crime</b>, but don't expect them to be where they "should" be. That hammer? It might be in the bathroom instead of a workshop. Logic won't help you here!</li>
 					<!-- <ul>
 						<li>The hammer (🔨) in the bedroom (🛏️)</li>
 						<li>The pistol (🔫) in the kitchen (🍲)</li>
 						<li>The scissors (✂️) in the dining room (🪑)</li>
 					 </ul> -->
-					<li><b>The timeline</b>: the murder occurred within a specific time window (e.g., between 8:00 and 9:30). You’ll need to reconstruct the movements of the suspects and identify when the fatal blow was struck. There is, however, one important detail that separates these puzzles from other logic whodunit games. Our puzzles try to mimic real life, where statements and clues are often chaotic, redundant or incomplete. In that sense, reconstructing all the timeline is not necessary to solve the murder, and often it is impossible!.</li>
-					<li><b>The statements</b>: you'll get statements from suspects and evidence from the scene. Everyone will be telling the truth, but not necessary the whole story. You will need to carefully deduce and combine facts in order to uncover the truth.</li>
+					<li><b>The timeline</b>: the murder occurred within a specific time window (e.g., between 8:00 and 9:30). You'll need to reconstruct the movements of the suspects and identify when the fatal blow was struck. There is, however, one important detail that separates these puzzles from other logic whodunit games. Our puzzles try to mimic real life, where statements and clues are often chaotic, redundant or incomplete. In that sense, <b>reconstructing all the timeline is not necessary to solve the murder, and often it is impossible!</b>.</li>
+					<li><b>The statements</b>: you'll get statements from suspects and evidence from the scene. <b>Everyone will be telling the truth, but not necessary the whole story</b>. You will need to carefully deduce and combine facts in order to uncover the truth.</li>
 				</ul>
 			</p>
 
@@ -254,8 +254,8 @@
 
             <p>
 			The list of initial clues describe where each character was at the end the timeline, and it is your job to deduce, using the suspect statements and other clues,
-			who the killer is, which weapon was used, and when the crime occurred. The timeline board is already filled with
-			initial clues. In order to do so, we used several symbols: the ✓ symbol means that someone was there at a given time and place. The ✗ symbol means they were not there. The ? symbol means we don't know.
+			who the killer is, which weapon was used, and when the crime occurred. We've can mark the timeline with three simple
+			symbols: ✓ means someone was there, ✗ means they weren't, and ? means we're not sure.
 			</p>
 
 			<div class="col-12 text-center">
@@ -279,10 +279,10 @@
 			<div class="col-12 text-center">
 				<canvas id="clues-table-weapons:tutorial-0" oncontextmenu="return false" height="40" width="500" onclick="checkWeaponClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
+				<br/>
+				<a onclick="clearTable(':tutorial-0');" class="btn btn-danger" role="button">Clear ♻️</a>
 			</div>
 
-					<br/>
-				<a onclick="clearTable(':tutorial-0');" class="btn btn-danger" role="button">Clear ♻️</a>
 			</div>
 			</p>
 
@@ -291,7 +291,7 @@
 
 				<ul>
 					<li>The hammer (🔨) from the dining room (🪑)</li>
-					<li>The gun (🔫) from the bedroom (🛏️)</li>
+					<li>The pistol (🔫) from the bedroom (🛏️)</li>
 					<li>The scissors (✂️) from the kitchen (🍲)</li>
 					<li>The rope (🪢) from the bathroom (🚽)</li>
 				</ul>

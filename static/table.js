@@ -336,7 +336,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 	date.setSeconds(timeOffset);
 	var titles = [getEmoji("🕰️")];
 	for (let i = 0; i < nColumns; i++) {
-	  title = date.toISOString().substr(11, 5);
+	  title = date.toISOString().substr(12, 4);
 	  titles.push(title);
 	  date.setSeconds(60 * 15);
 	}
