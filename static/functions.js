@@ -4,7 +4,7 @@ function getCurrentDate() {
 }
 
 function showPage(page) {
-	data = getTableData();
+	tableData = getTableData();
 	document.getElementById("home").style.display = "none";
 	document.getElementById("about").style.display = "none";
 	document.getElementById("how-to-play").style.display = "none";
@@ -13,8 +13,8 @@ function showPage(page) {
 
 	for (let i = 0; i < tables.length; i++) {
 		tables[i].redraw(true);
-		for (let j = 0; j < data[i].length; j++) {
-			[row, col, value] = data[i][j];
+		for (let j = 0; j < tableData[i].length; j++) {
+			[row, col, value] = tableData[i][j];
 			tables[i].getRow(row).getCells()[col].setValue(value);
 		}
 	}

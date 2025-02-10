@@ -343,7 +343,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 
 	if (headerVisible) {
 		for (let i = 0; i < nColumns - 1; i++) {
-			fillClueTable(titles[i], columnSize / 3.3, '#000000', i + 1, 0, table);
+			fillClueTable(titles[i], columnSize / 2.8, '#000000', i + 1, 0, table);
 			table.data[i + 1][0] = titles[i];
 		}
 	}
@@ -352,7 +352,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 		var column = i;
 		if (headerVisible)
 			column = column + 1;
-		fillClueTable(rowNames[i], columnSize / 3.3, '#000000', 1, column, table);
+		fillClueTable(rowNames[i], columnSize / 3.0, '#000000', 1, column, table);
 		table.data[1][column] = rowNames[i];
 	}
 	var placeLabelPosition = 1;
