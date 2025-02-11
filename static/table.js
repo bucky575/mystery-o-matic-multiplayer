@@ -371,7 +371,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 	if (headerVisible)
 		startRow = 1
 	for (let i = startRow; i < nRows; i++) {
-		fillClueTable("✗", columnSize / 3, '#000000', nColumns - 1, i, table);
+		fillClueTable("✗", columnSize / 2, '#000000', nColumns - 1, i, table);
 	}
 
 	for (let i = startRow; i < startRow + rowNames.length; i++) {
@@ -381,7 +381,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 		var symbol = (character == victim && isKindle) ? "☠︎" : "✓";
 		if (roomName == name) {
 			clearClueTable(nColumns - 1, i, table);
-			fillClueTable(symbol, columnSize / 3, color, nColumns - 1, i, table);
+			fillClueTable(symbol, columnSize / 2, color, nColumns - 1, i, table);
 		}
 	}
 
