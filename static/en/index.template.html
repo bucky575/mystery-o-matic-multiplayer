@@ -362,7 +362,7 @@
 				</ul>
 			</p>
 
-			<p>Let's add the missing ones:<br/></p>
+			<p>Let's add the missing deductions:<br/></p>
 
 			<div class="col-12 text-center">
 				<canvas id="clues-table-kitchen:tutorial-2" oncontextmenu="return false" height="100" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
@@ -375,9 +375,7 @@
 			<div class="col-12 text-center">
 				<canvas id="clues-table-bathroom:tutorial-2" oncontextmenu="return false" height="70" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 							Your browser does not support the HTML canvas tag.</canvas>
-			</div>
-			<p>
-				<div class="col-12 text-center">
+
 					<a onclick="clearTable(':tutorial-2');" class="btn btn-danger" role="button">Clear ♻️</a>
 					<!-- <a onclick="checkTutorialTable('kitchen:tutorial-2'); checkTutorialTable('bathroom:tutorial-2')" class="btn btn-info" role="button">Check 🎯</a>-->
 				</div>
@@ -395,6 +393,11 @@
 			<p>
 			In this map, the bedroom has solid lines connecting it to the kitchen and bathroom. These solid lines represent direct connections - rooms that characters can move between in one 15-minute interval. The dotted line to the dining room shows an indirect connection - characters need to go through another room first to get there.
 				Since the bedroom connects to both the kitchen and bathroom, Bob could have come from either one. But here's a solid deduction – <b>Bob couldn't have been in the dining room at 8:00 because it doesn't connect to the bedroom!</b></p>
+				<p>
+					<ul class="list-group">
+						<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was not in the dining room at 8:00 </li>
+					</ul>
+				</p>
 			<p>
 				Using this information, we can add another deduction into the timeline board:
 			</p>
@@ -418,7 +421,7 @@
 					<div class="card" style="height: auto;">
 						<div class="card-body text-center">
 							<div class="row align-items-center">
-									<p id="clue-text-tutorial" class="card-text"><b>☛ Carol</b>: "I was in the dining room (🪑) from 8:00 to 8:45"</p>
+									<p id="clue-text-tutorial" class="card-text"><b>☞ Carol</b>: "I was in the dining room (🪑) from 8:00 to 8:45"</p>
 							</div>
 						</div>
 					</div>
@@ -445,7 +448,13 @@
 			</ul>
 
 			Looking at our room layout, <b>Carol must have headed to the kitchen at 9:00 – it's the only place she could reach from the dining room!</b>
-			<br/>
+			</p>
+			<p>
+				<ul class="list-group">
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was in the kitchen at 9:00 </li>
+				</ul>
+			</p>
+			<p>
 			Let's complete the timeline board with all these deductions:
 			</p>
 
@@ -483,13 +492,23 @@
 						<div class="card" style="height: auto;">
 							<div class="card-body text-center">
 								<div class="row align-items-center">
-										<p id="clue-text-tutorial" class="card-text"><b>☛ Bob</b>: "Saw nobody when I arrived to the bathroom (🚽) at 9:00"</p>
+										<p id="clue-text-tutorial" class="card-text"><b>☞ Bob</b>: "Saw nobody when I arrived to the bathroom (🚽) at 9:00"</p>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</p>
+			<p>
+			Let's break it down:
+
+			<ul class="list-group">
+				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was in the kitchen at 9:00 </li>
+				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was NOT in the bedroom, dining room or bathroom at 9:00 </li>
+				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Neither Alice or Carol were in the kitchen at 9:00 </li>
+			</ul>
+			</p>
+
 			<p>Not only does this put Bob in the bathroom at 9:00, but we can backtrack – <b>he must have been in the bedroom at 8:45 since it's the only way to reach the bathroom!</b></p>
 
 			<div class="col-12 text-center">
@@ -523,7 +542,7 @@
 						<div class="card" style="height: auto;">
 							<div class="card-body text-center">
 								<div class="row align-items-center">
-										<p id="clue-text-tutorial" class="card-text"><b>☛ Carol</b>: "I heard someone washing the dishes at 8:45"</p>
+										<p id="clue-text-tutorial" class="card-text"><b>☞ Carol</b>: "I heard someone washing the dishes at 8:45"</p>
 								</div>
 							</div>
 						</div>
@@ -538,7 +557,23 @@
 				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was NOT in the kitchen at 8:45</li>
 			</ul>
 			</p>
-			<p>It can be tempting to try to guess where Carol was, but this is not possible. Characters sometimes can heard or see someone in other rooms, but their location cannot be inferred from this kind of clue. However, what we can deduce using our previous observation is who was in the kitchen. Clearly, it was not Carol (she was elsewhere at 8:45 actually!). Also, we know that Bob was in the bedroom, which means that <b>Alice was in the kitchen at 8:45</b>. </p>
+			<p>It can be tempting to try to guess where Carol was, but this is not possible. Characters sometimes can heard or see someone in other rooms, but their location cannot be inferred from this kind of clue.
+				<br/>
+				However, what we can deduce using our previous observation is who was in the kitchen. Clearly, it was not Carol (she was elsewhere at 8:45 actually!). Also, we know that Bob was in the bedroom, which means that <b>Alice was in the kitchen at 8:45</b>.
+				<br/>
+				Our first attempt to deduce facts was vague, time to recollect our new deductions!
+
+				<ul class="list-group">
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice was in the kitchen at 8:45 </li>
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice was NOT in the bedroom, dining room or bathroom at 8:45 </li>
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was NOT in the kitchen at 8:45</li>
+				</ul>
+			</p>
+
+			<p>
+				Back to the timeline board..
+			</p>
+
 
 			<div class="col-12 text-center">
 				<canvas id="clues-table-kitchen:tutorial-6" height="100" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
@@ -577,7 +612,7 @@
 						<div class="card" style="height: auto;">
 							<div class="card-body text-center">
 								<div class="row align-items-center">
-										<p id="clue-text-tutorial" class="card-text">☛ A blood-curdling scream from the victim was heard between 8:45 and 9:00</p>
+										<p id="clue-text-tutorial" class="card-text">☞ A blood-curdling scream from the victim was heard between 8:45 and 9:00</p>
 								</div>
 							</div>
 						</div>
@@ -608,7 +643,7 @@
 						<div class="card" style="height: auto;">
 							<div class="card-body text-center">
 								<div class="row align-items-center">
-										<p id="clue-text-tutorial" class="card-text">☛ Inspecting the body reveals no signs of stabbing</p>
+										<p id="clue-text-tutorial" class="card-text">☞ Inspecting the body reveals no signs of stabbing</p>
 								</div>
 							</div>
 						</div>
