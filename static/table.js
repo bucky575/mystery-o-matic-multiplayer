@@ -452,7 +452,7 @@ async function checkCellClicked(c, x, y) {
 
 	table.data[position[0]][position[1]] = value;
 	clearClueTable(position[0], position[1], table);
-	fillClueTable(value, table.columnSize / 3, '#000000', position[0], position[1], table);
+	fillClueTable(value, table.columnSize / 2, '#000000', position[0], position[1], table);
 
 	var highligthColor = '#2222FF'
 	name = table.data[1][position[1]]
