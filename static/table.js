@@ -242,6 +242,10 @@ function getTableData() {
 	return data;
 }
 
+function getWeaponFontSize(columSize) {
+	return columSize / 6;
+}
+
 function createCluesTableWeapons(name) {
 	var rowNames = []
 	var isTutorial = name.includes("tutorial");
@@ -296,16 +300,28 @@ function createCluesTableWeapons(name) {
 		var placeIcon = getEmoji(locationIcons[weaponMap[weapons[i]]]);
 		var weaponIcon = getEmoji(weaponIcons[weapons[i]]);
 		if (isKindle)
-			table.fillCell(weaponIcon, columnSize / 6, "#000000", i, 0);
+			table.fillCell(weaponIcon, getWeaponFontSize(columnSize), "#000000", i, 0);
 		else
 			table.fillCell(
 				weaponIcon + " " + placeIcon,
-				columnSize / 6,
+				getWeaponFontSize(columnSize),
 				"#000000",
 				i,
 				0
 			);
 	}
+}
+
+function getCluesFontSize(columnSize) {
+	return columnSize / 2.0;
+}
+
+function getCluesHeaderFontSize(columnSize) {
+	return columnSize / 2.9;
+}
+
+function getCluesNameFontSize(columnSize) {
+	return columnSize / 3.0;
 }
 
 function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTutorial) {
@@ -369,7 +385,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 
 	if (headerVisible) {
 		for (let i = 0; i < nColumns - 1; i++) {
-			table.fillCell(titles[i], columnSize / 2.8, '#000000', i + 1, 0);
+			table.fillCell(titles[i], getCluesHeaderFontSize(columnSize), '#000000', i + 1, 0);
 			table.data[i + 1][0] = titles[i];
 		}
 	}
@@ -378,7 +394,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 		var column = i;
 		if (headerVisible)
 			column = column + 1;
-		table.fillCell(rowNames[i], columnSize / 3.0, '#000000', 1, column);
+		table.fillCell(rowNames[i], getCluesNameFontSize(columnSize), '#000000', 1, column);
 		table.data[1][column] = rowNames[i];
 	}
 	var placeLabelPosition = 1;
@@ -397,7 +413,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 	if (headerVisible)
 		startRow = 1
 	for (let i = startRow; i < nRows; i++) {
-		table.fillCell("✗", columnSize / 2, '#000000', nColumns - 1, i);
+		table.fillCell("✗", getCluesFontSize(columnSize), '#000000', nColumns - 1, i);
 	}
 
 	for (let i = startRow; i < startRow + rowNames.length; i++) {
@@ -407,14 +423,14 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 		var symbol = (character == victim && isKindle) ? "☠︎" : "✓";
 		if (roomName == name) {
 			table.clearCell(nColumns - 1, i);
-			table.fillCell(symbol, columnSize / 2, color, nColumns - 1, i);
+			table.fillCell(symbol, getCluesFontSize(columnSize), color, nColumns - 1, i);
 		}
 	}
 
 	if (isTutorial && tutorialData.initialData[completeName] != undefined) {
 		for (let i = 0; i < (headerVisible ? nRows - 1 : nRows); i++) {
 			for (let j = 0; j < nColumns - 3; j++) {
-				table.fillCell(tutorialData.initialData[completeName][i][j], columnSize / 3, '#000000', j + 2, headerVisible ? i + 1 : i);
+				table.fillCell(tutorialData.initialData[completeName][i][j], getCluesFontSize(columnSize), '#000000', j + 2, headerVisible ? i + 1 : i);
 			}
 		}
 	}
@@ -432,7 +448,7 @@ function checkWeaponClicked(c, x, y) {
 	var weapon = table.data[position[0]][position[1]];
 
 	table.clearCell(position[0], position[1]);
-	table.fillCell(weapon, table.columnSize / 6, '#000000', position[0], position[1]);
+	table.fillCell(weapon, getWeaponFontSize(table.columnSize), '#000000', position[0], position[1]);
 
 	if (value == "crossed") {
 		table.extra[position[0]][position[1]] = "";
@@ -470,29 +486,29 @@ async function checkCellClicked(c, x, y) {
 
 	table.data[position[0]][position[1]] = value;
 	table.clearCell(position[0], position[1]);
-	table.fillCell(value, table.columnSize / 2, '#000000', position[0], position[1]);
+	table.fillCell(value, getCluesFontSize(table.columnSize), '#000000', position[0], position[1]);
 
 	var highligthColor = '#2222FF'
 	name = table.data[1][position[1]]
 	table.clearCell(1, position[1]);
-	table.fillCell(name, table.columnSize / 2.6, highligthColor, 1, position[1]);
+	table.fillCell(name, getCluesNameFontSize(table.columnSize) * 1.08, highligthColor, 1, position[1]);
 
 	var ftable = tables.get("room0");
 	var time = ftable.data[position[0]][0]
 	if (!table.isTutorial) {
 		ftable.clearCell(position[0], 0);
-		ftable.fillCell(time, ftable.columnSize / 2.6, highligthColor, position[0], 0);
+		ftable.fillCell(time, getCluesHeaderFontSize(ftable.columnSize) * 1.08, highligthColor, position[0], 0);
 	}
 
 	await sleep(300);
 
 	// Restore cells in both tables
 	table.clearCell(1, position[1]);
-	table.fillCell(name, table.columnSize / 3.3, '#000000', 1, position[1]);
+	table.fillCell(name, getCluesNameFontSize(table.columnSize), '#000000', 1, position[1]);
 
 	if (!table.isTutorial) {
 		ftable.clearCell(position[0], 0);
-		ftable.fillCell(time, table.columnSize / 3.3, '#000000', position[0], 0);
+		ftable.fillCell(time, getCluesHeaderFontSize(table.columnSize), '#000000', position[0], 0);
 	}
 }
 
@@ -505,7 +521,7 @@ function clearTable(c) {
 			for (let i = 0; i < table.nColumns; i++) {
 				var weapon = table.data[i][0]
 				table.clearCell(i, 0);
-				table.fillCell(weapon, table.columnSize / 6, '#000000', i, 0);
+				table.fillCell(weapon, getWeaponFontSize(table.columnSize), '#000000', i, 0);
 				table.extra[i][0] = "";
 			}
 		} else {
@@ -514,7 +530,7 @@ function clearTable(c) {
 					var value = table.data[i][j];
 					if (value == "✓" || value == "✗" || value == "?") {
 						table.clearCell(i, j);
-						table.fillCell("", table.columnSize / 3, '#000000', i, j);
+						table.fillCell("", getCluesFontSize(table.columSize), '#000000', i, j);
 					}
 				}
 			}
