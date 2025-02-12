@@ -1,3 +1,132 @@
+class ClueTable {
+	constructor(canvas, ctx, nColumns, nRows, columnSize, rowSize, colorEven, colorOdd, lineColor, headerVisible, width, height, isTutorial, readOnly = false) {
+		this.canvas = canvas;
+		this.ctx = ctx;
+		this.nColumns = nColumns;
+		this.nRows = nRows;
+		this.columnSize = columnSize;
+		this.rowSize = rowSize;
+		this.colorEven = colorEven;
+		this.colorOdd = colorOdd;
+		this.lineColor = lineColor;
+		this.headerVisible = headerVisible;
+		this.width = width;
+		this.height = height;
+		this.isTutorial = isTutorial;
+		this.readOnly = readOnly;
+		this.data = [...Array(nColumns)].map(() => Array(nRows).fill(""));
+		this.extra = [...Array(nColumns)].map(() => Array(nRows).fill(""));
+	}
+
+	draw() {
+		this.ctx.fillStyle = this.colorEven;
+		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+		let startColumn = this.nRows === 1 ? 0 : 1;
+		for (let i = startColumn; i < this.nColumns; i++) {
+			for (let j = 0; j < this.nRows; j++) {
+				this.clearCell(i, j);
+				this.data[i][j] = "";
+			}
+		}
+	}
+
+	clearCell(column, row) {
+		this.ctx.clearRect(
+			this.columnSize * column,
+			this.rowSize * row,
+			this.columnSize,
+			this.rowSize
+		);
+		this.data[column][row] = null;
+		let backgroundColor = row % 2 === 0 ? this.colorEven : this.colorOdd;
+		if (this.headerVisible && row === 0) backgroundColor = this.colorEven;
+		else if (this.headerVisible) backgroundColor = row % 2 === 0 ? this.colorOdd : this.colorEven;
+		this.ctx.fillStyle = backgroundColor;
+		this.ctx.fillRect(
+			this.columnSize * column,
+			this.rowSize * row,
+			this.columnSize,
+			this.rowSize
+		);
+		this.ctx.strokeStyle = this.lineColor;
+		this.ctx.beginPath();
+		this.ctx.moveTo(this.columnSize * column, this.rowSize * row);
+		this.ctx.lineTo(this.columnSize * (column + 1), this.rowSize * row);
+		this.ctx.lineTo(this.columnSize * (column + 1), this.rowSize * (row + 1));
+		this.ctx.lineTo(this.columnSize * column, this.rowSize * (row + 1));
+		this.ctx.closePath();
+		this.ctx.stroke();
+	}
+
+	fillCell(text, size, color, column, row) {
+		this.ctx.font = "bold " + size + "px Raleway";
+		this.ctx.textAlign = "center";
+		this.ctx.fillStyle = color;
+		if (text && typeof(text) === "object") {
+			this.ctx.drawImage(
+				text,
+				this.columnSize * column + this.columnSize / 2 - text.width / 5,
+				this.rowSize * row / 2 + this.rowSize / 1.8 - text.height / 4,
+				text.width / 2.5,
+				text.height / 2.5
+			);
+		} else {
+			this.ctx.fillText(
+				text,
+				this.columnSize * column + this.columnSize / 2,
+				this.rowSize * row + this.rowSize / 1.5
+			);
+		}
+		this.data[column][row] = text;
+	}
+
+	renderTextInColumn(text, size, color, column) {
+		this.ctx.font = "bold " + size + "px Raleway";
+		this.ctx.textAlign = "center";
+		this.ctx.fillStyle = color;
+		const textX = this.columnSize * column + this.columnSize / 2;
+		const textY = this.height / 2 + size / 3;
+		if (text && typeof(text) === "object") {
+			this.ctx.drawImage(
+				text,
+				textX - size / 2,
+				textY - size / 1.2,
+				text.width / 2.5,
+				text.height / 2.5
+			);
+		} else this.ctx.fillText(text, textX, textY);
+	}
+
+	crossCell(size, color, column, row) {
+		this.ctx.strokeStyle = color;
+		this.ctx.lineWidth = size;
+		this.ctx.beginPath();
+		this.ctx.moveTo(this.columnSize * column + 3, this.rowSize * row + 3);
+		this.ctx.lineTo(
+			this.columnSize * (column + 1) - 3,
+			this.rowSize * (row + 1) - 3
+		);
+		this.ctx.moveTo(
+			this.columnSize * (column + 1) - 3,
+			this.rowSize * row + 3
+		);
+		this.ctx.lineTo(
+			this.columnSize * column + 3,
+			this.rowSize * (row + 1) - 3
+		);
+		this.ctx.stroke();
+		this.extra[column][row] = "crossed";
+	}
+
+	findPosition(x, y) {
+		//console.log(x, y);
+		const rect = this.canvas.getBoundingClientRect()
+		x = this.height * x / rect.height;
+		y = this.width * y / rect.width;
+		return [Math.trunc(x / this.columnSize), Math.trunc(y / this.rowSize)];
+	}
+}
+
 var ua = navigator.userAgent;
 var isKindle = /Kindle/i.test(ua);
 var isMobile = /Mobi/i.test(ua);
@@ -95,7 +224,7 @@ function createTables() {
 	createCluesTableWeapons("weapons");
 	createCluesTableWeapons("weapons:tutorial-0");
 	createCluesTableWeapons("weapons:tutorial-final");
-	crossClueTable(3, '#770000', 2, 0, tables.get("weapons:tutorial-final"));
+	tables.get("weapons:tutorial-final").crossCell(3, '#770000', 2, 0);
 	tables.get("weapons:tutorial-final").readOnly = true;
 }
 
@@ -111,86 +240,6 @@ function getTableData() {
 		}
 	}
 	return data;
-}
-
-function drawClueTable(table) {
-	table.ctx.fillStyle = table.colorEven;
-	table.ctx.fillRect(0, 0, table.canvas.width, table.canvas.height);
-
-	var startColumn = table.nRows == 1 ? 0 : 1;
-
-	for (let i = startColumn; i < table.nColumns; i++) {
-		for (let j = 0; j < table.nRows; j++) {
-			clearClueTable(i, j, table);
-			table.data[i][j] = "";
-		}
-	}
-}
-
-function clearClueTable(column, row, table) {
-	// This function clears a cell and redraws the border lines
-	table.ctx.clearRect(table.columnSize * column, table.rowSize * row, table.columnSize, table.rowSize);
-	table.data[column][row] = null;
-
-	// Determine the background color based on the row number
-	var backgroundColor = row % 2 === 0 ? table.colorEven : table.colorOdd;
-	if (table.headerVisible && row === 0)
-		backgroundColor = table.colorEven;
-	else if (table.headerVisible)
-		backgroundColor = row % 2 === 0 ? table.colorOdd : table.colorEven;
-
-	table.ctx.fillStyle = backgroundColor;
-	table.ctx.fillRect(table.columnSize * column, table.rowSize * row, table.columnSize, table.rowSize);
-
-	table.ctx.strokeStyle = table.lineColor;
-	table.ctx.beginPath();
-	table.ctx.moveTo(table.columnSize * column, table.rowSize * row);
-	table.ctx.lineTo(table.columnSize * (column + 1), table.rowSize * row);
-	table.ctx.lineTo(table.columnSize * (column + 1), table.rowSize * (row + 1));
-	table.ctx.lineTo(table.columnSize * column, table.rowSize * (row + 1));
-	table.ctx.closePath();
-	table.ctx.stroke();
-}
-
-function fillClueTable(text, size, color, column, row, table) {
-	table.ctx.font = "bold " + size + "px Raleway";
-	table.ctx.textAlign = "center";
-	table.ctx.fillStyle = color;
-	if (text && typeof(text) === "object") {
-		console.log(text);
-		table.ctx.drawImage(text, table.columnSize * column + table.columnSize / 2 - text.width / 5, table.rowSize * row / 2 + table.rowSize / 1.8 - text.height / 4, text.width / 2.5, text.height / 2.5);
-	} else
-		table.ctx.fillText(text, table.columnSize * column + table.columnSize / 2, table.rowSize * row + table.rowSize / 1.5);
-
-	table.data[column][row] = text;
-}
-
-function renderTextInColumn(text, size, color, column, table) {
-	table.ctx.font = "bold " + size + "px Raleway";
-	table.ctx.textAlign = "center";
-	table.ctx.fillStyle = color;
-
-	const textX = table.columnSize * column + table.columnSize / 2;
-	const textY = table.height / 2 + size / 3;
-
-	if (text && typeof(text) === "object") {
-		console.log(text);
-		table.ctx.drawImage(text, textX - size / 2, textY - size / 1.2, text.width / 2.5, text.height / 2.5);
-	} else
-		table.ctx.fillText(text, textX, textY);
-}
-
-function crossClueTable(size, color, column, row, table) {
-	table.ctx.strokeStyle = color;
-	table.ctx.lineWidth = size;
-	table.ctx.beginPath();
-	table.ctx.moveTo(table.columnSize * column + 3, table.rowSize * row + 3);
-	table.ctx.lineTo(table.columnSize * (column + 1) - 3, table.rowSize * (row + 1) - 3);
-	table.ctx.moveTo(table.columnSize * (column + 1) - 3, table.rowSize * row + 3);
-	table.ctx.lineTo(table.columnSize * column + 3, table.rowSize * (row + 1) - 3);
-	table.ctx.stroke();
-
-	table.extra[column][row] = "crossed";
 }
 
 function createCluesTableWeapons(name) {
@@ -227,46 +276,35 @@ function createCluesTableWeapons(name) {
 	var columnSize = width / nColumns;
 	var rowSize = height / nRows;
 
-	var table = {
-		canvas: c,
-		ctx: ctx,
-		nColumns: nColumns,
-		nRows: nRows,
-		columnSize: columnSize,
-		rowSize: rowSize,
-		colorEven: '#888888',
-		colorOdd: '#777777',
-		lineColor: '#FFFFFF',
-		headerVisible: false,
-		width: width,
-		height: height,
-		data: [...Array(nColumns)].map(e => Array(nRows).fill("")),
-		extra: [...Array(nColumns)].map(e => Array(nRows).fill("")),
-		isTutorial: isTutorial,
-		readOnly: false,
-	};
-
+	var tableColorEven = "#888888";
+	var tableColorOdd = "#777777";
+	var tableLineColor = "#FFFFFF";
 	if (isKindle) {
-		table.colorEven = '#FFFFFF';
-		table.colorOdd = '#FFFFFF';
-		table.lineColor = '#000000';
+		tableColorEven = "#FFFFFF";
+		tableColorOdd = "#FFFFFF";
+		tableLineColor = "#000000";
 	}
-
+	let table = new ClueTable(
+		c, ctx, nColumns, nRows, columnSize, rowSize,
+		tableColorEven, tableColorOdd, tableLineColor, false, width, height, isTutorial
+	);
 	tables.set(name, table);
-	drawClueTable(table);
-
-	var placeIcon;
-	var weaponIcon;
+	table.draw();
 
 	weapons = Object.keys(weaponMap);
 	for (var i = 0; i < weapons.length; i++) {
-		placeIcon = getEmoji(locationIcons[weaponMap[weapons[i]]]);
-		weaponIcon = getEmoji(weaponIcons[weapons[i]]);
-
-		if (isKindle) // Kindle does not support rendering two emojis in the same cell
-			fillClueTable(weaponIcon, columnSize / 6, '#000000', i, 0, table);
+		var placeIcon = getEmoji(locationIcons[weaponMap[weapons[i]]]);
+		var weaponIcon = getEmoji(weaponIcons[weapons[i]]);
+		if (isKindle)
+			table.fillCell(weaponIcon, columnSize / 6, "#000000", i, 0);
 		else
-			fillClueTable(weaponIcon + " " + placeIcon, columnSize / 6, '#000000', i, 0, table);
+			table.fillCell(
+				weaponIcon + " " + placeIcon,
+				columnSize / 6,
+				"#000000",
+				i,
+				0
+			);
 	}
 }
 
@@ -303,34 +341,22 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 	var columnSize = width / nColumns;
 	var rowSize = height / nRows;
 
-	var ctx = c.getContext("2d");
-
-	var table = {
-		canvas: c,
-		ctx: ctx,
-		nColumns: nColumns,
-		nRows: nRows,
-		columnSize: columnSize,
-		rowSize: rowSize,
-		colorEven: '#888888',
-		colorOdd: '#777777',
-		lineColor: '#FFFFFF',
-		headerVisible: headerVisible,
-		width: width,
-		height: height,
-		data: [...Array(nColumns)].map(e => Array(nRows).fill("")),
-		isTutorial: isTutorial,
-		readOnly: false,
-	};
-
+	var tableColorEven = "#888888";
+	var tableColorOdd = "#777777";
+	var tableLineColor = "#FFFFFF";
 	if (isKindle) {
-		table.colorEven = '#EEEEEE';
-		table.colorOdd = '#DDDDDD';
-		table.lineColor = '#000000';
+		tableColorEven = "#EEEEEE";
+		tableColorOdd = "#DDDDDD";
+		tableLineColor = "#000000";
 	}
 
+	let table = new ClueTable(
+		c, ctx, nColumns, nRows, columnSize, rowSize,
+		tableColorEven, tableColorOdd, tableLineColor,
+		headerVisible, width, height, isTutorial
+	);
 	tables.set(room, table);
-	drawClueTable(table);
+	table.draw();
 
 	var date = new Date(null);
 	date.setSeconds(timeOffset);
@@ -343,7 +369,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 
 	if (headerVisible) {
 		for (let i = 0; i < nColumns - 1; i++) {
-			fillClueTable(titles[i], columnSize / 2.8, '#000000', i + 1, 0, table);
+			table.fillCell(titles[i], columnSize / 2.8, '#000000', i + 1, 0);
 			table.data[i + 1][0] = titles[i];
 		}
 	}
@@ -352,7 +378,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 		var column = i;
 		if (headerVisible)
 			column = column + 1;
-		fillClueTable(rowNames[i], columnSize / 3.0, '#000000', 1, column, table);
+		table.fillCell(rowNames[i], columnSize / 3.0, '#000000', 1, column);
 		table.data[1][column] = rowNames[i];
 	}
 	var placeLabelPosition = 1;
@@ -360,7 +386,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 		placeLabelPosition = placeLabelPosition + 1;
 
 	name = name.split(":")[0];
-	renderTextInColumn(places.get(name), columnSize / 1.5, '#000000', 0, table);
+	table.renderTextInColumn(places.get(name), columnSize / 1.5, '#000000', 0);
 	table.data[0][0] = " ";
 	table.data[0][1] = " ";
 	table.data[0][2] = " ";
@@ -371,7 +397,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 	if (headerVisible)
 		startRow = 1
 	for (let i = startRow; i < nRows; i++) {
-		fillClueTable("✗", columnSize / 2, '#000000', nColumns - 1, i, table);
+		table.fillCell("✗", columnSize / 2, '#000000', nColumns - 1, i);
 	}
 
 	for (let i = startRow; i < startRow + rowNames.length; i++) {
@@ -380,15 +406,15 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 		var color = (character == victim) ? '#cc0000' : '#000000';
 		var symbol = (character == victim && isKindle) ? "☠︎" : "✓";
 		if (roomName == name) {
-			clearClueTable(nColumns - 1, i, table);
-			fillClueTable(symbol, columnSize / 2, color, nColumns - 1, i, table);
+			table.clearCell(nColumns - 1, i);
+			table.fillCell(symbol, columnSize / 2, color, nColumns - 1, i);
 		}
 	}
 
 	if (isTutorial && tutorialData.initialData[completeName] != undefined) {
 		for (let i = 0; i < (headerVisible ? nRows - 1 : nRows); i++) {
 			for (let j = 0; j < nColumns - 3; j++) {
-				fillClueTable(tutorialData.initialData[completeName][i][j], columnSize / 3, '#000000', j + 2, headerVisible ? i + 1 : i, table);
+				table.fillCell(tutorialData.initialData[completeName][i][j], columnSize / 3, '#000000', j + 2, headerVisible ? i + 1 : i);
 			}
 		}
 	}
@@ -396,30 +422,22 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 	return table;
 }
 
-function findPositionTable(table, x, y) {
-	//console.log(x, y);
-	const rect = table.canvas.getBoundingClientRect()
-	x = table.height * x / rect.height;
-	y = table.width * y / rect.width;
-	return [Math.trunc(x / table.columnSize), Math.trunc(y / table.rowSize)];
-}
-
 function checkWeaponClicked(c, x, y) {
 	var name = c.id.replace("clues-table-", "");
 	var table = tables.get(name);
 	if (table.readOnly)
 		return;
-	var position = findPositionTable(table, x, y);
+	var position = table.findPosition(x, y);
 	var value = table.extra[position[0]][position[1]];
 	var weapon = table.data[position[0]][position[1]];
 
-	clearClueTable(position[0], position[1], table);
-	fillClueTable(weapon, table.columnSize / 6, '#000000', position[0], position[1], table);
+	table.clearCell(position[0], position[1]);
+	table.fillCell(weapon, table.columnSize / 6, '#000000', position[0], position[1]);
 
 	if (value == "crossed") {
 		table.extra[position[0]][position[1]] = "";
 	} else {
-		crossClueTable(3, '#770000', position[0], position[1], table);
+		table.crossCell(3, '#770000', position[0], position[1]);
 	}
 }
 
@@ -432,7 +450,7 @@ async function checkCellClicked(c, x, y) {
 	var table = tables.get(name);
 	if (table.readOnly)
 		return;
-	var position = findPositionTable(table, x, y);
+	var position = table.findPosition(x, y);
 	//console.log(name);
 	if (position[0] == table.nColumns - 1)
 		return;
@@ -451,27 +469,31 @@ async function checkCellClicked(c, x, y) {
 		return;
 
 	table.data[position[0]][position[1]] = value;
-	clearClueTable(position[0], position[1], table);
-	fillClueTable(value, table.columnSize / 2, '#000000', position[0], position[1], table);
+	table.clearCell(position[0], position[1]);
+	table.fillCell(value, table.columnSize / 2, '#000000', position[0], position[1]);
 
 	var highligthColor = '#2222FF'
 	name = table.data[1][position[1]]
-	clearClueTable(1, position[1], table);
-	fillClueTable(name, table.columnSize / 2.6, highligthColor, 1, position[1], table);
+	table.clearCell(1, position[1]);
+	table.fillCell(name, table.columnSize / 2.6, highligthColor, 1, position[1]);
 
 	var ftable = tables.get("room0");
 	var time = ftable.data[position[0]][0]
-	clearClueTable(position[0], 0, ftable);
-	fillClueTable(time, ftable.columnSize / 2.6, highligthColor, position[0], 0, ftable);
+	if (!table.isTutorial) {
+		ftable.clearCell(position[0], 0);
+		ftable.fillCell(time, ftable.columnSize / 2.6, highligthColor, position[0], 0);
+	}
 
 	await sleep(300);
 
 	// Restore cells in both tables
-	clearClueTable(1, position[1], table);
-	fillClueTable(name, table.columnSize / 3.3, '#000000', 1, position[1], table);
+	table.clearCell(1, position[1]);
+	table.fillCell(name, table.columnSize / 3.3, '#000000', 1, position[1]);
 
-	clearClueTable(position[0], 0, ftable);
-	fillClueTable(time, table.columnSize / 3.3, '#000000', position[0], 0, ftable);
+	if (!table.isTutorial) {
+		ftable.clearCell(position[0], 0);
+		ftable.fillCell(time, table.columnSize / 3.3, '#000000', position[0], 0);
+	}
 }
 
 function clearTable(c) {
@@ -482,8 +504,8 @@ function clearTable(c) {
 		if (table.nRows == 1) {
 			for (let i = 0; i < table.nColumns; i++) {
 				var weapon = table.data[i][0]
-				clearClueTable(i, 0, table);
-				fillClueTable(weapon, table.columnSize / 6, '#000000', i, 0, table);
+				table.clearCell(i, 0);
+				table.fillCell(weapon, table.columnSize / 6, '#000000', i, 0);
 				table.extra[i][0] = "";
 			}
 		} else {
@@ -491,8 +513,8 @@ function clearTable(c) {
 				for (let j = 0; j < table.nRows; j++) {
 					var value = table.data[i][j];
 					if (value == "✓" || value == "✗" || value == "?") {
-						clearClueTable(i, j, table);
-						fillClueTable("", table.columnSize / 3, '#000000', i, j, table);
+						table.clearCell(i, j);
+						table.fillCell("", table.columnSize / 3, '#000000', i, j);
 					}
 				}
 			}
@@ -515,20 +537,20 @@ function checkTutorialTable(c) {
 
 			if (expectedValue == "✓" || expectedValue == "✗") {
 				if (value == expectedValue) {
-					clearClueTable(j, i, table);
-					fillClueTable(value, table.columnSize / 3, '#02FF20', j, i, table);
+					table.clearCell(j, i);
+					table.fillCell(value, table.columnSize / 3, '#02FF20', j, i);
 				} else {
 					if (value == "")
 						value = "?";
-					clearClueTable(j, i, table);
-					fillClueTable(value, table.columnSize / 3, '#FF2020', j, i, table);
+					table.clearCell(j, i);
+					table.fillCell(value, table.columnSize / 3, '#FF2020', j, i);
 				}
 			} else if (expectedValue == "?") {
 				if (value == "?" || value == "") {
 					//Nothing
 				} else {
-					clearClueTable(j, i, table);
-					fillClueTable(value, table.columnSize / 3, '#FF2020', j, i, table);
+					table.clearCell(j, i, table);
+					table.fillCell(value, table.columnSize / 3, '#FF2020', j, i);
 				}
 			}
 		}
