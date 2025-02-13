@@ -127,6 +127,28 @@ class ClueTable {
 	}
 }
 
+// Extra function to get font sizes for different specialized tables
+
+function getCluesFontSize(t) {
+	return t.rowSize / 1.5;
+}
+
+function getCluesHeaderFontSize(t) {
+	return t.columnSize / 2.9;
+}
+
+function getCluesNameFontSize(t) {
+	return t.columnSize / 3.3;
+}
+
+function getCluesIconFontSize(t) {
+	return t.columnSize / 1.5;
+}
+
+function getWeaponFontSize(columSize) {
+	return columSize / 6;
+}
+
 var ua = navigator.userAgent;
 var isKindle = /Kindle/i.test(ua);
 var isMobile = /Mobi/i.test(ua);
@@ -242,10 +264,6 @@ function getTableData() {
 	return data;
 }
 
-function getWeaponFontSize(columSize) {
-	return columSize / 6;
-}
-
 function createCluesTableWeapons(name) {
 	var rowNames = []
 	var isTutorial = name.includes("tutorial");
@@ -310,18 +328,6 @@ function createCluesTableWeapons(name) {
 				0
 			);
 	}
-}
-
-function getCluesFontSize(t) {
-	return t.rowSize / 1.5;
-}
-
-function getCluesHeaderFontSize(t) {
-	return t.columnSize / 2.9;
-}
-
-function getCluesNameFontSize(t) {
-	return t.columnSize / 3.2;
 }
 
 function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTutorial) {
@@ -402,7 +408,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 		placeLabelPosition = placeLabelPosition + 1;
 
 	name = name.split(":")[0];
-	table.renderTextInColumn(places.get(name), columnSize / 1.5, '#000000', 0);
+	table.renderTextInColumn(places.get(name), getCluesIconFontSize(table), '#000000', 0);
 	table.data[0][0] = " ";
 	table.data[0][1] = " ";
 	table.data[0][2] = " ";
