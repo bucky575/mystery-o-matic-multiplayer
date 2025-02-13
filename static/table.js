@@ -321,7 +321,7 @@ function getCluesHeaderFontSize(t) {
 }
 
 function getCluesNameFontSize(t) {
-	return t.columnSize / 3.1;
+	return t.columnSize / 3.2;
 }
 
 function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTutorial) {

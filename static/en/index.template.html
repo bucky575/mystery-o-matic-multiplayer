@@ -508,8 +508,25 @@
 				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Neither Alice or Carol were in the kitchen at 9:00 </li>
 			</ul>
 			</p>
+			<p>What else we can get from this clue? Let's take another look to the location graph:</p>
 
-			<p>Not only does this put Bob in the bathroom at 9:00, but we can backtrack – <b>he must have been in the bedroom at 8:45 since it's the only way to reach the bathroom!</b></p>
+			<ul class="list-group">
+				<div class="text-center">
+					<img src="locations_tutorial_highlighted_bathroom.svg" class="mx-auto" style="max-width: 60%; max-height: 200px;" alt="Location Graph">
+				</div>
+			</ul>
+
+			<p>Not only does this clue put Bob in the bathroom at 9:00, but we can backtrack – <b>he must have been in the bedroom at 8:45 since it's the only way to reach the bathroom!</b>
+				In other words:
+				<ul class="list-group">
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was in the bedroom at 8:45 </li>
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was NOT in the kitchen, dining room or bathroom at 8:45 </li>
+				</ul>
+			</p>
+
+			<p>
+			Time to add our shiny new deductions to the timeline board:
+			</p>
 
 			<div class="col-12 text-center">
 				<canvas id="clues-table-kitchen:tutorial-5" height="115" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
