@@ -249,6 +249,11 @@ function createTables() {
 	createCluesTableWeapons("weapons:tutorial-final");
 	tables.get("weapons:tutorial-final").crossCell(3, '#770000', 2, 0);
 	tables.get("weapons:tutorial-final").readOnly = true;
+
+	if (window.location.hash == "#how-to-play") {
+		showPage("how-to-play");
+		window.scrollTo(0, 0);
+	}
 }
 
 function getTableData() {
