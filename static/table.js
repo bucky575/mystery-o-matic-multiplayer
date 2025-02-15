@@ -245,6 +245,7 @@ function createTables() {
 
 	createCluesTableWeapons("weapons");
 	createCluesTableWeapons("weapons:tutorial-0");
+	createCluesTableWeapons("weapons:tutorial-1");
 	createCluesTableWeapons("weapons:tutorial-final");
 	tables.get("weapons:tutorial-final").crossCell(3, '#770000', 2, 0);
 	tables.get("weapons:tutorial-final").readOnly = true;
@@ -436,7 +437,7 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 	if (isTutorial && tutorialData.initialData[completeName] != undefined) {
 		for (let i = 0; i < (headerVisible ? nRows - 1 : nRows); i++) {
 			for (let j = 0; j < nColumns - 3; j++) {
-				table.fillCell(tutorialData.initialData[completeName][i][j], getCluesFontSize(table), '#000000', j + 2, headerVisible ? i + 1 : i);
+				table.fillCell(tutorialData.initialData[completeName][i][j], getCluesFontSize(table), '#444444', j + 2, headerVisible ? i + 1 : i);
 			}
 		}
 	}
@@ -545,34 +546,38 @@ function clearTable(c) {
 	}
 }
 
-function checkTutorialTable(c) {
+function checkTutorialTable(c, d) {
+	var expectedData = tutorialData.initialData[d.replace("clues-table-", "")];
 	var name = c.replace("clues-table-", "");
+	var initialData = tutorialData.initialData[name];
+	console.log(initialData);
 	var table = tables.get(name);
 
-	var data = tutorialData.expectedData[name];
+	for (let i = 0; i < expectedData.length; i++) {
+		for (let j = 0; j < expectedData[i].length; j++) {
+			var expectedValue = expectedData[i][j].trim();
+			var ii = table.headerVisible ? i + 1 : i;
+			var value = table.data[j + 2][ii];
 
-	for (let i = 0; i < data.length; i++) {
-		console.log(data[i])
-		for (let j = 0; j < data[i].length; j++) {
-			var expectedValue = data[i][j];
-			var value = table.data[j][i];
+			if (initialData != undefined && initialData[i][j] != "")
+				continue
 
 			if (expectedValue == "✓" || expectedValue == "✗") {
 				if (value == expectedValue) {
-					table.clearCell(j, i);
-					table.fillCell(value, table.columnSize / 3, '#02FF20', j, i);
+					table.clearCell(j + 2, ii);
+					table.fillCell(value, getCluesFontSize(table), '#06402b', j + 2, ii);
 				} else {
 					if (value == "")
 						value = "?";
-					table.clearCell(j, i);
-					table.fillCell(value, table.columnSize / 3, '#FF2020', j, i);
+					table.clearCell(j + 2, ii);
+					table.fillCell(value, getCluesFontSize(table), '#AA0000', j + 2, ii);
 				}
-			} else if (expectedValue == "?") {
+			} else if (expectedValue == "") {
 				if (value == "?" || value == "") {
 					//Nothing
 				} else {
-					table.clearCell(j, i, table);
-					table.fillCell(value, table.columnSize / 3, '#FF2020', j, i);
+					table.clearCell(j + 2, i + 1, table);
+					table.fillCell(value, getCluesFontSize(table), '#AA0000', j + 2, ii);
 				}
 			}
 		}

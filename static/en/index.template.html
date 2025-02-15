@@ -350,7 +350,7 @@
 							Your browser does not support the HTML canvas tag.</canvas>
 					<br/>
 					<a onclick="clearTable(':tutorial-1');" class="btn btn-danger" role="button">Clear ♻️</a>
-					<!-- <a onclick="checkTutorialTable('kitchen:tutorial-1');" class="btn btn-info" role="button">Check 🎯</a>-->
+					<a onclick="checkTutorialTable('bedroom:tutorial-1', 'bedroom:tutorial-3.5');" class="btn btn-info" role="button">Check 🎯</a>
 			</div>
 			</p>
 
@@ -377,7 +377,7 @@
 							Your browser does not support the HTML canvas tag.</canvas>
 					<br/>
 					<a onclick="clearTable(':tutorial-2');" class="btn btn-danger" role="button">Clear ♻️</a>
-					<!-- <a onclick="checkTutorialTable('kitchen:tutorial-2'); checkTutorialTable('bathroom:tutorial-2')" class="btn btn-info" role="button">Check 🎯</a>-->
+					<a onclick="checkTutorialTable('kitchen:tutorial-2', 'kitchen:tutorial-3.5'); checkTutorialTable('dining room:tutorial-2', 'dining room:tutorial-3.5'); checkTutorialTable('bathroom:tutorial-2', 'bathroom:tutorial-3.5');" class="btn btn-info" role="button">Check 🎯</a>
 				</div>
 			</p>
 
@@ -407,7 +407,7 @@
 							Your browser does not support the HTML canvas tag.</canvas>
 				<br/>
 				<a onclick="clearTable(':tutorial-3');" class="btn btn-danger" role="button">Clear ♻️</a>
-				<!-- <a onclick="checkTutorialTable('kitchen:tutorial-2'); checkTutorialTable('bathroom:tutorial-2')" class="btn btn-info" role="button">Check 🎯</a> -->
+				<a onclick="checkTutorialTable('dining room:tutorial-3', 'dining room:tutorial-4');" class="btn btn-info" role="button">Check 🎯</a>
 			</div>
 
 			<br>
@@ -447,11 +447,12 @@
 				</div>
 			</ul>
 
-			Looking at our room layout, <b>Carol must have headed to the kitchen at 9:00 – it's the only place she could reach from the dining room!</b>
+			Looking at our room layout, <b>Carol must have headed to the kitchen at 9:00 (and therefore, she is not somewhere else!) – it's the only place she could reach from the dining room!</b>
 			</p>
 			<p>
 				<ul class="list-group">
 					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was in the kitchen at 9:00 </li>
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was NOT in bedroom, dining room or bathroom at 9:00 </li>
 				</ul>
 			</p>
 			<p>
@@ -477,7 +478,7 @@
 					Your browser does not support the HTML canvas tag.</canvas>
 				<br/>
 				<a onclick="clearTable(':tutorial-4');" class="btn btn-danger" role="button">Clear ♻️</a>
-				<!-- <a onclick="checkTutorialTable('kitchen:tutorial-2'); checkTutorialTable('bathroom:tutorial-2')" class="btn btn-info" role="button">Check 🎯</a> -->
+				<a onclick="checkTutorialTable('kitchen:tutorial-4', 'kitchen:tutorial-5'); checkTutorialTable('bedroom:tutorial-4', 'bedroom:tutorial-5'); checkTutorialTable('dining room:tutorial-4', 'dining room:tutorial-5'); checkTutorialTable('bathroom:tutorial-4', 'bathroom:tutorial-5');" class="btn btn-info" role="button">Check 🎯</a>
 			</div>
 			<br/>
 			<hr class="styled-hr">
@@ -503,9 +504,9 @@
 			Let's break it down:
 
 			<ul class="list-group">
-				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was in the kitchen at 9:00 </li>
-				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was NOT in the bedroom, dining room or bathroom at 9:00 </li>
-				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Neither Alice or Carol were in the kitchen at 9:00 </li>
+				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was in the bathroom at 9:00 </li>
+				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was NOT in the kitchen, bedroom or dining room at 9:00 </li>
+				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Neither Alice or Carol were in the bathroom at 9:00 </li>
 			</ul>
 			</p>
 			<p>What else we can get from this clue? Let's take another look to the location graph:</p>
@@ -516,7 +517,7 @@
 				</div>
 			</ul>
 
-			<p>Not only does this clue put Bob in the bathroom at 9:00, but we can backtrack – <b>he must have been in the bedroom at 8:45 since it's the only way to reach the bathroom!</b>
+			<p>Not only does this clue places Bob in the bathroom at 9:00, but we can backtrack – <b>he must have been in the bedroom at 8:45 since it's the only way to reach the bathroom!</b>
 				In other words:
 				<ul class="list-group">
 					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was in the bedroom at 8:45 </li>
@@ -547,7 +548,7 @@
 					Your browser does not support the HTML canvas tag.</canvas>
 				<br/>
 				<a onclick="clearTable(':tutorial-5');" class="btn btn-danger" role="button">Clear ♻️</a>
-				<!-- <a onclick="" class="btn btn-info" role="button">Check 🎯</a> -->
+				<a onclick="checkTutorialTable('kitchen:tutorial-5', 'kitchen:tutorial-6'); checkTutorialTable('bedroom:tutorial-5', 'bedroom:tutorial-6'); checkTutorialTable('dining room:tutorial-5', 'dining room:tutorial-6'); checkTutorialTable('bathroom:tutorial-5', 'bathroom:tutorial-6');" class="btn btn-info" role="button">Check 🎯</a>
 			</div>
 			<br/>
 			<hr class="styled-hr">
@@ -575,10 +576,11 @@
 			</ul>
 			</p>
 			<p>It can be tempting to try to guess where Carol was, but this is not possible. Characters sometimes can heard or see someone in other rooms, but their location cannot be inferred from this kind of clue.
-				<br/>
 				However, what we can deduce using our previous observation is who was in the kitchen. Clearly, it was not Carol (she was elsewhere at 8:45 actually!). Also, we know that Bob was in the bedroom, which means that <b>Alice was in the kitchen at 8:45</b>.
 				<br/>
-				Our first attempt to deduce facts was vague, time to recollect our new deductions!
+				<p>
+				Our first attempt to deduce facts not great, so let's review our previous deduction and refine them:
+				</p>
 
 				<ul class="list-group">
 					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice was in the kitchen at 8:45 </li>
@@ -611,7 +613,7 @@
 					Your browser does not support the HTML canvas tag.</canvas>
 				<br/>
 				<a onclick="clearTable(':tutorial-6');" class="btn btn-danger" role="button">Clear ♻️</a>
-				<!-- <a onclick="" class="btn btn-info" role="button">Check 🎯</a> -->
+				<a onclick="checkTutorialTable('kitchen:tutorial-6', 'kitchen:tutorial-7'); checkTutorialTable('bedroom:tutorial-6', 'bedroom:tutorial-7'); checkTutorialTable('dining room:tutorial-6', 'dining room:tutorial-7'); checkTutorialTable('bathroom:tutorial-6', 'bathroom:tutorial-7');" class="btn btn-info" role="button">Check 🎯</a>
 			</div>
 
 		</div>
@@ -640,12 +642,22 @@
 			<p>
 				Since our suspects move every 15 minutes like clockwork, the murder had to happen either at 8:45 or 9:00. However, we already know that Alice was alive at 8:45 (and happily washing the dishes). So the only option here is that murder happened at 9:00. Remember that once the killer strikes, the victim body is never moved, so can easily complete the Alice's timeline until 9:30.
 				<br/>
-				Let's note this in the timeline board:
+
+				<ul class="list-group">
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice was killed at 9:00 in the kitchen</li>
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice's body is in the kitchen from 9:15 to 9:30 </li>
+				</ul>
+				<br/>
+
+				Let's note our findings in the timeline board:
 			</p>
 
 			<div class="col-12 text-center">
 				<canvas id="clues-table-kitchen:tutorial-7" height="115" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
+				<br/>
+				<a onclick="clearTable('kitchen:tutorial-7');" class="btn btn-danger" role="button">Clear ♻️</a>
+				<a onclick="checkTutorialTable('kitchen:tutorial-7', 'kitchen:tutorial-final');" class="btn btn-info" role="button">Check 🎯</a>
 			</div>
 
 		</div>
@@ -679,14 +691,19 @@
 			</p>
 
 			<p>
-				Armed with this information, we can discard a weapon in the the bottom of the timeline board table, just crossing the corresponding weapon/location icon: <s>✂️🍲</s>
+				Armed with this information, we can discard a weapon in the the bottom of the timeline board table, just clicking the corresponding weapon/location icon: ✂️🍲
 			</p>
+
+			<div class="col-12 text-center">
+				<canvas id="clues-table-weapons:tutorial-1" oncontextmenu="return false" height="40" width="500" onclick="checkWeaponClicked(this, event.offsetX, event.offsetY)">
+						Your browser does not support the HTML canvas tag.</canvas>
+			</div>
 
 		</div>
 		<div class="container mt-5">
 			<h4>🎓 Solving your first case</h4>
 
-			<p>Time to put it all together and solve our very first murder:</p>
+			<p>Time to put it all together and solve our very first murder. <b>We include all our deductions in the following read-only timeline board</b>:</p>
 
 			<div class="col-12 text-center">
 				<canvas id="clues-table-kitchen:tutorial-final" height="115" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
@@ -713,24 +730,51 @@
 			</div>
 
 			<p>
+				Think for a while and then click to reveal each solution:
+			</p>
 
-				Time to crack this case, let's use our deductions so far to answer. Think for a while and click to reveal each solution):
-				<ul>
-					<details>
-							<summary>1. Who was the killer?</summary>
-							Either Bob and Carol are suspect. Well, Bob's got a solid alibi – he wasn't even at the crime scene when it happened (either 8:45 or 9:00). That leaves Carol as the killer.
-					</details>
+			<p>
+				<div class="accordion">
+					<div class="accordion-item">
+					<h2 class="accordion-header" id="headingOne">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+							1. Who was the killer?
+						</button>
+					</h2>
+					<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+						<div class="accordion-body">
+						Either Bob and Carol are suspect. Well, Bob's got a solid alibi – he wasn't even at the crime scene when it happened (either 8:45 or 9:00). <b>That leaves Carol as the killer.</b>
+						</div>
+					</div>
+					</div>
+					<div class="accordion-item">
+					<h2 class="accordion-header" id="headingTwo">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+							2. Which weapon was used?
+						</button>
+					</h2>
+					<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+						<div class="accordion-body">
+							We can rule out the scissors, leaving us with the gun, hammer, or rope. But wait – we know Carol's our killer, and she was only in the dining room before the murder. <b>That means the murder weapon was the hammer</b>!
+						</div>
+					</div>
+					</div>
+					<div class="accordion-item">
+					<h2 class="accordion-header" id="headingThree">
+						<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+							3. When the murder was commited?
+						</button>
+					</h2>
+					<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+						<div class="accordion-body">
+							The victim's scream narrows it down to either 8:45 or 9:00. Since Carol (our now-confirmed killer) wasn't at the scene at 8:45 and we know that Alice was alive before 9:00, so <b>the murder was commited at 9:00</b>.
+						</div>
+					</div>
+					</div>
+				</div>
+			</p>
 
-					<details>
-						<summary>2. Which weapon was used?</summary>
-						We can rule out the scissors, leaving us with the gun, hammer, or rope. But wait – we know Carol's our killer, and she was only in the dining room before the murder. That means the murder weapon was the hammer!
-					</details>
-
-					<details>
-						<summary>3. When the murder was commited?</summary>
-						The victim's scream narrows it down to either 8:45 or 9:00. Since Carol (our now-confirmed killer) wasn't at the scene at 8:45 and we know that Alice was alive before 9:00, the murder was commited at 9:00.
-					</details>
-				</ul>
+			<p>
 				You know what's really clever about this approach? While we've pieced together most of the timeline, there's still some mystery about Alice's movements - like where she was at 8:30. And that's not an oversight - it's actually showing us something important! Remember that early note about how "reconstructing all the timeline is not necessary to solve the murder, and often it is impossible"? Well, we're seeing that principle in action. We solved the case conclusively (Carol did it with the hammer at 9:00) without needing to track every single place Alice visited. It's a perfect example of how these puzzles mirror a more realistic detective work.
 				<br/>
 				Case closed! Ready to tackle the next one?
