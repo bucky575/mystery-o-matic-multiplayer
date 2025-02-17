@@ -69,6 +69,12 @@ mansion_activities = {
             "es": "miré afuera y vi a alguien podando los arbustos",
         },
     ],
+    "BEDROOM": [
+        {
+            "en": "heard someone snoring in the bedroom (🛏️)",
+            "es": "escuché a alguien roncando en el dormitorio (🛏️)"
+        },
+    ],
     "DINING": [
         {
             "en": "heard someone playing the piano in the dining room (🪑)",
@@ -126,6 +132,12 @@ ship_activities = {
             "en": "heard someone adjusting the sails",
             "es": "escuché a alguien ajustando las velas",
         },
+    ],
+    "CAPTAIN CABIN": [
+        {
+            "en": "heard someone snoring in the captain cabin (🛏️)",
+            "es": "escuché a alguien roncando en la cabina del capitán (🛏️)"
+        }
     ],
     "CARGO HOLD": [
         {
@@ -267,6 +279,18 @@ medieval_castle_activities = {
             "es": "vi a alguien puliendo un escudo en la armería (🛡️) a lo lejos",
         },
     ],
+    "DUNGEON": [
+        {
+            "en": "heard someone screaming in the dungeon (🔒)",
+            "es": "escuché a alguien gritando en la mazmorra (🔒)",
+        },
+    ],
+    "BED CHAMBER": [
+        {
+            "en": "heard someone snoring in the bed chamber (🛏️)",
+            "es": "escuché a alguien roncando en el dormitorio principal (🛏️)",
+        },
+    ],
     "GARDEN": [
         {
             "en": "heard someone whistling in the garden (🌳)",
@@ -339,6 +363,12 @@ train_activities = {
             "es": "escuché a alguien tocando el piano en el vagón comedor (🍽️)",
         },
     ],
+    "SLEEPING": [
+        {
+            "en": "heard someone snoring in the sleeping carriage (🛌)",
+            "es": "escuché a alguien roncando en el vagón dormitorio (🛌)",
+        },
+    ],
     "LOUNGE": [
         {
             "en": "glanced out my window and saw someone reading in the lounge carriage (🪑)",
@@ -380,7 +410,38 @@ space_station_representations = {
     "GARDEN": "🥔",
 }
 
-space_station_activities = {}
+space_station_activities = {
+    "COMMAND": [
+        {
+            "en": "saw someone from a distance piloting the space station",
+            "es": "vi a alguien pilotando la estación espacial a lo lejos"
+        },
+    ],
+    "LAB": [
+        {
+            "en": "saw someone conducting experiments in the lab module (🔬)",
+            "es": "vi a alguien realizando experimentos en el módulo de laboratorio (🔬)",
+        },
+    ],
+    "AIRLOCK": [
+        {
+            "en": "heard someone entering thought airlock module (🔒)",
+            "es": "escuché a alguien entrando por el módulo de esclusa (🔒)",
+        }
+    ],
+    "SLEEPING": [
+        {
+            "en": "heard someone snoring in the sleeping module (🛌)",
+            "es": "escuché a alguien roncando en el módulo de descanso (🛌)",
+        },
+    ],
+    "GARDEN": [
+        {
+            "en": "saw someone harvesting potatos",
+            "es": "vi a alguien cosechando papas",
+        },
+    ]
+}
 
 
 def get_location_data(selected_location):

@@ -76,7 +76,7 @@ def get_char_name(name):
     if name == "NOBODY":
         return name
     return (
-        '<a href="#/" class="link-dark" onClick="openModal(\''
+        '<a href="#/" class="link-dark" onClick="openModal(event, \''
         + name.lower()
         + "')\">"
         + name.capitalize()

@@ -84,7 +84,8 @@ function setLocalNotepad() {
 
 setLocalNotepad();
 
-function openModal(name) {
+function openModal(event, name) {
+	event.stopPropagation();
 	let element = document.getElementById('portraitImage');
 	element.src = "../images/" + name + ".jpg";
 	let modal = new bootstrap.Modal(document.getElementById('portraitModal'), {});
