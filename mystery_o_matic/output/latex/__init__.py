@@ -71,6 +71,11 @@ def produce_tex_output(
         if language == "en":
             names_html["NOBODY"] = "nobody"
             names_txt["NOBODY"] = "nobody"
+
+            for weapon_type in ["STABBING", "STRANGULATION", "CONTUSION", "PROJECTILE"]:
+                names_html[weapon_type] = weapon_type.lower()
+                names_txt[weapon_type] = weapon_type.lower()
+
         elif language == "es":
             names_html["NOBODY"] = "nadie"
             names_txt["NOBODY"] = "nadie"

@@ -49,6 +49,9 @@ def produce_llm_output(
 
     if language == "en":
         names_txt["NOBODY"] = "nobody"
+        for weapon_type in ["STABBING", "STRANGULATION", "CONTUSION", "PROJECTILE"]:
+            names_txt[weapon_type] = weapon_type.lower()
+
     elif language == "es":
         names_txt["NOBODY"] = "nadie"
     else:
