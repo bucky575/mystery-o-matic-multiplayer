@@ -84,13 +84,21 @@ function setLocalNotepad() {
 
 setLocalNotepad();
 
-function openModal(event, name) {
+function openModalChar(event, name) {
 	event.stopPropagation();
 	let element = document.getElementById('portraitImage');
 	element.src = "../images/" + name + ".jpg";
 	let modal = new bootstrap.Modal(document.getElementById('portraitModal'), {});
 	modal.show();
 }
+
+function openModalWeaponType(event, name) {
+	event.stopPropagation();
+	name = name.charAt(0).toUpperCase() + name.slice(1);
+	let modal = new bootstrap.Modal(document.getElementById('weaponTypeModal'+name), {});
+	modal.show();
+}
+
 
 function revealAnotherClue(offset) {
 	if (currentClue == 0 && offset < 0)

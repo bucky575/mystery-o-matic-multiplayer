@@ -71,14 +71,22 @@ def get_subtitle(subtitle, name=""):
         text(subtitle)
     return indent(doc.getvalue())
 
-
 def get_char_name(name):
     if name == "NOBODY":
         return name
     return (
-        '<a href="#/" class="link-dark" onClick="openModal(event, \''
+        '<a href="#/" class="link-dark" onClick="openModalChar(event, \''
         + name.lower()
         + "')\">"
         + name.capitalize()
+        + "</a>"
+    )
+
+def get_weapon_type_name(name):
+    return (
+        '<a href="#/" class="link-dark" onClick="openModalWeaponType(event, \''
+        + name.lower()
+        + "')\">"
+        + name.lower()
         + "</a>"
     )

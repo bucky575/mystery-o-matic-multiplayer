@@ -5,6 +5,7 @@ from mystery_o_matic.output.html.utils import (
     get_bullet_list,
     get_options_selector,
     get_char_name,
+    get_weapon_type_name,
     save_json,
 )
 from mystery_o_matic.clues import NoOneElseStatement
@@ -76,6 +77,11 @@ def produce_html_output(
         if language == "en":
             names_html["NOBODY"] = "nobody"
             names_txt["NOBODY"] = "nobody"
+
+            for weapon_type in ["STABBING", "STRANGULATION", "CONTUSION", "PROJECTILE"]:
+                names_html[weapon_type] = get_weapon_type_name(weapon_type)
+                names_txt[weapon_type] = weapon_type.lower()
+
         elif language == "es":
             names_html["NOBODY"] = "nadie"
             names_txt["NOBODY"] = "nadie"
