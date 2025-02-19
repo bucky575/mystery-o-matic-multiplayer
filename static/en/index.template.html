@@ -770,7 +770,7 @@
 						<div class="card" style="height: auto;">
 							<div class="card-body text-center">
 								<div class="row align-items-center">
-										<p id="clue-text-tutorial" class="card-text">☞ Inspecting the body reveals no signs of stabbing</p>
+									<p id="clue-text-tutorial" class="card-text">☞ Inspecting the body reveals no signs of <a href="#/" class="link-dark" onClick="openModalWeaponType(event, 'stabbing')">stabbing</a></p>
 								</div>
 							</div>
 						</div>
@@ -779,13 +779,7 @@
 			</p>
 
 			<p>
-				To discard a particular weapon we need to know what kind of wound they produce. This one of many types:
-			</p>
-
-			<p>
-				<ul class="list-group">
-					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Some weapons that cause injuries by cutting, stabbing or piercing are knife (🔪), scissors (✂️), axe (🪓)</li>
-				</ul>
+				To discard a particular weapon we need to know what kind of wound they produce. Just click on the type of wound described in the clue (e.g. <a href="#/" class="link-dark" onClick="openModalWeaponType(event, 'stabbing')">stabbing</a>) and you will see a list of potential weapons.
 			</p>
 
 			<p>
