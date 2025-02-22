@@ -262,7 +262,7 @@ class NotSawWhenArrivingLeavingClue(AbstractClue):
         s = f'{self.subject}: "'
 
         if r == 0:
-            s += f"I'm sure {self.object} was not with me in the {self.place} at {self.time}\""
+            s += f'I\'m sure {self.object} was not with me in the {self.place} at {self.time}"'
         elif r == 1:
             s += f'I know {self.object} was not with me in the {self.place} at {self.time}"'
         elif r == 2:
@@ -270,7 +270,7 @@ class NotSawWhenArrivingLeavingClue(AbstractClue):
         elif r == 3:
             s += f'{self.object} was not with me in the {self.place} at {self.time}"'
         elif r == 4:
-            s += f'Not in the {self.place}, no. {self.object} was not there with me at {self.time}"'
+            s += f'While I was in the {self.place} at {self.time}, {self.object} was nowhere to be seen."'
         elif r == 5:
             s += f'I was in the {self.place} at {self.time} but {self.object} was not there with me."'
         else:
