@@ -161,13 +161,13 @@ class SawWhenArrivingClue(AbstractClue):
             raise ValueError("Invalid random number: " + str(r))
 
         if not self.object_is_alive:
-            return f'{self.subject}: "I was horrified to discover {self.object}\'s body when I arrived to the {self.place} at {self.time}"'
+            return f'{self.subject}: "I was horrified to discover {self.object}\'s body when I arrived at the {self.place} at {self.time}"'
 
         if self.foggy and self.object_is_alive:
             if object != "$NOBODY":
                 object = "somebody"
 
-        s += f'{object} when I arrived to the {self.place} at {self.time}"'
+        s += f'{object} when I arrived at the {self.place} at {self.time}"'
         return s
 
     def string_spanish(self):
@@ -264,7 +264,7 @@ class NotSawWhenArrivingLeavingClue(AbstractClue):
         if r == 0:
             s += f'I\'m sure {self.object} was not with me in the {self.place} at {self.time}"'
         elif r == 1:
-            s += f'I know {self.object} was not with me in the {self.place} at {self.time}"'
+            s += f'I was in the {self.place} at {self.time} but {self.object} wasn\'t around."'
         elif r == 2:
             s += f'{self.object} definitely was not with me in the {self.place} at {self.time}"'
         elif r == 3:
@@ -535,9 +535,9 @@ class WasVictimDeadAtClue(AbstractClue):  # UNUSED
 
     def string_english(self):
         if self.alternative:
-            r = "Inspecting the crime scene reveals that the victim was dead at "
+            r = "Inspecting the crime scene reveals that the victim had been dead by "
         else:
-            r = "A close examination of the body reveals that the victim was dead at "
+            r = "A close examination of the body reveals that the victim had been dead by "
 
         r += f"{self.time}"
         return r
@@ -907,13 +907,15 @@ class WeaponNotUsedClue(AbstractClue):
             raise ValueError("Unknown type of weapon: " + weapon)
 
     def string_english(self):
-        r = randint(0, 1)
+        r = randint(0, 2)
         weapon = self.weapon
 
         if r == 0:
             s = "Inspecting the body reveals "
         elif r == 1:
             s = "The inspection of the body indicates "
+        elif r == 2:
+            s = "The body shows "
         else:
             raise ValueError("Invalid random number: " + str(r))
 
@@ -925,7 +927,7 @@ class WeaponNotUsedClue(AbstractClue):
         elif weapon_type == "sharp force":
             return s + "no signs of $STABBING."
         elif weapon_type == "poisoning":
-            return s + "that the " + weapon + " was not the murderer weapon."
+            return s + "that the " + weapon + " was not the murder weapon."
         elif weapon_type == "blunt force":
             return s + "no signs of $CONTUSION."
         else:

@@ -121,7 +121,7 @@ ship_activities = {
         },
     ],
     "NAVIGATION ROOM": [
-        {"en": "saw someone looking at a map", "es": "vi a alguien mirando un mapa"},
+        {"en": "saw someone studying a map", "es": "vi a alguien mirando un mapa"},
     ],
     "MAIN DECK": [
         {
