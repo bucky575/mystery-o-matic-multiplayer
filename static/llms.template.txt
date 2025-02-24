@@ -1,212 +1,173 @@
 # mystery-o-matic puzzle of the day
 
-## Introduction
+🕵️ Welcome Detective!
 
-Our mission is to solve a murder mystery by uncovering who the
-killer is, which weapon was used, and when the crime occurred.
-It’s up to you to piece together the puzzle by examining the
-following key elements:
+Our mission is to solve a murder mystery by uncovering who the killer is, which weapon was used, and when the crime occurred. It’s up to you to piece together the puzzle by examining the following key elements:
 
-• The suspects: You'll meet a colorful cast of characters
-  including Alice, Bob, Carol, Dave, Frida and Eddie. One of them
-  has met an unfortunate end while some of the others are our
-  prime suspects. Spoiler alert: in this tutorial, poor Alice is
-  our victim so we'll focus on Bob and Carol.
+The suspects: you'll meet a colorful cast of characters including Alice, Bob, Carol, Dave, Frida and Eddie. One of them has met an unfortunate end while some of the others are our prime suspects. Spoiler alert: in this tutorial, poor Alice is our victim so we'll focus on Bob and Carol as suspects.
 
-• The crime: A gruesome murder has taken place, and we need to
-  determine how it happened. Once the fatal act occurs, the
-  victim's body remains exactly where they fellthis is a crucial
-  detail for your investigation.
+The crime: a gruesome murder has taken place, and we need to determine how it happened. Once the fatal act occurs, the victim's body remains exactly where they fell–this is a crucial detail for your investigation.
 
-• The location: each location can be connected with the others,
-  allowing characters to move freely. For this tutorial, we’ll
-  explore a chilling mystery set in an eerie Victorian mansion,
-  where people has been mysteriously disappearing from time to
-  time. The layout changes from case to case, with three to five
-  rooms to explore. For our tutorial, here's how the rooms
-  connect:
+The location: each place can be connected with the others, allowing characters to move freely. For this tutorial, we’ll explore a chilling mystery set in an eerie Victorian mansion, where people have been mysteriously disappearing from time to time. The layout changes from case to case, with three to five rooms to explore. For our tutorial, here's how the rooms connect:
   - The kitchen is connected with dinning room and the bedroom.
   - The dinning room is only connected with the kitchen.
   - The bedroom is connected with with the kitchen and the bathroom.
   - The bathroom is only connected with the bedroom.
 
-• The weapons: Various weapons are scattered throughout the rooms
-  and the killer will pick up one of the weapons, but don't
-  expect them to be where they "should" be. That hammer? It might
-  be in the bathroom instead of a workshop. Logic won't help you
-  here!
+The weapons: various weapons are scattered throughout the rooms and the killer will pick up one of the weapons before the crime, but don't expect them to be where they "should" be. That hammer? It might be in the bathroom instead of a workshop. Logic won't help you here!
 
-• The timeline: The murder occurred within a specific time window
-  (e.g., between 8:00 and 9:30). You’ll need to reconstruct the
-  movements of the suspects and identify when the fatal blow was
-  struck. There is, however, one important detail that separates
-  these puzzles from other logic whodunit games. Our puzzles try
-  to mimic real life, where statements and clues are often
-  chaotic, redundant or incomplete. In that sense, reconstructing
-  all the timeline is not necessary to solve the murder, and
-  often it is impossible!
+The timeline: the murder occurred within a specific time window (e.g., between 8:00 and 9:30). You'll need to reconstruct the movements of the suspects and identify when the fatal blow was struck. There is, however, one important detail that separates these puzzles from other logic whodunit games. Our puzzles try to mimic real life, where statements and clues are often chaotic, redundant or incomplete. In that sense, reconstructing all the timeline is not necessarily to solve the murder, and often it is impossible!.
 
-• The statements: You'll get statements from suspects and
-  evidence from the scene. Everyone will be telling the truth,
-  but not necessary the whole story. You will need to carefully
-  deduce and combine facts in order to uncover the truth.
+The statements: you'll get statements from suspects and evidence from the scene. Everyone will be telling the truth, but not necessary the whole story. You will need to carefully deduce and combine facts in order to uncover the truth.
 
+🕗 Using the Timeline Board
 
-## Using the timeline board
-
-Think of the Timeline Board as your detective's whiteboard – it's
-where all the magic happens. This tool allows you to keep track
-of key events, movements, and deductions as you piece together
-the story behind the murder.  Every case starts with some basic
-facts we know for sure:
+The Timeline Board is a grid that allows you to keep track of key events, movements, and deductions as you piece together the story behind the murder. Think of it as your detective's whiteboard – it's where all the magic happens. It’s up to you to fill in the board with what you’ve deduced. In this tutorial, Alice has been murdered before 9:30 in the mansion, her body found in the kitchen. We’ll use the Timeline Board to reconstruct this crime. Let’s start with some basic facts we know for sure:
 
 We know where everyone was at 9:30:
-  – Alice's body was in the kitchen (pot-of-food)
-  – Bob was in the dining room (chair)
-  – Carol was in the bathroom (toilet)
+ - Alice's body was in the kitchen
+ - Bob was in the dining room
+ - Carol was in the bathroom
 
-The list of initial clues describe where each character was at
-the end the timeline, and it is your job to deduce, using the
-suspect statements and other clues, who the killer is, which
-weapon was used, and when the crime occurred. The timeline board
-is already filled with initial clues. In order to do so, we used
-several symbols: the    symbol means that someone was there at a
-given time and place. The  symbol means they were not there.
-Finally the  symbol is used to designate the victim but feel free
-to use other symbols if you like.
+The list of initial clues describe where each character was at 9:30, the end of the timeline. It is your job to deduce, using the suspect statements and other clues, who the killer is, which weapon was used, and when the crime occurred. We can mark the timeline with three simple symbols: ✓ means someone was there, ✗ means they weren't, and ? means we're not sure.
 
-At the bottom of the timeline board lies the weapon section,
-which shows where each available weapon was located. For
-instance, the killer took the murderer weapon from one the
-following locations:
+At the bottom of the timeline board lies the weapon section, which shows where each available weapon was located. For instance, the killer took the murderer weapon from one of the following locations:
 
-• The hammer from the dining room
+- The hammer (🔨) from the dining room (🪑)
+- The pistol (🔫) from the bedroom (🛏️)
+- The scissors (✂️) from the kitchen (🍲)
+- The rope (🪢) from the bathroom (🚽)
 
-• The gun from the bedroom
+🎓 Understanding Clues and Making Basic Deductions
 
-• The scissors from the kitchen
+Here's where it gets fun! Our suspects may move between rooms every 15 minutes (they're suspiciously punctual), following the location's layout.
 
-• The rope from the bathroom
+They can only move to directly connected rooms during each 15-minute interval - no shortcuts allowed! Think of it like moving across a chessboard - you have to pass through the squares one at a time.
 
-# Understanding clues and making basic deductions
+For example, if Alice wants to go from the dining room to the bathroom, she must:
 
-Here's where it gets fun! Our suspects move between rooms every
-15 minutes (they're suspiciously punctual). Our suspects must
-follow the location's layout when moving between rooms. They can
-only move to directly connected rooms during each 15-minute
-interval - no shortcuts allowed! Think of it like moving across a
-chessboard - you have to pass through the squares one at a time.
-For example, if Alice wants to go from the dining room to the
-bathroom, he must:
+1. Move from the dining room to the bedroom during one 15-minute interval.
 
-1. Move from the dining room to the bedroom during one 15-minute
-  interval.
+2. Stay there for any number of 15-minutes intervals (even if other suspects are also there).
 
-2. Stay there for any number of 15-minutes intervals (even if
-  other suspects are also there).
+3. Move from the bedroom to the bathroom during another 15-minute interval.
 
-3. Move from the bedroom to the bathroom during another 15-minute
-  interval.
+She cannot teleport directly from the dining room to the bathroom, even though they might seem close. This rule is crucial for making deductions - if you know where and when someone started and ended up, you can often figure out where they must have been in between!
 
-She cannot teleport directly from the dining room to the
-bathroom, even though they might seem close. This rule is crucial
-for making deductions - if you know where and when someone
-started and ended up, you can often figure out where they must
-have been in between!
+Once the movement rules are clarified, let's start this case, with the following statement:
 
-Once the movement rules are clarified, let's start this case,
-with the following statement:
+In our murder mystery, characters move between rooms every 15 minutes, allowing us to track their locations over time through their statements.
 
-Bob: "I saw Alice when I arrived in the bedroom at 8:15"
+For example, let's say we have the following clue:
+
+☞ Bob: "I saw Alice when I arrived in the bedroom (🛏️) at 8:15"
 
 What can we deduce? Quite a lot actually:
 
-• Alice was in the bedroom at 8:15
+🔎 Alice was in the bedroom at 8:15
+🔎 Bob was also in the bedroom at 8:15
+🔎 Bob was NOT in the bedroom at 8:00
 
-• Bob was also in the kitchen at 8:15
+The second we finished adding these into the timetable, other deductions start popping up! Since our suspects haven't mastered the art of being in two places at once, we can also figure out where they weren't:
 
-• Bob was NOT in the kitchen at 8:00
+🔎 Alice was not in the bathroom, kitchen, or dining room at 8:15
+🔎 Bob was not in the bathroom, kitchen, or dining room at 8:15
 
+But where was Bob at 8:00? This is where our room layout comes in handy.
 
-Using these deductions we can start completing the timeline
-board:
+Since the bedroom connects to both the kitchen and bathroom, Bob could have come from either one. But here's a solid deduction – Bob couldn't have been in the dining room at 8:00 because it doesn't connect to the bedroom!
 
-New deductions are highlighted in the timeline board for your
-convenience. The second we finished adding these into the
-timetable, other deductions start popping up! Since our suspects
-haven't mastered the art of being in two places at once, we can
-also figure out where they weren't:
+🔎 Bob was not in the dining room at 8:00
 
-•  Neither Alice nor Bob could have been in the bathroom,
-  kitchen, or dining room at 8:15
+Other types of clues describe when the suspects spend some time. For instance:
 
-But where was Alice at 8:00? This is where our room layout comes
-in handy:
-
-Since the bedroom connects to both the kitchen and bathroom,
-Alice could have come from either one. But here's a solid
-deduction – Bob couldn't have been in the dining room at 8:00
-because it doesn't connect to the bedroom!
-
-Other types of clues describe when the suspects spend some time.
-For instance:
-
-Carol: "I was in the dining room from 8:00 to 8:45"
+☞ Carol: "I was in the dining room (🪑) from 8:00 to 8:45"
 
 This tells us:
 
-• Carol was in the dining room from 8:00 to 8:45
+🔎 Carol was in the dining room from 8:00 to 8:45
+🔎 Carol was NOT in any of the other rooms from 8:00 to 8:45
+🔎 Carol was NOT in the dining room at 9:00
 
-• Carol was NOT in any of the other rooms from 8:00 to 8:45
+Where was Carol at 9:00? Let's go back to mansion map to figure it out.
 
-• Carol was NOT in the dining room at 9:00
+Looking at our room layout, Carol must have headed to the kitchen at 9:00 (and therefore, she is not somewhere else!) – it's the only place she could reach from the dining room!
 
-Looking at our room layout, Carol must have headed to the kitchen
-at 9:00 – it's the only place she could reach from the dining
-room!
+🔎 Carol was in the kitchen at 9:00
+🔎 Carol was NOT in bedroom, dining room or bathroom at 9:00
 
 Here's another juicy clue type:
 
-Bob: "Saw nobody when I arrived to the bathroom () at 9:00"
+☞ Bob: "Saw nobody when I arrived to the bathroom (🚽) at 9:00"
 
-Not only does this put Bob in the bathroom at 9:00, but we can
-backtrack – he must have been in the bedroom at 8:45 since it's
-the only way to reach the bathroom!
+Let's break it down:
 
+🔎 Bob was in the bathroom at 9:00
+🔎 Bob was NOT in the kitchen, bedroom or dining room at 9:00
+🔎 Neither Alice or Carol were in the bathroom at 9:00
+
+What else we can get from this clue? Let's take another look to the location graph.
+
+Not only does this clue places Bob in the bathroom at 9:00, but we can backtrack – he must have been in the bedroom at 8:45 since it's the only way to reach the bathroom! In other words:
+
+🔎 Bob was in the bedroom at 8:45
+🔎 Bob was NOT in the kitchen, dining room or bathroom at 8:45
 
 Finally, sometimes we get somehow vague clues from suspects:
 
-Carol: "I heard someone washing the dishes at 8:45"
+☞ Carol: "I heard someone washing the dishes at 8:45"
 
-We know that someone was in the kitchen. Can you wash dishes in
-the bathroom? Nope, absolutely ridiculous (looking at you The
-Sims™).
+This clue tells us that someone was in the kitchen. Wait a minute, can you wash dishes in the bathroom? Nope, absolutely ridiculous (looking at you The Sims™). Let's review what we deduced so far:
 
-• Someone was (alive!) at the kitchen at 8:45
+🔎 Someone was (alive!) at the kitchen at 8:45
+🔎 Carol was NOT in the kitchen at 8:45
 
-• Carol was NOT in the kitchen at 8:45
+It can be tempting to try to guess where Carol was, but this is not possible. Characters sometimes can hear or see someone in other rooms, but their location cannot be inferred from this kind of clue. However, what we can deduce using our previous observation is who was in the kitchen. Clearly, it was not Carol (she was elsewhere at 8:45 actually!). Also, we know that Bob was in the bedroom, which means that Alice was in the kitchen at 8:45.
 
+Our first attempt to deduce facts was not great, so let's review our previous deduction and refine them:
 
-It can be tempting to try to guess where Carol was, but this is
-not possible. Characters sometimes can heard or see someone in
-other rooms, but their location does really matter here. However,
-what we can deduce using our previous observation is who was in
-the kitchen. Clearly, it was not Carol. We know that Bob was in
-the bedroom, which means that Alice was in the kitchen at 8:45.
+🔎 Alice was in the kitchen at 8:45
+🔎 Alice was NOT in the bedroom, dining room or bathroom at 8:45
+🔎 Carol was NOT in the kitchen at 8:45
 
-### Determining Time of Death
+⌛ Determining Time of Death
 
-Figuring out when our victim met their end is crucial. Sometimes
-we get helpful clues like this:
+Once we have a good idea of where everyone was at different times, we can start narrowing down the time of death. This is a crucial step in solving the mystery, as it can help us identify the killer. Sometimes we get helpful clues like this:
 
-A blood-curdling scream from the victim was heard between 8:45 and 9:00
+☞ A blood-curdling scream from the victim was heard between 8:45 and 9:00
 
-Since our suspects move every 15 minutes like clockwork, the
-murder had to happen either at 8:45 or 9:00. However, we already
-know that Alice was alive at 8:45 (and happily washing the
-dishes). So the only option here is that murder happened at 9:00.
-Remember that once the killer strikes, the victim body is never
-moved, so can easily complete the Alice's timeline until 9:30.
+Since our suspects move every 15 minutes like clockwork, the murder had to happen either at 8:45 or 9:00. However, we already know that Alice was alive at 8:45 (and happily washing the dishes). So the only option here is that murder happened at 9:00. Remember that once the killer strikes, the victim body is never moved, so can easily complete the Alice's timeline until 9:30.
+
+🔎 Alice was killed at 9:00 in the kitchen
+🔎 Alice's body is in the kitchen from 9:15 to 9:30
+
+🔪 Finding the smoking gun
+
+Following characters around is not enough. We need to figure out the murder weapon! Fortunately, on occasion, you will come across a clue related to the wounds inflicted on the victim that will help you discard a certain kind of weapon. For example:
+
+☞ Inspecting the body reveals no signs of stabbing
+
+To discard a particular weapon we need to know what kind of wound they produce. Just click on the type of wound described in the clue (e.g. stabbing) and you will see a list of potential weapons:
+
+🎓 Solving your first case
+
+Time to put it all together and solve our very first murder.  Think for a while and then click to reveal each solution:
+
+1. Who was the killer?
+
+Either Bob and Carol are suspect. Well, Bob's got a solid alibi – he wasn't even at the crime scene when it happened (either 8:45 or 9:00). That leaves Carol as the killer.
+
+2. Which weapon was used?
+
+We can rule out the scissors, leaving us with the gun, hammer, or rope. But wait – we know Carol's our killer, and she was only in the dining room before the murder. That means the murder weapon was the hammer!
+
+3. When the murder was committed?
+
+The victim's scream narrows it down to either 8:45 or 9:00. Since Carol (our now-confirmed killer) wasn't at the scene at 8:45 and we know that Alice was alive before 9:00, so the murder was committed at 9:00.
+
+You know what's really clever about this approach? While we've pieced together most of the timeline, there's still some mystery about Alice's movements - like where she was at 8:30. And that's not an oversight - it's actually showing us something important! Remember that early note about how "reconstructing all the timeline is not necessary to solve the murder, and often it is impossible"? Well, we're seeing that principle in action. We solved the case conclusively (Carol did it with the hammer at 9:00) without needing to track every single place Alice visited. It's a perfect example of how these puzzles mirror a more realistic detective work.
+
+Case closed! Ready to tackle a real one?
 
 ## Daily mystery
 
