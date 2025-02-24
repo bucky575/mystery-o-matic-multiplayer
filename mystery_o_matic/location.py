@@ -62,7 +62,7 @@ mansion_activities = {
     "GARDEN": [
         {
             "en": "heard someone whistling in the garden (🌳)",
-            "es": "escuché a alguien silvando en el jardín (🌳)",
+            "es": "escuché a alguien silbando en el jardín (🌳)",
         },
         {
             "en": "looked outside and saw someone pruning the bushes",
@@ -149,7 +149,7 @@ ship_activities = {
 
 egypt_intro = {}
 egypt_intro["en"] = (
-    " are transported back in time to <b>a pyramid in the Ancient Egypt</b>!"
+    " are transported back in time to <b>a pyramid in Ancient Egypt</b>!"
 )
 egypt_intro["es"] = (
     " han sido transportados en el tiempo a <b>una pirámide en el Antiguo Egipto</b>!"
@@ -305,7 +305,7 @@ medieval_castle_activities = {
 
 train_intro = {}
 train_intro["en"] = (
-    " are transported back in time into <b>the famous Orient Express</b> during its last voyage!"
+    " are transported back in time to <b>the famous Orient Express</b> during its last voyage!"
 )
 train_intro["es"] = (
     " han sido transportados en el tiempo al <b>famoso Orient Express</b> durante su último viaje!"
@@ -339,7 +339,7 @@ train_representations = {
 train_activities = {
     "LOCOMOTIVE": [
         {
-            "en": "glanced out my window and saw someone fueling the locomotive (🚂)",
+            "en": "glanced out the window and saw someone fueling the locomotive (🚂)",
             "es": "miré por la ventana y vi a alguien repostando la locomotora (🚂)",
         },
         {
@@ -413,7 +413,7 @@ space_station_representations = {
 space_station_activities = {
     "COMMAND": [
         {
-            "en": "saw someone from a distance piloting the space station",
+            "en": "saw someone in the command module (🕹️) piloting the station",
             "es": "vi a alguien pilotando la estación espacial a lo lejos"
         },
     ],
@@ -425,7 +425,7 @@ space_station_activities = {
     ],
     "AIRLOCK": [
         {
-            "en": "heard someone entering thought airlock module (🔒)",
+            "en": "heard someone entering through the airlock module (🔒)",
             "es": "escuché a alguien entrando por el módulo de esclusa (🔒)",
         }
     ],
@@ -437,8 +437,8 @@ space_station_activities = {
     ],
     "GARDEN": [
         {
-            "en": "saw someone harvesting potatos",
-            "es": "vi a alguien cosechando papas",
+            "en": "saw someone harvesting potatoes",
+            "es": "vi a alguien cosechando patatas",
         },
     ]
 }
