@@ -48,6 +48,7 @@ mansion_activities = {
             "en": "heard someone washing the dishes",
             "es": "escuché a alguien lavando los platos",
         },
+        {"en": "heard a voice coming from the kitchen (🍲)", "es": "escuché una voz que venía desde la cocina (🍲)"},
     ],
     "BATHROOM": [
         {
@@ -58,6 +59,7 @@ mansion_activities = {
             "en": "heard someone flushing the toilet",
             "es": "escuché a alguien tirando de la cadena",
         },
+        {"en": "heard a voice coming from the bathroom (🚽)", "es": "escuché una voz que venía desde el baño (🚽)"},
     ],
     "GARDEN": [
         {
@@ -68,18 +70,21 @@ mansion_activities = {
             "en": "looked outside and saw someone pruning the bushes",
             "es": "miré afuera y vi a alguien podando los arbustos",
         },
+        {"en": "heard a voice coming from the garden (🌳)", "es": "escuché una voz que venía desde el jardín (🌳)"},
     ],
     "BEDROOM": [
         {
             "en": "heard someone snoring in the bedroom (🛏️)",
             "es": "escuché a alguien roncando en el dormitorio (🛏️)"
         },
+        {"en": "heard a voice coming from the bedroom (🛏️)", "es": "escuché una voz que venía desde el dormitorio (🛏️)"},
     ],
     "DINING": [
         {
             "en": "heard someone playing the piano in the dining room (🪑)",
             "es": "escuché a alguien tocando el piano en el comedor (🪑)",
-        }
+        },
+        {"en": "heard a voice coming from the dining room (🪑)", "es": "escuché una voz que venía desde el comedor (🪑)"},
     ],
 }
 
@@ -119,9 +124,14 @@ ship_activities = {
             "en": "heard someone washing the dishes",
             "es": "escuché a alguien lavando los platos",
         },
+        {"en": "heard a voice coming from the galley (🍲)", "es": "escuché una voz que venía desde la cocina (🍲)"},
     ],
     "NAVIGATION ROOM": [
         {"en": "saw someone studying a map", "es": "vi a alguien mirando un mapa"},
+        {
+            "en": "heard a voice coming from the navigation room (🧭)",
+            "es": "escuché una voz que venía desde la sala de navegación (🧭)",
+        },
     ],
     "MAIN DECK": [
         {
@@ -132,18 +142,21 @@ ship_activities = {
             "en": "heard someone adjusting the sails",
             "es": "escuché a alguien ajustando las velas",
         },
+        {"en": "heard a voice coming from the main deck (⚓)", "es": "escuché una voz que venía desde la cubierta principal (⚓)"},
     ],
     "CAPTAIN CABIN": [
         {
             "en": "heard someone snoring in the captain cabin (🛏️)",
             "es": "escuché a alguien roncando en la cabina del capitán (🛏️)"
-        }
+        },
+        {"en": "heard a voice coming from the captain cabin (🛏️)", "es": "escuché una voz que venía desde la cabina del capitán (🛏️)"},
     ],
     "CARGO HOLD": [
         {
             "en": "heard someone rummaging in the cargo hold (📦)",
             "es": "escuché a alguien revisando la bodega de carga (📦)",
-        }
+        },
+        {"en": "heard a voice coming from the cargo hold (📦)", "es": "escuché una voz que venía desde la bodega de carga (📦)"},
     ],
 }
 
@@ -190,12 +203,14 @@ egypt_activities = {
             "en": "saw someone from afar polishing the throne",
             "es": "vi a alguien puliendo el trono a lo lejos",
         },
+        {"en": "heard a voice coming from the throne room (👑)", "es": "escuché una voz que venía desde el cuarto del trono (👑)"},
     ],
     "BURIAL PLACE": [
         {
             "en": "saw someone at a distance praying in the burial chamber (⚰️)",
             "es": "vi a alguien rezando en la cámara funeraria a lo lejos (⚰️)",
         },
+        {"en": "heard a voice coming from the burial chamber (⚰️)", "es": "escuché una voz que venía desde la cámara funeraria (⚰️)"},
     ],
     "TEMPLE": [
         {
@@ -206,6 +221,7 @@ egypt_activities = {
             "en": "saw someone from afar lighting candles in the temple (📿)",
             "es": "vi a alguien a la distancia encendiendo velas en el templo (📿)",
         },
+        {"en": "heard a voice coming from the temple (📿)", "es": "escuché una voz que venía desde el templo (📿)"},
     ],
     "DESERT": [
         {
@@ -222,6 +238,7 @@ egypt_activities = {
             "en": "looked outside and saw someone pruning the bushes",
             "es": "miré afuera y vi a alguien podando los arbustos",
         },
+        {"en": "heard a voice coming from the garden (🌳)", "es": "escuché una voz que venía desde el jardín (🌳)"},
     ],
 }
 
@@ -268,6 +285,7 @@ medieval_castle_activities = {
             "en": "saw someone from a distance dancing in the great hall (🍷)",
             "es": "vi a alguien bailando en el gran salón (🍷) a lo lejos",
         },
+        {"en": "heard a voice coming from the great hall (🍷)", "es": "escuché una voz que venía desde el gran salón (🍷)"},
     ],
     "ARMORY": [
         {
@@ -278,18 +296,21 @@ medieval_castle_activities = {
             "en": "saw someone at a distance polishing a shield in the armory (🛡️)",
             "es": "vi a alguien puliendo un escudo en la armería (🛡️) a lo lejos",
         },
+        {"en": "heard a voice coming from the armory (🛡️)", "es": "escuché una voz que venía desde la armería (🛡️)"},
     ],
     "DUNGEON": [
         {
             "en": "heard someone screaming in the dungeon (🔒)",
             "es": "escuché a alguien gritando en la mazmorra (🔒)",
         },
+        {"en": "heard a voice coming from the dungeon (🔒)", "es": "escuché una voz que venía desde la mazmorra (🔒)"},
     ],
     "BED CHAMBER": [
         {
             "en": "heard someone snoring in the bed chamber (🛏️)",
             "es": "escuché a alguien roncando en el dormitorio principal (🛏️)",
         },
+        {"en": "heard a voice coming from the bed chamber (🛏️)", "es": "escuché una voz que venía desde el dormitorio principal (🛏️)"},
     ],
     "GARDEN": [
         {
@@ -300,6 +321,7 @@ medieval_castle_activities = {
             "en": "looked outside and saw someone pruning the bushes",
             "es": "miré afuera y vi a alguien podando los arbustos",
         },
+        {"en": "heard a voice coming from the garden (🌳)", "es": "escuché una voz que venía desde el jardín (🌳)"},
     ],
 }
 
@@ -346,12 +368,14 @@ train_activities = {
             "en": "heard the whistle of the locomotive",
             "es": "escuché el silbido de la locomotora",
         },
+        {"en": "heard a voice coming from the locomotive (🚂)", "es": "escuché una voz que venía desde la locomotora (🚂)"},
     ],
     "LUGGAGE": [
         {
             "en": "heard someone rummaging in luggage carriage (🧳)",
             "es": "escuché a alguien revisando el vagón de carga (🧳)",
-        }
+        },
+        {"en": "heard a voice coming from the luggage carriage (🧳)", "es": "escuché una voz que venía desde el vagón de carga (🧳)"},
     ],
     "DINING": [
         {
@@ -362,18 +386,21 @@ train_activities = {
             "en": "heard someone playing the piano in the dining carriage (🍽️)",
             "es": "escuché a alguien tocando el piano en el vagón comedor (🍽️)",
         },
+        {"en": "heard a voice coming from the dining carriage (🍽️)", "es": "escuché una voz que venía desde el vagón comedor (🍽️)"},
     ],
     "SLEEPING": [
         {
             "en": "heard someone snoring in the sleeping carriage (🛌)",
             "es": "escuché a alguien roncando en el vagón dormitorio (🛌)",
         },
+        {"en": "heard a voice coming from the sleeping carriage (🛌)", "es": "escuché una voz que venía desde el vagón dormitorio (🛌)"},
     ],
     "LOUNGE": [
         {
             "en": "glanced out my window and saw someone reading in the lounge carriage (🪑)",
             "es": "miré por la ventana y vi a alguien leyendo en el vagón salón (🪑)",
         },
+        {"en": "heard a voice coming from the lounge carriage (🪑)", "es": "escuché una voz que venía desde el vagón salón (🪑)"},
     ],
 }
 
@@ -416,30 +443,35 @@ space_station_activities = {
             "en": "saw someone in the command module (🕹️) piloting the station",
             "es": "vi a alguien pilotando la estación espacial a lo lejos"
         },
+        {"en": "heard a voice coming from the command module (🕹️)", "es": "escuché una voz que venía desde el módulo de comando (🕹️)"},
     ],
     "LAB": [
         {
             "en": "saw someone conducting experiments in the lab module (🔬)",
             "es": "vi a alguien realizando experimentos en el módulo de laboratorio (🔬)",
         },
+        {"en": "heard a voice coming from the lab module (🔬)", "es": "escuché una voz que venía desde el módulo de laboratorio (🔬)"},
     ],
     "AIRLOCK": [
         {
             "en": "heard someone entering through the airlock module (🔒)",
             "es": "escuché a alguien entrando por el módulo de esclusa (🔒)",
-        }
+        },
+        {"en": "heard a voice coming from the airlock module (🔒)", "es": "escuché una voz que venía desde el módulo de esclusa (🔒)"},
     ],
     "SLEEPING": [
         {
             "en": "heard someone snoring in the sleeping module (🛌)",
             "es": "escuché a alguien roncando en el módulo de descanso (🛌)",
         },
+        {"en": "heard a voice coming from the sleeping module (🛌)", "es": "escuché una voz que venía desde el módulo de descanso (🛌)"}
     ],
     "GARDEN": [
         {
             "en": "saw someone harvesting potatoes",
             "es": "vi a alguien cosechando patatas",
         },
+        {"en": "heard a voice coming from the garden module (🥔)", "es": "escuché una voz que venía desde el módulo de jardín (🥔)"},
     ]
 }
 
