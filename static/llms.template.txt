@@ -26,8 +26,8 @@ The Timeline Board is a grid that allows you to keep track of key events, moveme
 
 We know where everyone was at 9:30:
  - Alice's body was in the kitchen
- - Bob was in the dining room
- - Carol was in the bathroom
+ - Bob was in the bathroom
+ - Carol was in the dining room
 
 The list of initial clues describe where each character was at 9:30, the end of the timeline. It is your job to deduce, using the suspect statements and other clues, who the killer is, which weapon was used, and when the crime occurred. We can mark the timeline with three simple symbols: ✓ means someone was there, ✗ means they weren't, and ? means we're not sure.
 
@@ -147,11 +147,21 @@ Following characters around is not enough. We need to figure out the murder weap
 
 ☞ Inspecting the body reveals no signs of stabbing
 
-To discard a particular weapon we need to know what kind of wound they produce. Just click on the type of wound described in the clue (e.g. stabbing) and you will see a list of potential weapons:
+To discard a particular weapon we need to know what kind of wound they produce. Just click on the type of wound described in the clue (e.g. "stabbing") and you will see a list of potential weapons:
+
+  🔪 A classic choice for chefs... and assassins. Sharp, sleek, and perfect for slicing more than just vegetables.
+	🪓 Lumberjacks love it. So do people with unresolved anger issues.
+	✂️ Snip, snip! Whether you’re crafting or ... cutting ties permanently, they’re sharp enough for the job.
+	🪛 Good for assembling furniture, opening paint cans, and, apparently, creating unsolvable crime scenes.
+	🗡️ Like a knife, but fancier and with more flair. Great for stabbing ... and looking cool while doing it.
+	⚔️ Chivalry isn’t dead, but someone might be after this gets unsheathed. Elegant, deadly, and hard to conceal.
+	🔱 Why settle for one point when you can have three? Poseidon approves, and so will your suspect.
+
+Using this list, we can discard the scissors from the list of potential weapons in this case.
 
 🎓 Solving your first case
 
-Time to put it all together and solve our very first murder.  Think for a while and then click to reveal each solution:
+Time to put it all together and solve our very first murder.  Think for a while and then clsick to reveal each solution:
 
 1. Who was the killer?
 
@@ -187,7 +197,7 @@ $locationConnections
 
 $additionalClues
 
-Determinate who did it, which weapon was used and the time of the murder. Make sure the time of murder is precise (e.g. no intervals), and it only uses steps of 15 minutes. If you are not completely sure about the solution, tell me and I will give you more clues.
+Determinate who did it, which weapon was used and the time of the murder. Do not make any extra assumptions  in the tutorial. If you are not completely sure about the solution, let me know and I will give you more clues.
 
 ## Solution
 
