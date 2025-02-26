@@ -48,6 +48,10 @@ mansion_activities = {
             "en": "heard someone washing the dishes",
             "es": "escuché a alguien lavando los platos",
         },
+        {
+            "en": "heard the clatter of pots in the kitchen (🍲)",
+            "es": "escuché el ruido de ollas en la cocina (🍲)",
+        },
         {"en": "heard a voice coming from the kitchen (🍲)", "es": "escuché una voz que venía desde la cocina (🍲)"},
     ],
     "BATHROOM": [
@@ -58,6 +62,10 @@ mansion_activities = {
         {
             "en": "heard someone flushing the toilet",
             "es": "escuché a alguien tirando de la cadena",
+        },
+        {
+            "en": "heard the splash of shower in the bathroom (🚽)",
+            "es": "escuché el chapoteo de la ducha en el baño (🚽)",
         },
         {"en": "heard a voice coming from the bathroom (🚽)", "es": "escuché una voz que venía desde el baño (🚽)"},
     ],
@@ -361,8 +369,12 @@ train_representations = {
 train_activities = {
     "LOCOMOTIVE": [
         {
-            "en": "glanced out the window and saw someone fueling the locomotive (🚂)",
-            "es": "miré por la ventana y vi a alguien repostando la locomotora (🚂)",
+            "en": "glanced out the window and saw someone shoveling coal into the locomotive’s furnace (🚂)",
+            "es": "miré por la ventana y vi a alguien echando carbón al horno de la locomotora (🚂)",
+        },
+        {
+            "en": "heard a loud clang of tools in the locomotive (🚂)",
+            "es": "escuché un golpe fuerte de herramientas en la locomotora (🚂)",
         },
         {
             "en": "heard the whistle of the locomotive",
@@ -383,6 +395,10 @@ train_activities = {
             "es": "miré por la ventana y vi a alguien comiendo en el vagón comedor (🍽️)",
         },
         {
+            "en": "saw someone pouring wine in the dining carriage (🍽️)",
+            "es": "vi a alguien sirviendose vino en el vagón comedor (🍽️)",
+        },
+        {
             "en": "heard someone playing the piano in the dining carriage (🍽️)",
             "es": "escuché a alguien tocando el piano en el vagón comedor (🍽️)",
         },
@@ -392,6 +408,10 @@ train_activities = {
         {
             "en": "heard someone snoring in the sleeping carriage (🛌)",
             "es": "escuché a alguien roncando en el vagón dormitorio (🛌)",
+        },
+        {
+            "en": "saw someone adjusting the curtains in the sleeping carriage (🛌)",
+            "es": "vi a alguien ajustando las cortinas en el vagón dormitorio (🛌)",
         },
         {"en": "heard a voice coming from the sleeping carriage (🛌)", "es": "escuché una voz que venía desde el vagón dormitorio (🛌)"},
     ],
@@ -440,22 +460,22 @@ space_station_representations = {
 space_station_activities = {
     "COMMAND": [
         {
-            "en": "saw someone in the command module (🕹️) piloting the station",
-            "es": "vi a alguien pilotando la estación espacial a lo lejos"
+            "en": "saw someone adjusting the station’s orbit on the command module’s screens",
+            "es": "vi a alguien ajustando la órbita de la estación en las pantallas del módulo de comando (🕹️)"
         },
         {"en": "heard a voice coming from the command module (🕹️)", "es": "escuché una voz que venía desde el módulo de comando (🕹️)"},
     ],
     "LAB": [
         {
-            "en": "saw someone conducting experiments in the lab module (🔬)",
-            "es": "vi a alguien realizando experimentos en el módulo de laboratorio (🔬)",
+            "en": "saw someone mixing glowing chemicals in the lab module (🔬)",
+            "es": "vi a alguien mezclando químicos brillantes en el módulo de laboratorio (🔬)",
         },
         {"en": "heard a voice coming from the lab module (🔬)", "es": "escuché una voz que venía desde el módulo de laboratorio (🔬)"},
     ],
     "AIRLOCK": [
         {
-            "en": "heard someone entering through the airlock module (🔒)",
-            "es": "escuché a alguien entrando por el módulo de esclusa (🔒)",
+            "en": "heard a hiss of depressurization from the airlock module (🔒)",
+            "es": "escuché un silbido de despresurización desde el módulo de esclusa (🔒)",
         },
         {"en": "heard a voice coming from the airlock module (🔒)", "es": "escuché una voz que venía desde el módulo de esclusa (🔒)"},
     ],
@@ -464,6 +484,10 @@ space_station_activities = {
             "en": "heard someone snoring in the sleeping module (🛌)",
             "es": "escuché a alguien roncando en el módulo de descanso (🛌)",
         },
+        {
+            "en": "heard a metallic clank from the sleeping module’s lockers (🛌)",
+            "es": "escuché un golpe metálico proveniente de los armarios del módulo de descanso (🛌)",
+        },
         {"en": "heard a voice coming from the sleeping module (🛌)", "es": "escuché una voz que venía desde el módulo de descanso (🛌)"}
     ],
     "GARDEN": [
@@ -471,10 +495,13 @@ space_station_activities = {
             "en": "saw someone harvesting potatoes",
             "es": "vi a alguien cosechando patatas",
         },
+        {
+            "en": "saw someone watering the hydroponic vines in the garden module (🥔)",
+            "es": "vi a alguien regando las enredaderas hidropónicas en el módulo de jardín (🥔)",
+        },
         {"en": "heard a voice coming from the garden module (🥔)", "es": "escuché una voz que venía desde el módulo de jardín (🥔)"},
     ]
 }
-
 
 def get_location_data(selected_location):
     if selected_location is None:
