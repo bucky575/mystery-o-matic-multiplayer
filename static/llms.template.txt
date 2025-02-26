@@ -195,9 +195,15 @@ $locationConnections
 
 ## Statements & Clues
 
+The daily mystery comes in two flavors, the first set of clues corresponds does not allow lies in suspects or the killer:
+
 $additionalClues
 
-Determinate who did it, which weapon was used and the time of the murder. Do not make any extra assumptions  in the tutorial. If you are not completely sure about the solution, let me know and I will give you more clues.
+In the second set of clues, the killer can lie in their statements. However, they will only do it if it somehow helps to cover their tracks during the time and place of the murder.
+
+$additionalCluesWithLies
+
+Determinate who did it, which weapon was used and the time of the murder. Do not make any extra assumptions, except the ones following the tutorial. If you are not completely sure about the solution, let me know and I will give you more clues.
 
 ## Solution
 

@@ -114,11 +114,14 @@ def produce_llm_output(
             create_template(clue[language]).substitute(names_txt)
         )
 
+    additional_clues_with_lies = get_bullet_list(additional_clues_with_lies, 0)
+
     args = {}
     args["introLocation"] = introLocation
     args["initialClues"] = initial_clues_list
     args["locationConnections"] = connections_list
     args["additionalClues"] = remove_emojis(additional_clues_list)
+    args["additionalCluesWithLies"] = remove_emojis(additional_clues_with_lies)
     args["solution"] = mystery.get_answer()
 
     txt_template = read_txt_template(static_dir + f"/llms.template.txt")
