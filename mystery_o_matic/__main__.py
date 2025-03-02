@@ -163,7 +163,7 @@ def main() -> int:
     while True:
         solidity_file = args.scenario
         locations = Locations(
-            location_name, number_places, location_data, weapons_available.keys()
+            mode, location_name, number_places, location_data, weapons_available.keys()
         )
         weapon_locations = locations.weapon_locations
         activities = locations.get_activities()

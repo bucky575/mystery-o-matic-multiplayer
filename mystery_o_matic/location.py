@@ -572,7 +572,7 @@ class Locations:
     - weapon_locations: A dictionary mapping location names to weapons.
     """
 
-    def __init__(self, location_name, number_places, location_data, weapons):
+    def __init__(self, mode, location_name, number_places, location_data, weapons):
         """
         Initializes a Locations object.
 
@@ -584,7 +584,7 @@ class Locations:
             + representations: A dictionary mapping concrete location names to their representations.
         - weapons: A list of weapons available in the game.
         """
-
+        self.mode = mode
         self.name = location_name
         intro, names, representations, activities = location_data
         self.intro = intro
@@ -705,8 +705,13 @@ class Locations:
         g.layout(prog="dot")
         g.edge_attr.update(color="gray")
         g.draw(outdir + f"/{language}/locations_big.svg")
+
+        if self.mode == "latex":
+            g.draw(outdir + f"/{language}/locations_big.pdf")
+
         g.graph_attr.update(dpi="200")
-        g.draw(outdir + f"/{language}/locations_big.png")
+        if self.mode != "latex":
+            g.draw(outdir + f"/{language}/locations_big.png")
 
         labels = {}
         for place, name in names.items():
@@ -731,10 +736,24 @@ class Locations:
         g.node_attr.update(
             fontname="Raleway", shape="plaintext", width="0.2", fixedsize="true"
         )
+
+        if g.number_of_nodes() == 3:
+            g.node_attr.update(fontsize="12")
+        elif g.number_of_nodes() == 4:
+            g.node_attr.update(fontsize="14")
+        elif g.number_of_nodes() >= 5:
+            g.node_attr.update(fontsize="16")
+
         g.layout(prog="dot")
         g.draw(outdir + f"/{language}/locations_small.svg")
+
+        if self.mode == "latex":
+            g.draw(outdir + f"/{language}/locations_small.pdf")
+
         g.graph_attr.update(dpi="200")
-        g.draw(outdir + f"/{language}/locations_small.png")
+
+        if self.mode != "latex":
+            g.draw(outdir + f"/{language}/locations_small.png")
 
     def get_activities(self):
         """
