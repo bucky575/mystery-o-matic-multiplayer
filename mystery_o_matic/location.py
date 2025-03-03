@@ -737,12 +737,13 @@ class Locations:
             fontname="Raleway", shape="plaintext", width="0.2", fixedsize="true"
         )
 
-        if g.number_of_nodes() == 3:
-            g.node_attr.update(fontsize="12")
-        elif g.number_of_nodes() == 4:
-            g.node_attr.update(fontsize="14")
-        elif g.number_of_nodes() >= 5:
-            g.node_attr.update(fontsize="16")
+        if (self.mode == "latex"):
+            if g.number_of_nodes() == 3:
+                g.node_attr.update(fontsize="12")
+            elif g.number_of_nodes() == 4:
+                g.node_attr.update(fontsize="14")
+            elif g.number_of_nodes() >= 5:
+                g.node_attr.update(fontsize="16")
 
         g.layout(prog="dot")
         g.draw(outdir + f"/{language}/locations_small.svg")
