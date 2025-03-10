@@ -149,13 +149,13 @@ def main() -> int:
         used_seed = abs(hash256(random()))
 
     create_outdir(out_dir)
-    location_name, location_data = get_location_data(args.location)
+    location_name, location_data = get_location_data(args.location, args.mode)
     print("Location selected is:", location_name)
     weapons_available, weapon_labels = get_available_weapons(
         number_places, location_name
     )
 
-    _, tutorial_location_data = get_location_data("mansion")
+    _, tutorial_location_data = get_location_data("mansion", args.mode)
     tutorial_locations = TutorialLocations(tutorial_location_data)
     # Unused for now
     # tutorial_locations.render_locations(out_dir + "/tutorial")

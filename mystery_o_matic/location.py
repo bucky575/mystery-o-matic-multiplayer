@@ -503,8 +503,11 @@ space_station_activities = {
     ]
 }
 
-def get_location_data(selected_location):
+def get_location_data(selected_location, mode):
     if selected_location is None:
+        if mode == "latex":
+            locations.remove("train")
+
         location_name = choice(locations)
     else:
         location_name = selected_location

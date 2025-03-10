@@ -9,16 +9,16 @@ The suspects: you'll meet a colorful cast of characters including Alice, Bob, Ca
 The crime: a gruesome murder has taken place, and we need to determine how it happened. Once the fatal act occurs, the victim's body remains exactly where they fell–this is a crucial detail for your investigation.
 
 The location: each place can be connected with the others, allowing characters to move freely. For this tutorial, we’ll explore a chilling mystery set in an eerie Victorian mansion, where people have been mysteriously disappearing from time to time. The layout changes from case to case, with three to five rooms to explore. For our tutorial, here's how the rooms connect:
-  - The kitchen is connected with dinning room and the bedroom.
-  - The dinning room is only connected with the kitchen.
-  - The bedroom is connected with with the kitchen and the bathroom.
+  - The kitchen is connected with the dining room and the bedroom.
+  - The dining room is only connected with the kitchen.
+  - The bedroom is connected with the kitchen and the bathroom.
   - The bathroom is only connected with the bedroom.
 
 The weapons: various weapons are scattered throughout the rooms and the killer will pick up one of the weapons before the crime, but don't expect them to be where they "should" be. That hammer? It might be in the bathroom instead of a workshop. Logic won't help you here!
 
-The timeline: the murder occurred within a specific time window (e.g., between 8:00 and 9:30). You'll need to reconstruct the movements of the suspects and identify when the fatal blow was struck. There is, however, one important detail that separates these puzzles from other logic whodunit games. Our puzzles try to mimic real life, where statements and clues are often chaotic, redundant or incomplete. In that sense, reconstructing all the timeline is not necessarily to solve the murder, and often it is impossible!.
+The timeline: the murder occurred within a specific time window (e.g., between 8:00 and 9:30). You'll need to reconstruct the movements of the suspects and identify when the fatal blow was struck. There is, however, one important detail that separates these puzzles from other logic whodunit games. Our puzzles try to mimic real life, where statements and clues are often chaotic, redundant or incomplete. In that sense, reconstructing the complete timeline is not necessarily to solve the murder, and often it is impossible!.
 
-The statements: you'll get statements from suspects and evidence from the scene. Everyone will be telling the truth, but not necessary the whole story. You will need to carefully deduce and combine facts in order to uncover the truth.
+The statements: you'll get statements from suspects and evidence from the scene. Everyone will be telling the truth, but not necessarily the whole story. You will need to carefully deduce and combine facts in order to uncover the truth.
 
 🕗 Using the Timeline Board
 
@@ -68,7 +68,7 @@ What can we deduce? Quite a lot actually:
 🔎 Bob was also in the bedroom at 8:15
 🔎 Bob was NOT in the bedroom at 8:00
 
-The second we finished adding these into the timetable, other deductions start popping up! Since our suspects haven't mastered the art of being in two places at once, we can also figure out where they weren't:
+The second we finish adding these into the timetable, other deductions start popping up! Since our suspects haven't mastered the art of being in two places at once, we can also figure out where they weren't:
 
 🔎 Alice was not in the bathroom, kitchen, or dining room at 8:15
 🔎 Bob was not in the bathroom, kitchen, or dining room at 8:15
@@ -89,7 +89,7 @@ This tells us:
 🔎 Carol was NOT in any of the other rooms from 8:00 to 8:45
 🔎 Carol was NOT in the dining room at 9:00
 
-Where was Carol at 9:00? Let's go back to mansion map to figure it out.
+Where was Carol at 9:00? Let's go back to the mansion map to figure it out.
 
 Looking at our room layout, Carol must have headed to the kitchen at 9:00 (and therefore, she is not somewhere else!) – it's the only place she could reach from the dining room!
 
@@ -106,9 +106,9 @@ Let's break it down:
 🔎 Bob was NOT in the kitchen, bedroom or dining room at 9:00
 🔎 Neither Alice or Carol were in the bathroom at 9:00
 
-What else we can get from this clue? Let's take another look to the location graph.
+What else can we get from this clue? Let's take another look at the location graph.
 
-Not only does this clue places Bob in the bathroom at 9:00, but we can backtrack – he must have been in the bedroom at 8:45 since it's the only way to reach the bathroom! In other words:
+Not only does this clue place Bob in the bathroom at 9:00, but we can backtrack – he must have been in the bedroom at 8:45 since it's the only way to reach the bathroom! In other words:
 
 🔎 Bob was in the bedroom at 8:45
 🔎 Bob was NOT in the kitchen, dining room or bathroom at 8:45
@@ -136,7 +136,7 @@ Once we have a good idea of where everyone was at different times, we can start 
 
 ☞ A blood-curdling scream from the victim was heard between 8:45 and 9:00
 
-Since our suspects move every 15 minutes like clockwork, the murder had to happen either at 8:45 or 9:00. However, we already know that Alice was alive at 8:45 (and happily washing the dishes). So the only option here is that murder happened at 9:00. Remember that once the killer strikes, the victim body is never moved, so can easily complete the Alice's timeline until 9:30.
+Since our suspects move every 15 minutes like clockwork, the murder had to happen either at 8:45 or 9:00. However, we already know that Alice was alive at 8:45 (and happily washing the dishes). So the only option here is that murder happened at 9:00. Remember that once the killer strikes, the victim's body is never moved, so can easily complete Alice's timeline until 9:30.
 
 🔎 Alice was killed at 9:00 in the kitchen
 🔎 Alice's body is in the kitchen from 9:15 to 9:30
@@ -165,7 +165,7 @@ Time to put it all together and solve our very first murder.  Think for a while 
 
 1. Who was the killer?
 
-Either Bob and Carol are suspect. Well, Bob's got a solid alibi – he wasn't even at the crime scene when it happened (either 8:45 or 9:00). That leaves Carol as the killer.
+Either Bob and Carol are suspects. Well, Bob's got a solid alibi – he wasn't even at the crime scene when it happened (either 8:45 or 9:00). That leaves Carol as the killer.
 
 2. Which weapon was used?
 
