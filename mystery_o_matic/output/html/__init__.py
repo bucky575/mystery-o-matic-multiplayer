@@ -147,7 +147,7 @@ def produce_html_output(
         weapons_options = []
         for w in locations.weapon_locations.values():
             # use the labels in the current language but the values in english
-            weapons_options.append((weapon_labels[language][w], weapon_labels["en"][w]))
+            weapons_options.append((weapon_labels[language][w], weapon_labels["en"][w].replace(" ", "")))
 
         select_weapons = get_options_selector(weapons_options)
 
