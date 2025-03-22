@@ -29,7 +29,7 @@ weapon_labels["en"] = {
     "$ROCK": "rock",
     "$CURSE": "curse",
     "$WIRE": "wire extension",
-    "$SONICBLASTER": "sonic blaster",
+    "$SONIC_BLASTER": "sonic blaster",
 }
 
 weapon_labels["es"] = {
@@ -51,7 +51,7 @@ weapon_labels["es"] = {
     "$ROCK": "la roca",
     "$CURSE": "la maldición",
     "$WIRE": "el cable alargador",
-    "$SONICBLASTER": "el arma sónica",
+    "$SONIC_BLASTER": "el arma sónica",
 }
 
 ship_weapons = [
@@ -81,7 +81,7 @@ medieval_castle_weapons = [
 space_station_weapons = [
     {"$PISTOL": "🔫"},
     {"$KNIFE": "🔪", "$SCISSORS": "✂️", "$AXE": "🪓", "$SCREWDRIVER": "🪛"},
-    {"$POISON": "⚗️", "$SONICBLASTER": "🔊"},
+    {"$POISON": "⚗️", "$SONIC_BLASTER": "🔊"},
     {"$HAMMER": "🔨", "$WRENCH": "🔧"},
     {"$ROPE": "🪢", "$WIRE": "🔌"},
 ]
@@ -129,7 +129,7 @@ def get_weapon_type(weapon):
         or weapon == "$SWORD"
     ):
         return "sharp force"
-    elif weapon == "$POISON" or weapon == "$CURSE" or weapon == "$SONICBLASTER":
+    elif weapon == "$POISON" or weapon == "$CURSE" or weapon == "$SONIC_BLASTER":
         return "poisoning"
     elif (
         weapon == "$ROCK"
