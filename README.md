@@ -7,6 +7,12 @@ mystery-o-matic supports the following languages:
 * [English](https://mystery-o-matic.com/en)
 * [Spanish](https://mystery-o-matic.com/es)
 
+## Screenshots
+
+<img src="https://i.imgur.com/dMmUoeg.png" width=40% height=40%>
+
+or visit [mystery-o-matic.com](https://mystery-o-matic.com) for a live version.
+
 ## Installation
 
 Make sure all the requirements are met. If you are using Ubuntu:
