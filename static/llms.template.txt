@@ -179,6 +179,48 @@ You know what's really clever about this approach? While we've pieced together m
 
 Case closed! Ready to tackle a real one?
 
+🚀 Beyond the basics
+
+That was not too hard, wasn't it? Well, if you want to be a super sleuth 🕵️, you need to learn a few additional tips and tricks. This section will help you deal with more complicated (and interesting!) cases.
+
+Better identification of weapons
+
+There's a powerful technique to either confirm or eliminate potential murder weapons quickly, based on this critical clue:
+
+☞ The killer was alone when they retrieved the murder weapon.
+
+By combining this insight with your suspicions about the killer and the timing of the crime, you can make decisive deductions. Let's examine how this works:
+
+☞ Alice: "I was in the bedroom from 8:00 to 8:30"
+
+Assuming that we know that Alice is NOT the killer and the crime happened after 8:30, then we can arrive the following deduction:
+
+🔎 The killer didn't take the weapon from the bedroom.
+
+On the contrary, if we know that Alice IS the killer and the crime happened after 8:30, then we will need to check if she was alone at 8:00, 8:15 or 8:30 to deduce:
+
+🔎 The killer did take the weapon from the bedroom.
+
+Using this deductive technique, we can quickly identify the weapon used and solve the case!
+
+Navigating Deception: Dealing with liars
+
+Before starting each mystery, you can decide if the killer can lie in their statements or not. If you are up to a challenge, you will have to consider that every statement from the suspects can be a lie.
+
+Lying during a crime investigation is a serious business! The killer must be very careful since the rest of the suspects will always tell the truth. In practice, they will only provide a false statement if it somehow helps to cover their tracks during the time and place of the murder.
+
+Identifying the killer using unreliable information is usually harder since we don’t know if the statements are true or not. Not all hope is lost, since the rest of the suspects will always tell the truth. Detecting a lie is easy: we need to look for an inconsistency between two statements. Let’s see an example:
+
+☞ Bob: "I was in the kitchen from 9:00 to 10:00"
+☞ Carol: "I saw nobody when I arrived to the kitchen at 9:30"
+
+This contradiction immediately tells you something crucial, we know that exactly one of the following statements must be true:
+
+🔎 Bob is the killer
+🔎 Carol is the killer
+
+Pro Tip™: begin by assuming all statements are truthful. When you encounter a contradiction, you've identified a pair of potential killers.
+
 ## Daily mystery
 
 Once the tutorial is over, let's solve the murder mystery for the day.

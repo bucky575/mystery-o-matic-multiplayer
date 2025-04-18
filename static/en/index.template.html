@@ -866,11 +866,108 @@
 
 			<p>
 				You know what's really clever about this approach? While we've pieced together most of the timeline, there's still some mystery about Alice's movements - like where she was at 8:30. And that's not an oversight - it's actually showing us something important! Remember that early note about how "reconstructing all the timeline is not necessary to solve the murder, and often it is impossible"? Well, we're seeing that principle in action. We solved the case conclusively (Carol did it with the hammer at 9:00) without needing to track every single place Alice visited. It's a perfect example of how these puzzles mirror a more realistic detective work.
-				<br/>
-				Case closed! Ready to tackle the next one?
-
+			</p>
+			<p>
+				<b>Case closed! Ready to tackle the next one?</b>
 			</p>
 		</div>
+
+		<div class="container mt-5">
+			<h4>🚀 Beyond the basics</h4>
+
+			<p>That was not too hard, wasn't it? Well, if you want to be a super sleuth 🕵️, you need to learn a few additional tips and tricks. This section will help you deal with more complicated (and interesting!) cases.</p>
+
+			<h5>Better identification of weapons</h5>
+
+			<p>There's a powerful technique to either confirm or eliminate potential murder weapons quickly, based on this critical clue:</p>
+
+			<p>
+				<div class="d-flex justify-content-center align-items-center">
+					<div style="width: 99%" id="clues-tutorial">
+						<div class="card" style="height: auto;">
+							<div class="card-body text-center">
+								<div class="row align-items-center">
+										<p id="clue-text-tutorial" class="card-text">☞ The killer was alone when they retrieved the murder weapon.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p>
+
+			<p>By combining this insight with your suspicions about the killer and the timing of the crime, you can make decisive deductions. Let's examine how this works:</p>
+
+			<p>
+				<div class="d-flex justify-content-center align-items-center">
+					<div style="width: 99%" id="clues-tutorial">
+						<div class="card" style="height: auto;">
+							<div class="card-body text-center">
+								<div class="row align-items-center">
+										<p id="clue-text-tutorial" class="card-text">☞ Alice: "I was in the bedroom from 8:00 to 8:30"</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p>
+
+			<p>Assuming that <b>Alice is NOT the killer and the crime happened after 8:30</b>, then we can arrive the following deduction:</p>
+
+			<p>
+			<ul class="list-group">
+				<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 The killer didn't take the weapon from the bedroom.</li>
+			</ul>
+			</p>
+
+			<p>
+				On the contrary, if <b>Alice IS the killer and the crime happened after 8:30</b>, then we will need to check if she was alone at 8:00, 8:15 or 8:30 to deduce:
+			</p>
+
+			<p>
+				<ul class="list-group">
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 The killer did take the weapon from the bedroom.</li>
+				</ul>
+			</p>
+			<p>Using this deductive technique, we can quickly identify the weapon used and solve the case!</p>
+
+			<h5>Navigating Deception: Dealing with liars</h5>
+
+			<p>Before starting each mystery, you can decide if the killer can lie in their statements or not. If you are up to a challenge, you will have to consider that every statement from the suspects can be a lie.</p>
+
+			<p>Lying during a crime investigation is a serious business! The killer must be very careful since the rest of the suspects will always tell the truth. In practice, they will only provide a false statement if it somehow helps to cover their tracks during the time and place of the murder.</p>
+
+			<p>Identifying the killer using unreliable information is usually harder since we don’t know if the statements are true or not. Not all hope is lost, since the rest of the suspects will always tell the truth. Detecting a lie is easy: we need to look for an inconsistency between two statements. Let’s see an example:</p>
+
+			<p>
+				<div class="d-flex justify-content-center align-items-center">
+					<div style="width: 99%" id="clues-tutorial">
+						<div class="card" style="height: auto;">
+							<div class="card-body text-center">
+								<div class="row align-items-center">
+										<p id="clue-text-tutorial" class="card-text">☞ Bob: "I was in the kitchen from 9:00 to 10:00"</p>
+										<hr>
+										<p id="clue-text-tutorial" class="card-text">☞ Carol: "I saw nobody when I arrived to the kitchen at 9:30"</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p>
+
+			<p>This contradiction immediately tells you something crucial, we know that exactly one of the following statements must be true:</p>
+
+			<p>
+				<ul class="list-group">
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob is the killer.</li>
+					<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol is the killer.</li>
+				</ul>
+			</p>
+
+			<p>
+				Pro Tip™: begin by assuming all statements are truthful. When you encounter a contradiction, you've identified a pair of potential killers.
+			</p>
+		</div>
+
 	</div>
 
 	<div id="home">
