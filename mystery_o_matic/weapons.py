@@ -28,7 +28,7 @@ weapon_labels["en"] = {
     "$SWORD": "sword",
     "$ROCK": "rock",
     "$CURSE": "curse",
-    "$WIRE": "wire extension",
+    "$WIRE_EXTENSION": "wire extension",
     "$SONIC_BLASTER": "sonic blaster",
 }
 
@@ -50,7 +50,7 @@ weapon_labels["es"] = {
     "$SWORD": "la espada",
     "$ROCK": "la roca",
     "$CURSE": "la maldición",
-    "$WIRE": "el cable alargador",
+    "$WIRE_EXTENSION": "el cable alargador",
     "$SONIC_BLASTER": "el arma sónica",
 }
 
@@ -83,7 +83,7 @@ space_station_weapons = [
     {"$KNIFE": "🔪", "$SCISSORS": "✂️", "$AXE": "🪓", "$SCREWDRIVER": "🪛"},
     {"$POISON": "⚗️", "$SONIC_BLASTER": "🔊"},
     {"$HAMMER": "🔨", "$WRENCH": "🔧"},
-    {"$ROPE": "🪢", "$WIRE": "🔌"},
+    {"$ROPE": "🪢", "$WIRE_EXTENSION": "🔌"},
 ]
 
 
@@ -117,7 +117,7 @@ def get_available_weapons(num_weapons, location_name):
 def get_weapon_type(weapon):
     if weapon == "$PISTOL" or weapon == "$ARCHERY_BOW":
         return "projectile"
-    elif weapon == "$ROPE" or weapon == "$CHAIN" or weapon == "$WIRE":
+    elif weapon == "$ROPE" or weapon == "$CHAIN" or weapon == "$WIRE_EXTENSION":
         return "strangulation"
     elif (
         weapon == "$KNIFE"
