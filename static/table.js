@@ -142,7 +142,7 @@ function getCluesNameFontSize(t) {
 }
 
 function getCluesIconFontSize(t) {
-	return t.columnSize / 1.5;
+	return t.columnSize / (isKindle ? 2.0 : 1.5);
 }
 
 function getWeaponFontSize(columSize) {
