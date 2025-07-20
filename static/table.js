@@ -63,12 +63,18 @@ class ClueTable {
 		this.ctx.textAlign = "center";
 		this.ctx.fillStyle = color;
 		if (text && typeof(text) === "object") {
+			const dHeight = size;
+			const dWidth = text.width * (dHeight / text.height);
+			const centerX = this.columnSize * column + this.columnSize / 2;
+			const centerY = this.rowSize * row + this.rowSize / 2;
+			const dx = centerX - dWidth / 2;
+			const dy = centerY - dHeight / 2;
 			this.ctx.drawImage(
 				text,
-				this.columnSize * column + this.columnSize / 2 - text.width / 5,
-				this.rowSize * row / 2 + this.rowSize / 1.8 - text.height / 4,
-				text.width / 2.5,
-				text.height / 2.5
+				dx,
+				dy,
+				dWidth,
+				dHeight
 			);
 		} else {
 			this.ctx.fillText(
@@ -87,12 +93,18 @@ class ClueTable {
 		const textX = this.columnSize * column + this.columnSize / 2;
 		const textY = this.height / 2 + size / 3;
 		if (text && typeof(text) === "object") {
+			const dHeight = size;
+			const dWidth = text.width * (dHeight / text.height);
+			const centerX = textX;
+			const centerY = this.height / 2;
+			const dx = centerX - dWidth / 2;
+			const dy = centerY - dHeight / 2;
 			this.ctx.drawImage(
 				text,
-				textX - size / 2,
-				textY - size / 1.2,
-				text.width / 2.5,
-				text.height / 2.5
+				dx,
+				dy,
+				dWidth,
+				dHeight
 			);
 		} else this.ctx.fillText(text, textX, textY);
 	}
