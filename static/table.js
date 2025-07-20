@@ -200,8 +200,6 @@ if (isKindle) {
 	document.body.innerHTML = emoji.replace_unified(document.body.innerHTML);
 	document.getElementById("locations-big").src = "locations_big.png";
 	document.getElementById("locations-big").style.height = 'auto';
-	document.getElementById("locations-small").src = "locations_small.png";
-	document.getElementById("locations-small").style.height = '25vh';
 }
 
 function preload_image(url) {

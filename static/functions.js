@@ -57,6 +57,11 @@ function selectClues(withLies) {
 	clues = withLies ? data.additionalCluesWithLies[language] : data.additionalClues[language];
 	new Array(clues.length).fill(false);
 	revealAnotherClue(0);
+
+	if (isKindle) {
+		document.getElementById("locations-small").src = "locations_small.png";
+		document.getElementById("locations-small").style.height = '25vh';
+	}
 }
 
 function autosaveLocalNotebook() {
