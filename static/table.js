@@ -127,7 +127,7 @@ class ClueTable {
 		this.ctx.textAlign = "center";
 		this.ctx.fillStyle = color;
 		const textX = this.columnSize * column + this.columnSize / 2;
-		const textY = this.height / 2 + size / 3;
+		const textY = this.height / 2;
 		if (text && typeof(text) === "object") {
 			const dHeight = size;
 			const dWidth = text.width * (dHeight / text.height);
@@ -142,7 +142,10 @@ class ClueTable {
 				dWidth,
 				dHeight
 			);
-		} else this.ctx.fillText(text, textX, textY);
+		} else {
+			this.ctx.textBaseline = "middle";
+			this.ctx.fillText(text, textX, textY);
+		}
 	}
 
 	crossCell(size, color, column, row) {
