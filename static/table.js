@@ -59,32 +59,57 @@ class ClueTable {
 	}
 
 	fillCell(text, size, color, column, row) {
-		this.ctx.font = "bold " + size + "px Raleway";
-		this.ctx.textAlign = "center";
 		this.ctx.fillStyle = color;
 		if (text && typeof(text) === "object") {
-			const dHeight = size;
-			const dWidth = text.width * (dHeight / text.height);
-			const centerX = this.columnSize * column + this.columnSize / 2;
-			const centerY = this.rowSize * row + this.rowSize / 2;
-			const dx = centerX - dWidth / 2;
-			const dy = centerY - dHeight / 2;
-			this.ctx.drawImage(
-				text,
-				dx,
-				dy,
-				dWidth,
-				dHeight
-			);
+			if (Array.isArray(text)) {
+				this._drawImages(text, size, column, row);
+			} else {
+				this._drawImage(text, size, column, row);
+			}
 		} else {
-			this.ctx.fillText(
-				text,
-				this.columnSize * column + this.columnSize / 2,
-				this.rowSize * row + this.rowSize / 1.5
-			);
+			this._fillText(text, size, color, column, row);
 		}
 		this.data[column][row] = text;
 	}
+
+	_fillText(text, size, color, column, row) {
+        this.ctx.font = "bold " + size + "px Raleway";
+        this.ctx.textAlign = "center";
+        this.ctx.fillStyle = color;
+        this.ctx.fillText(
+            text,
+            this.columnSize * column + this.columnSize / 2,
+            this.rowSize * row + this.rowSize / 1.5
+        );
+    }
+
+	_drawImage(image, size, column, row) {
+        const dHeight = size;
+        const dWidth = image.width * (dHeight / image.height);
+        const centerX = this.columnSize * column + this.columnSize / 2;
+        const centerY = this.rowSize * row + this.rowSize / 2;
+        const dx = centerX - dWidth / 2;
+        const dy = centerY - dHeight / 2;
+        this.ctx.drawImage(image, dx, dy, dWidth, dHeight);
+    }
+
+	_drawImages(images, size, column, row) {
+        const dHeight = size;
+        const dWidths = images.map(img => img.width * (dHeight / img.height));
+        const totalWidth = dWidths.reduce((a, b) => a + b, 0);
+
+        const centerX = this.columnSize * column + this.columnSize / 2;
+        const centerY = this.rowSize * row + this.rowSize / 2;
+
+        let currentX = centerX - totalWidth / 2;
+        for (let i = 0; i < images.length; i++) {
+            const img = images[i];
+            const dWidth = dWidths[i];
+            const dy = centerY - dHeight / 2;
+            this.ctx.drawImage(img, currentX, dy, dWidth, dHeight);
+            currentX += dWidth;
+        }
+    }
 
 	renderTextInColumn(text, size, color, column) {
 		this.ctx.font = "bold " + size + "px Raleway";
@@ -336,7 +361,7 @@ function createCluesTableWeapons(name) {
 		var placeIcon = getEmoji(locationIcons[weaponMap[weapons[i]]]);
 		var weaponIcon = getEmoji(weaponIcons[weapons[i]]);
 		if (isKindle)
-			table.fillCell(weaponIcon, getWeaponFontSize(columnSize), "#000000", i, 0);
+			table.fillCell([weaponIcon, placeIcon], getWeaponFontSize(columnSize), "#000000", i, 0);
 		else
 			table.fillCell(
 				weaponIcon + " " + placeIcon,
