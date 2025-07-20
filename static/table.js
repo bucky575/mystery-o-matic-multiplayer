@@ -75,11 +75,12 @@ class ClueTable {
 	_fillText(text, size, color, column, row) {
         this.ctx.font = "bold " + size + "px Raleway";
         this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
         this.ctx.fillStyle = color;
         this.ctx.fillText(
             text,
             this.columnSize * column + this.columnSize / 2,
-            this.rowSize * row + this.rowSize / 1.5
+            this.rowSize * row + this.rowSize / 2
         );
     }
 
@@ -177,7 +178,7 @@ class ClueTable {
 // Extra function to get font sizes for different specialized tables
 
 function getCluesFontSize(t) {
-	return t.rowSize / 1.5;
+	return Math.min(t.rowSize, t.columnSize) / 1.2;
 }
 
 function getCluesHeaderFontSize(t) {
