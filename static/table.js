@@ -112,6 +112,16 @@ class ClueTable {
     }
 
 	renderTextInColumn(text, size, color, column) {
+		this.ctx.strokeStyle = this.lineColor;
+		this.ctx.beginPath();
+		this.ctx.moveTo(this.columnSize * column, 0);
+		this.ctx.lineTo(this.columnSize * (column + 1), 0);
+		this.ctx.moveTo(this.columnSize * column, 0);
+		this.ctx.lineTo(this.columnSize * column, this.height);
+		this.ctx.moveTo(this.columnSize * column, this.height);
+		this.ctx.lineTo(this.columnSize * (column + 1), this.height);
+		this.ctx.stroke();
+
 		this.ctx.font = "bold " + size + "px Raleway";
 		this.ctx.textAlign = "center";
 		this.ctx.fillStyle = color;
@@ -179,7 +189,7 @@ function getCluesNameFontSize(t) {
 }
 
 function getCluesIconFontSize(t) {
-	return t.columnSize / (isKindle ? 2.0 : 1.5);
+	return t.columnSize / 1.5;
 }
 
 function getWeaponFontSize(columSize) {
@@ -200,6 +210,7 @@ if (isKindle) {
 	document.body.innerHTML = emoji.replace_unified(document.body.innerHTML);
 	document.getElementById("locations-big").src = "locations_big.png";
 	document.getElementById("locations-big").style.height = 'auto';
+	document.getElementById("switch-theme-button").style.display = "none";
 }
 
 function preload_image(url) {
@@ -339,13 +350,12 @@ function createCluesTableWeapons(name) {
 	var columnSize = width / nColumns;
 	var rowSize = height / nRows;
 
-	var tableColorEven = "#888888";
-	var tableColorOdd = "#777777";
-	var tableLineColor = "#FFFFFF";
+	var tableColorEven = "#FFFFFF";
+	var tableColorOdd = "#E8E8E8";
+	var tableLineColor = "#000000";
 	if (isKindle) {
 		tableColorEven = "#FFFFFF";
 		tableColorOdd = "#FFFFFF";
-		tableLineColor = "#000000";
 	}
 	let table = new ClueTable(
 		c, ctx, nColumns, nRows, columnSize, rowSize,
@@ -404,13 +414,12 @@ function createCluesTable(room, name, nColumns, timeOffset, headerVisible, isTut
 	var columnSize = width / nColumns;
 	var rowSize = height / nRows;
 
-	var tableColorEven = "#888888";
-	var tableColorOdd = "#777777";
-	var tableLineColor = "#FFFFFF";
+	var tableColorEven = "#FFFFFF";
+	var tableColorOdd = "#E8E8E8";
+	var tableLineColor = "#000000";
 	if (isKindle) {
 		tableColorEven = "#EEEEEE";
 		tableColorOdd = "#DDDDDD";
-		tableLineColor = "#000000";
 	}
 
 	let table = new ClueTable(
