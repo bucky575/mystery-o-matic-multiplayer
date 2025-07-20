@@ -254,9 +254,6 @@ function createTables() {
 
 	createCluesTableWeapons("weapons");
 
-	if (getLanguage() == "es") // TODO: remove when tutorial is translated
-		return;
-
 	createCluesTable("kitchen:tutorial-0", "kitchen:tutorial-0", 7, tutorialData.timeOffset, true, true);
 	createCluesTable("bedroom:tutorial-0", "bedroom:tutorial-0", 7, tutorialData.timeOffset, false, true);
 	createCluesTable("dining room:tutorial-0", "dining room:tutorial-0", 7, tutorialData.timeOffset, false, true);
