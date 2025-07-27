@@ -10,14 +10,37 @@
    viewBox="0.00 0.00 241.25 191.00"
    version="1.1"
    id="svg7"
-   sodipodi:docname="locations_tutorial.svg"
+   sodipodi:docname="locations_tutorial_highlighted_bathroom.svg"
    inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <defs
-     id="defs7" />
+     id="defs7">
+    <linearGradient
+       id="linearGradient3"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#00ff00;stop-opacity:1;"
+         offset="0"
+         id="stop3" />
+      <stop
+         style="stop-color:#00ff00;stop-opacity:0;"
+         offset="1"
+         id="stop4" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3"
+       id="linearGradient4"
+       x1="72.18451"
+       y1="-127.92005"
+       x2="105.43539"
+       y2="-127.92005"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
   <sodipodi:namedview
      id="namedview7"
      pagecolor="#ffffff"
@@ -29,12 +52,12 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="pt"
      inkscape:zoom="2.1596859"
-     inkscape:cx="160.67152"
+     inkscape:cx="161.36606"
      inkscape:cy="127.33333"
-     inkscape:window-width="1690"
+     inkscape:window-width="1650"
      inkscape:window-height="761"
-     inkscape:window-x="135"
-     inkscape:window-y="102"
+     inkscape:window-x="6"
+     inkscape:window-y="39"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg7" />
   <g
@@ -79,15 +102,16 @@
      id="edge1"
      class="edge"
      transform="translate(4,187)"
-     style="stroke-width:1.50155597;stroke-dasharray:none">
+     style="stroke-width:1.50155597;stroke-dasharray:1.50155592,1.50155592;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-opacity:1;stroke-dashoffset:0">
     <title
-       id="title3">kitchen 🍲--dining room 🪑</title>
+       id="title3"
+       style="fill:url(#linearGradient4)">kitchen 🍲--dining room 🪑</title>
     <path
        fill="none"
        stroke="#808080"
        d="m 104.87,-146.31 c -9.75,11.16 -22.4,25.65 -32.12,36.78"
        id="path3"
-       style="stroke-width:1.50155597;stroke-dasharray:none" />
+       style="stroke-width:1.50155597;stroke-dasharray:1.50155592,1.50155592;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-opacity:1;stroke-dashoffset:0" />
   </g>
   <g
      id="node3"
@@ -112,7 +136,7 @@
      id="edge2"
      class="edge"
      transform="translate(4,187)"
-     style="stroke-width:1.50155597;stroke-dasharray:none">
+     style="stroke-width:1.50155597;stroke-dasharray:1.50155592,1.50155592;stroke:#000000;stroke-opacity:1;stroke-dashoffset:0">
     <title
        id="title5">kitchen 🍲--bedroom 🛏️</title>
     <path
@@ -120,7 +144,7 @@
        stroke="#808080"
        d="m 135.13,-146.31 c 9.9,11.16 22.76,25.65 32.63,36.78"
        id="path5"
-       style="stroke-width:1.50155597;stroke-dasharray:none" />
+       style="stroke-width:1.50155597;stroke-dasharray:1.50155592,1.50155592;stroke:#000000;stroke-opacity:1;stroke-dashoffset:0" />
   </g>
   <g
      id="node4"
@@ -145,7 +169,7 @@
      id="edge3"
      class="edge"
      transform="translate(4,187)"
-     style="stroke-width:1.50155597;stroke-dasharray:none">
+     style="stroke-width:1.50155597;stroke-dasharray:none;stroke:#000000;stroke-opacity:1;stroke-dashoffset:0">
     <title
        id="title7">bedroom 🛏️--bathroom 🚽</title>
     <path
@@ -153,6 +177,6 @@
        stroke="#808080"
        d="m 182.88,-73.31 c 0,11.16 0,25.65 0,36.78"
        id="path7"
-       style="stroke-width:1.50155597;stroke-dasharray:none" />
+       style="stroke-width:1.50155597;stroke-dasharray:none;stroke:#000000;stroke-opacity:1;stroke-dashoffset:0" />
   </g>
 </svg>
