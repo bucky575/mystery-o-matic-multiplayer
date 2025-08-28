@@ -34,7 +34,7 @@ def create_echidna_process(prefix, path, seed, workers):
             - file object: The output JSON file.
             - file object: The error output file.
     """
-    call = ["echidna"]
+    call = ["./bin/echidna"]
     call.extend([path])
     call.extend(["--config", "config/echidna.yaml", "--workers", str(workers)])
     if seed is not None:

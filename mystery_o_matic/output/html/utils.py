@@ -44,6 +44,15 @@ def build_website(outdir, static_dir, language, html):
     remove(outdir + f"/{language}/index.template.html")
 
 
+def get_clue_table(name, height, width):
+
+    html = f"""				<div class="col-12 text-center">
+					<canvas id="clues-table-{name}" oncontextmenu="return false" height="{height}" width="{width}" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+						Your browser does not support the HTML canvas tag.</canvas>
+				</div>
+    """
+    return html
+
 def get_bullet_list(elements, name=""):
     doc, tag, text, line = Doc().ttl()
 

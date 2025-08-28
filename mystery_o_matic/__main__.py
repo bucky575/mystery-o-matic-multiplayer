@@ -165,6 +165,8 @@ def main() -> int:
         locations = Locations(
             mode, location_name, number_places, location_data, weapons_available.keys()
         )
+        print("Sorted locations:", locations.sort_locations())
+
         weapon_locations = locations.weapon_locations
         activities = locations.get_activities()
 

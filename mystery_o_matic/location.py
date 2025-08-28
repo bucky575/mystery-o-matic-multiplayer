@@ -773,6 +773,25 @@ class Locations:
 
         return activities
 
+    def sort_locations(self):
+        """
+        Returns a list of generic labels sorted according to where they show in the graph.
+        Sorting is by highest x (descending), then lowest y (ascending).
+        """
+        g = to_agraph(self.graph)
+        g.layout(prog="dot")
+        pos = {}
+        for node in self.graph.nodes():
+            gv_node = g.get_node(node)
+            pos_str = gv_node.attr.get("pos")
+            if pos_str:
+                x, y = map(float, pos_str.split(","))
+                pos[node] = (x, y)
+        if not pos:
+            return list(self.graph.nodes())
+        sorted_locations = sorted(pos.items(), key=lambda item: (-item[1][1], item[1][0]))
+        sorted_labels = [loc[0].lower() for loc in sorted_locations]
+        return sorted_labels
 
 class TutorialLocations(Locations):
     def __init__(self, location_data):

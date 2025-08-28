@@ -5,6 +5,7 @@ from mystery_o_matic.output.html.utils import (
     get_bullet_list,
     get_options_selector,
     get_char_name,
+    get_clue_table,
     get_weapon_type_name,
     save_json,
 )
@@ -59,7 +60,19 @@ def produce_html_output(
 
     correct_answer = mystery.get_answer_hash()
 
+    clues_tables = ""
+    sorted_locations = locations.sort_locations()
+    clues_tables += get_clue_table(sorted_locations[0], 115, 500) + "\n"
+
+    for loc in locations.sort_locations()[1:]:
+        clues_tables += get_clue_table(loc, 95, 500) + "\n"
+
+    location_order = []
+    for loc in sorted_locations:
+        location_order.append((loc, create_template("$" + loc.upper()).substitute(names_txt)))
+
     json = {}
+    json["locationOrder"] = location_order
     json["additionalClues"] = {}
     json["additionalCluesWithLies"] = {}
     json["numIntervals"] = len(intervals)
@@ -152,6 +165,7 @@ def produce_html_output(
         select_weapons = get_options_selector(weapons_options)
 
         args = {}
+        args["cluesTables"] = clues_tables
         args["introLocation"] = introLocation
         args["initialClues"] = initial_clues
         args["selectIntervals"] = select_intervals

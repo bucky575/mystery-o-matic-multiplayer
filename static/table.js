@@ -239,11 +239,11 @@ var tables = new Map();
 var places = new Map();
 
 function createTables() {
-	locations = Object.keys(data.locationIcons)
-	for (let i = 0; i < locations.length; i++) {
-		roomName = locations[i]
+	rooms = data.locationOrder
+	for (let i = 0; i < rooms.length; i++) {
+		roomName = rooms[i][1]
 		places.set(roomName, getEmoji(data.locationIcons[roomName]));
-		createCluesTable("room"+i, roomName, data.numIntervals, data.timeOffset, i == 0, false);
+		createCluesTable(rooms[i][0], roomName, data.numIntervals, data.timeOffset, i == 0, false);
 	}
 
 	locations = Object.keys(tutorialData.locationIcons)
@@ -554,7 +554,8 @@ async function checkCellClicked(c, x, y) {
 	table.clearCell(1, position[1]);
 	table.fillCell(name, getCluesNameFontSize(table) * 1.08, highligthColor, 1, position[1]);
 
-	var ftable = tables.get("room0");
+	firstRoom = data.locationOrder[0][0];
+	var ftable = tables.get(firstRoom);
 	var time = ftable.data[position[0]][0]
 	if (!table.isTutorial) {
 		ftable.clearCell(position[0], 0);
