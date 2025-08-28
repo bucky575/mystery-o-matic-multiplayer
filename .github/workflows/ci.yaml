@@ -48,7 +48,7 @@ jobs:
 
     - name: Install Echidna
       run: |
-        sudo mv ./bin/echidna /usr/bin
+        sudo cp ./bin/echidna /usr/bin
         echidna --version
 
     - name: Install solc using solc-select
