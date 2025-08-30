@@ -55,3 +55,7 @@ hr.styled-hr:after {
 a:visited {
     color: var(--bs-link-color);
 }
+
+[data-bs-theme="dark"] .invert-in-dark-theme {
+    filter: invert(1);
+}
