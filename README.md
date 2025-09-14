@@ -1,5 +1,7 @@
 # mystery-⚙️-matic
 
+<a href="https://www.drips.network/app/projects/github/mystery-o-matic/mystery-o-matic.github.io" target="_blank"><img src="https://www.drips.network/api/embed/project/https%3A%2F%2Fgithub.com%2Fmystery-o-matic%2Fmystery-o-matic.github.io/support.png?background=light&style=github&text=me&stat=support" alt="Support mystery-o-matic.github.io on drips.network" height="20"></a>
+
 mystery-o-matic is a Python program used to produce the content of [mystery-o-matic.com](https://mystery-o-matic.com). It produces a random [murder mystery](https://en.wikipedia.org/wiki/Murder_mystery) to solve using [fuzzing testing](https://en.wikipedia.org/wiki/Fuzzing). Once a mystery is generated, it produces a static html file that contains all the clues (and the solution to verify it).
 
 mystery-o-matic supports the following languages:
