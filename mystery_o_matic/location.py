@@ -10,7 +10,7 @@ from networkx import (
 )
 from networkx.drawing.nx_agraph import to_agraph
 
-locations = ["egypt", "castle", "train", "ship", "space station", "mansion", "museum", "island"]
+locations = ["egypt", "castle", "train", "ship", "space station", "mansion", "museum", "island", "zoo"]
 
 mansions_labels = {}
 mansions_labels["en"] = {
@@ -610,6 +610,37 @@ space_station_activities = {
     ]
 }
 
+zoo_intro = {}
+zoo_intro["en"] = " are transported into <b>an abandoned zoo</b> at night!"
+zoo_intro["es"] = " han sido transportados a <b>un zoológico abandonado</b> por la noche!"
+
+zoo_labels = {}
+zoo_labels["en"] = {
+    "LION ENCLOSURE": "lion enclosure",
+    "REPTILE HOUSE": "reptile house",
+    "AVIARY": "aviary",
+    "MONKEY ISLAND": "monkey island",
+    "AQUARIUM": "aquarium",
+}
+
+zoo_labels["es"] = {
+    "LION ENCLOSURE": "el recinto de leones",
+    "REPTILE HOUSE": "la casa de reptiles",
+    "AVIARY": "el aviario",
+    "MONKEY ISLAND": "la isla de monos",
+    "AQUARIUM": "el acuario",
+}
+
+zoo_representations = {
+    "LION ENCLOSURE": "🦁",
+    "REPTILE HOUSE": "🦎",
+    "AVIARY": "🦜",
+    "MONKEY ISLAND": "🐒",
+    "AQUARIUM": "🐠",
+}
+
+zoo_activities = {}
+
 def get_location_data(selected_location, mode):
     if selected_location is None:
         if mode == "latex":
@@ -675,6 +706,13 @@ def get_location_data(selected_location, mode):
             island_labels,
             island_representations,
             island_activities,
+        )
+    elif location_name == "zoo":
+        location_data = (
+            zoo_intro,
+            zoo_labels,
+            zoo_representations,
+            zoo_activities,
         )
     else:
         raise ValueError("Unknown location name: " + location_name)
