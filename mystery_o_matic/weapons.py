@@ -86,6 +86,21 @@ space_station_weapons = [
     {"$ROPE": "🪢", "$WIRE_EXTENSION": "🔌"},
 ]
 
+museum_weapons = [
+    {"$ARCHERY_BOW": "🏹"},
+    {"$DAGGER": "🗡️", "$TRIDENT": "🔱", "$SWORD": "⚔️"},
+    {"$POISON": "⚗️", "$CURSE": "📜"},
+    {"$ROCK": "🪨", "$CANDLESTICK": "🕯️"},
+    {"$ROPE": "🪢", "$CHAIN": "⛓️"},
+]
+
+island_weapons = [
+    {"$ARCHERY_BOW": "🏹"},
+    {"$DAGGER": "🗡️", "$TRIDENT": "🔱", "$SWORD": "⚔️", "$KNIFE": "🔪"},
+    {"$POISON": "⚗️", "$CURSE": "📜"},
+    {"$ROCK": "🪨", "$CANDLESTICK": "🕯️"},
+    {"$ROPE": "🪢", "$CHAIN": "⛓️"},
+]
 
 def get_available_weapons(num_weapons, location_name):
 
@@ -101,6 +116,10 @@ def get_available_weapons(num_weapons, location_name):
         weapons_sets = classic_weapons[:]
     elif location_name == "space station":
         weapons_sets = space_station_weapons[:]
+    elif location_name == "museum":
+        weapons_sets = museum_weapons[:]
+    elif location_name == "island":
+        weapons_sets = island_weapons[:]
     else:
         raise ValueError("Unknown available weapons for" + location_name)
 

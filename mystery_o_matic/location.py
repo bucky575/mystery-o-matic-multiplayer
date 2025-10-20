@@ -10,7 +10,7 @@ from networkx import (
 )
 from networkx.drawing.nx_agraph import to_agraph
 
-locations = ["egypt", "castle", "train", "ship", "space station", "mansion"]
+locations = ["egypt", "castle", "train", "ship", "space station", "mansion", "museum", "island"]
 
 mansions_labels = {}
 mansions_labels["en"] = {
@@ -176,6 +176,66 @@ egypt_intro["es"] = (
     " han sido transportados en el tiempo a <b>una pirámide en el Antiguo Egipto</b>!"
 )
 
+island_intro = {}
+island_intro["en"] = " are transported to <b>a deserted tropical island</b>!"
+island_intro["es"] = " han sido transportados a <b>una isla tropical desierta</b>!"
+
+island_labels = {}
+island_labels["en"] = {
+    "BEACH": "beach",
+    "JUNGLE": "jungle",
+    "CAVE": "cave",
+    "CLIFF": "cliff",
+    "VOLCANO": "volcano",
+}
+
+island_labels["es"] = {
+    "BEACH": "la playa",
+    "JUNGLE": "la jungla",
+    "CAVE": "la cueva",
+    "CLIFF": "el acantilado",
+    "VOLCANO": "el volcán",
+}
+island_representations = {
+    "BEACH": "🏖️",
+    "JUNGLE": "🌴",
+    "CAVE": "🦇",
+    "CLIFF": "⛰️",
+    "VOLCANO": "🌋"
+}
+island_activities = {
+    "BEACH": [
+        {
+            "en": "looked around and saw someone collecting seashells (🏖️)",
+            "es": "miré alrededor y vi a alguien recogiendo conchas marinas (🏖️)",
+        },
+    ],
+    "JUNGLE": [
+        {
+            "en": "heard someone chopping wood in the jungle (🌴)",
+            "es": "escuché a alguien cortando leña en la jungla (🌴)",
+        },
+    ],
+    "CAVE": [
+        {
+            "en": "heard a voice coming from the cave (🦇)",
+            "es": "escuché una voz que venía desde la cueva (🦇)"
+        },
+    ],
+    "CLIFF": [
+        {
+            "en": "saw someone climbing the cliff (⛰️)",
+            "es": "vi a alguien escalando el acantilado (⛰️)",
+        },
+    ],
+    "VOLCANO": [
+        {
+            "en": "saw someone inspecting the volcano summit (🌋)",
+            "es": "vi a alguien inspeccionando la cima del volcán (🌋)",
+        },
+    ],
+}
+
 egypt_labels = {}
 egypt_labels["en"] = {
     "THRONE ROOM": "throne room",
@@ -195,7 +255,7 @@ egypt_labels["es"] = {
 
 egypt_representations = {
     "THRONE ROOM": "👑",
-    "BURIAL PLACE": "⚰️",
+    "BURIAL PLACE": "⚱️",
     "TEMPLE": "📿",
     "DESERT": "🏜️",
     "GARDEN": "🌳",
@@ -215,10 +275,10 @@ egypt_activities = {
     ],
     "BURIAL PLACE": [
         {
-            "en": "saw someone at a distance praying in the burial chamber (⚰️)",
-            "es": "vi a alguien rezando en la cámara funeraria a lo lejos (⚰️)",
+            "en": "saw someone at a distance praying in the burial chamber (⚱️)",
+            "es": "vi a alguien rezando en la cámara funeraria a lo lejos (⚱️)",
         },
-        {"en": "heard a voice coming from the burial chamber (⚰️)", "es": "escuché una voz que venía desde la cámara funeraria (⚰️)"},
+        {"en": "heard a voice coming from the burial chamber (⚱️)", "es": "escuché una voz que venía desde la cámara funeraria (⚱️)"},
     ],
     "TEMPLE": [
         {
@@ -331,6 +391,53 @@ medieval_castle_activities = {
         },
         {"en": "heard a voice coming from the garden (🌳)", "es": "escuché una voz que venía desde el jardín (🌳)"},
     ],
+}
+
+museum_intro = {}
+museum_intro["en"] = " are transported into <b>an empty museum at night</b>!"
+museum_intro["es"] = " han sido transportados a <b>un museo vacío por la noche</b>!"
+
+museum_labels = {}
+museum_labels["en"] = {
+    "DINOSAUR EXHIBIT": "dinosaur exhibit",
+    "EGYPTIAN EXHIBIT": "egyptian exhibit",
+    "MEDIEVAL EXHIBIT": "medieval exhibit",
+    "SPACE EXHIBIT": "space exhibit",
+    "OCEAN EXHIBIT": "ocean exhibit",
+}
+
+museum_labels["es"] = {
+    "DINOSAUR EXHIBIT": "la exhibición de dinosaurios",
+    "EGYPTIAN EXHIBIT": "la exhibición egipcia",
+    "MEDIEVAL EXHIBIT": "la exhibición medieval",
+    "SPACE EXHIBIT": "la exhibición espacial",
+    "OCEAN EXHIBIT": "la exhibición oceánica",
+}
+
+museum_representations = {
+    "DINOSAUR EXHIBIT": "🦖",
+    "EGYPTIAN EXHIBIT": "⚱️",
+    "MEDIEVAL EXHIBIT": "🛡️",
+    "SPACE EXHIBIT": "🪐",
+    "OCEAN EXHIBIT": "🐠",
+}
+
+museum_activities = {
+    "DINOSAUR EXHIBIT": [
+        {"en": "heard a voice coming from the dinosaur exhibit (🦖)", "es": "escuché una voz que venía desde la exhibición de dinosaurios (🦖)"}
+    ],
+    "EGYPTIAN EXHIBIT": [
+        {"en": "heard a voice coming from the egyptian exhibit (⚱️)", "es": "escuché una voz que venía desde la exhibición egipcia (⚱️)"}
+    ],
+    "MEDIEVAL EXHIBIT": [
+        {"en": "heard a voice coming from the medieval exhibit (🛡️)", "es": "escuché una voz que venía desde la exhibición medieval (🛡️)"}
+    ],
+    "SPACE EXHIBIT": [
+        {"en": "heard a voice coming from the space exhibit (🪐)", "es": "escuché una voz que venía desde la exhibición espacial (🪐)"}
+    ],
+    "OCEAN EXHIBIT": [
+        {"en": "heard a voice coming from the ocean exhibit (🐠)", "es": "escuché una voz que venía desde la exhibición oceánica (🐠)"}
+    ]
 }
 
 train_intro = {}
@@ -554,6 +661,20 @@ def get_location_data(selected_location, mode):
             space_station_labels,
             space_station_representations,
             space_station_activities,
+        )
+    elif location_name == "museum":
+        location_data = (
+            museum_intro,
+            museum_labels,
+            museum_representations,
+            museum_activities,
+        )
+    elif location_name == "island":
+        location_data = (
+            island_intro,
+            island_labels,
+            island_representations,
+            island_activities,
         )
     else:
         raise ValueError("Unknown location name: " + location_name)
