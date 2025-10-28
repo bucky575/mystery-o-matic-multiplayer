@@ -3,4 +3,5 @@ timeout: 1200
 format: json
 prefix: "mysteryNotSolved"
 shrinkLimit: 15000
+allEvents: true
 #corpusDir: "corpus"

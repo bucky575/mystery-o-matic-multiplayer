@@ -48,7 +48,9 @@ jobs:
 
     - name: Install Echidna
       run: |
-        sudo cp ./bin/echidna /usr/bin
+        wget https://github.com/crytic/echidna/releases/download/v2.3.0-RC1/echidna-2.3.0-RC1-x86_64-linux.tar.gz
+        tar -xvf echidna-2.3.0-RC1-x86_64-linux.tar.gz
+        sudo cp ./echidna /usr/bin
         echidna --version
 
     - name: Install solc using solc-select
