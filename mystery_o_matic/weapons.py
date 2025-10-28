@@ -110,6 +110,14 @@ zoo_weapons = [
     {"$ROPE": "🪢", "$WIRE_EXTENSION": "🔌"},
 ]
 
+hospital_weapons = [
+    {"$PISTOL": "🔫"},
+    {"$KNIFE": "🔪", "$SCISSORS": "✂️", "$AXE": "🪓", "$SCREWDRIVER": "🪛"},
+    {"$POISON": "⚗️"},
+    {"$CANDLESTICK": "🕯️", "$HAMMER": "🔨", "$WRENCH": "🔧"},
+    {"$ROPE": "🪢", "$WIRE_EXTENSION": "🔌", "$CHAIN": "⛓️"},
+]
+
 def get_available_weapons(num_weapons, location_name):
 
     if location_name == "mansion":
@@ -130,6 +138,8 @@ def get_available_weapons(num_weapons, location_name):
         weapons_sets = island_weapons[:]
     elif location_name == "zoo":
         weapons_sets = zoo_weapons[:]
+    elif location_name == "hospital":
+        weapons_sets = hospital_weapons[:]
     else:
         raise ValueError("Unknown available weapons for" + location_name)
 

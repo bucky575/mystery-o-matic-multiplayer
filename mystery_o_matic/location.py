@@ -641,6 +641,54 @@ zoo_representations = {
 
 zoo_activities = {}
 
+hospital_intro = {}
+hospital_intro["en"] = " are transported into <b>a deserted hospital</b> at night!"
+hospital_intro["es"] = " han sido transportados a <b>un hospital desierto</b> por la noche!"
+
+hospital_labels = {}
+hospital_labels["en"] = {
+    "ER": "emergency room",
+    "ICU": "intensive care unit",
+    "OPERATING THEATER": "operating theater",
+    "PHARMACY": "pharmacy",
+    "LOBBY": "lobby",
+}
+
+hospital_labels["es"] = {
+    "ER": "la sala de urgencias",
+    "ICU": "la unidad de cuidados intensivos",
+    "OPERATING THEATER": "el quirófano",
+    "PHARMACY": "la farmacia",
+    "LOBBY": "el vestíbulo",
+}
+
+hospital_representations = {
+    "ER": "🚑",
+    "ICU": "🛏️",
+    "OPERATING THEATER": "🔪",
+    "PHARMACY": "💊",
+    "LOBBY": "💺",
+}
+
+hospital_activities = {
+    "ER": [
+        {"en": "heard a voice coming from the emergency room (🚑)", "es": "escuché una voz que venía desde la sala de urgencias (🚑)"}
+    ],
+    "ICU": [
+        {"en": "heard a voice coming from the intensive care unit (🛏️)", "es": "escuché una voz que venía desde la unidad de cuidados intensivos (🛏️)"},
+    ],
+    "OPERATING THEATER": [
+        {"en": "heard a voice coming from the operating theater (🔪)", "es": "escuché una voz que venía desde el quirófano (🔪)"}
+    ],
+    "PHARMACY": [
+        {"en": "heard a voice coming from the pharmacy (💊)", "es": "escuché una voz que venía desde la farmacia (💊)"},
+        {"en": "saw someone checking the medicine shelves in the pharmacy (💊)", "es": "vi a alguien revisando las estanterias de medicamentos en la farmacia (💊)"}
+    ],
+    "LOBBY": [
+        {"en": "heard a voice coming from the lobby (💺)", "es": "escuché una voz que venía desde el vestíbulo (🛋️)"}
+    ]
+}
+
 def get_location_data(selected_location, mode):
     if selected_location is None:
         if mode == "latex":
@@ -713,6 +761,13 @@ def get_location_data(selected_location, mode):
             zoo_labels,
             zoo_representations,
             zoo_activities,
+        )
+    elif location_name == "hospital":
+        location_data = (
+            hospital_intro,
+            hospital_labels,
+            hospital_representations,
+            hospital_activities,
         )
     else:
         raise ValueError("Unknown location name: " + location_name)
