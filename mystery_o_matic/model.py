@@ -132,6 +132,8 @@ class Model:
             with open(outjson.name, "r") as f:
                 json = "{" + f.read().split("\n{")[1]
 
+            # Workaround for echidna warning in output JSON
+            json = json.replace("Warning: cannot save RPC cache without a specified block number.", "")
             return loads(json)
         else:
             print("No solution found! 💩")
