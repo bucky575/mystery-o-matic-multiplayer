@@ -10,7 +10,7 @@ from networkx import (
 )
 from networkx.drawing.nx_agraph import to_agraph
 
-locations = ["egypt", "castle", "train", "ship", "space station", "mansion", "museum", "island", "zoo"]
+locations = ["egypt", "castle", "train", "ship", "space station", "mansion", "museum", "island", "zoo", "hospital", "sport club"]
 
 mansions_labels = {}
 mansions_labels["en"] = {
@@ -689,6 +689,52 @@ hospital_activities = {
     ]
 }
 
+sport_club_intro = {}
+sport_club_intro["en"] = " are transported into <b>an empty sport club</b> at night!"
+sport_club_intro["es"] = " han sido transportados a <b>un club deportivo desierto</b> por la noche!"
+
+sport_club_labels = {}
+sport_club_labels["en"] = {
+    "GYM": "gym",
+    "POOL": "swimming pool",
+    "SAUNA": "sauna",
+    "COURT": "sports court",
+    "LOUNGE": "lounge",
+}
+sport_club_labels["es"] = {
+    "GYM": "el gimnasio",
+    "POOL": "la piscina",
+    "SAUNA": "la sauna",
+    "COURT": "la cancha deportiva",
+    "LOUNGE": "el salón",
+}
+
+sport_club_representations = {
+    "GYM": "💪",
+    "POOL": "🏊",
+    "SAUNA": "🧖",
+    "COURT": "🏀",
+    "LOUNGE": "🛋️",
+}
+
+sport_club_activities = {
+    "GYM": [
+        {"en": "heard a voice coming from the gym (💪)", "es": "escuché una voz que venía desde el gimnasio (💪)"}
+    ],
+    "POOL": [
+        {"en": "heard a voice coming from the swimming pool (🏊)", "es": "escuché una voz que venía desde la piscina (🏊)"}
+    ],
+    "SAUNA": [
+        {"en": "heard a voice coming from the sauna (🧖)", "es": "escuché una voz que venía desde la sauna (🧖)"}
+    ],
+    "COURT": [
+        {"en": "heard a voice coming from the sports court (🏀)", "es": "escuché una voz que venía desde la cancha deportiva (🏀)"}
+    ],
+    "LOUNGE": [
+        {"en": "heard a voice coming from the lounge (🛋️)", "es": "escuché una voz que venía desde el salón (🛋️)"}
+    ]
+}
+
 def get_location_data(selected_location, mode):
     if selected_location is None:
         if mode == "latex":
@@ -768,6 +814,13 @@ def get_location_data(selected_location, mode):
             hospital_labels,
             hospital_representations,
             hospital_activities,
+        )
+    elif location_name == "sport club":
+        location_data = (
+            sport_club_intro,
+            sport_club_labels,
+            sport_club_representations,
+            sport_club_activities,
         )
     else:
         raise ValueError("Unknown location name: " + location_name)
