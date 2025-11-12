@@ -33,13 +33,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        repository: mystery-o-matic/story
-        path: story
-        token: ${{ secrets.PAT_STORY_TOKEN }}
-
     - name: Install packages
       run: |
         sudo apt-get update
