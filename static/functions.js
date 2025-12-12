@@ -1,6 +1,10 @@
 function getCurrentDate() {
-	var options = {  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour12: false };
-	return String(new Date().toLocaleDateString(getLanguage(), options));
+	var options = {  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour12: false, timeZone: 'UTC' };
+	var date = new Date(document.lastModified);
+	if (isNaN(date)) {
+		date = new Date();
+	}
+	return String(date.toLocaleDateString(getLanguage(), options));
 }
 
 function showPage(page) {
