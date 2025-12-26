@@ -102,3 +102,23 @@ a:visited {
 	background: linear-gradient(90deg, rgba(241,73,02,0.06), rgba(241,73,02,0.02));
 	border-bottom-color: rgba(79,70,229,0.06);
 }
+
+/* Restore a subtle, theme-aware border and divider for the clues box (no markup changes) */
+#clues-box {
+	border: 1px solid rgba(0,0,0,0.06);
+	border-radius: 8px;
+}
+
+#clues-box .col-9 {
+	border-right: 1px solid rgba(0,0,0,0.06);
+	padding-right: 1rem;
+}
+
+/* Dark theme adjustments */
+[data-bs-theme="dark"] #clues-box {
+	border-color: rgba(255,255,255,0.04);
+	color: #e6eef8;
+}
+[data-bs-theme="dark"] #clues-box .col-9 {
+	border-right-color: rgba(255,255,255,0.06);
+}
