@@ -1280,13 +1280,15 @@
 						<div class="compact-card" style="height: auto;">
 							<div id="game" class="compact-card-body text-center py-2">
 
-								<div id="selection-clues-box" class="align-items-center" style="display:block">
-									<p>Start choosing whether the killer never lies (easier) or is allowed to lie
+								<div id="selection-clues-box" class="card" style="display:block">
+									<div class="card-body text-center py-2">
+							<p class="card-text mb-2">Start choosing whether the killer never lies (easier) or is allowed to lie
 										(harder).</p>
 									<button id="without-lies-button" type="button" class="btn btn-outline-secondary"
 										onclick="selectClues(false)">No lies 🕊️</button>
 									<button id="with-lies-button" type="button" class="btn btn-outline-secondary"
 										onclick="selectClues(true)">Lie to me 👹</button>
+								</div>
 								</div>
 								<div id="clues-box" class="row align-items-center" style="display:none">
 									<div class="col-9 border-end" display="none">
