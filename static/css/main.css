@@ -89,8 +89,6 @@ a:visited {
 
 [data-bs-theme="dark"] .compact-card {
 	background: #212529;
-	border-color: rgba(255,255,255,0.04);
-	box-shadow: 0 1px 3px rgba(0,0,0,0.6);
 }
 
 [data-bs-theme="dark"] .compact-card-body {
@@ -100,7 +98,6 @@ a:visited {
 [data-bs-theme="dark"] .section-header {
 	color: #F14902;
 	background: linear-gradient(90deg, rgba(241,73,02,0.06), rgba(241,73,02,0.02));
-	border-bottom-color: rgba(79,70,229,0.06);
 }
 
 /* Restore a subtle, theme-aware border and divider for the clues box (no markup changes) */
