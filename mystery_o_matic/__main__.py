@@ -6,6 +6,7 @@ from random import seed, random, shuffle
 from datetime import datetime
 from hashlib import sha256
 from os.path import isfile
+import json
 
 from mystery_o_matic.output.html import produce_html_output
 from mystery_o_matic.output.text import produce_text_output
@@ -16,6 +17,7 @@ from mystery_o_matic.location import Locations, TutorialLocations, get_location_
 from mystery_o_matic.weapons import get_available_weapons
 from mystery_o_matic.mystery import Mystery, get_intervals_length_from_events
 from mystery_o_matic.model import Model
+from mystery_o_matic.solidity import read_solidity_from_text
 
 
 def read_story(season, date):
@@ -108,7 +110,27 @@ def main() -> int:
         help="max number of time slots",
     )
 
+    parser.add_argument(
+        "--save-state",
+        type=str,
+        action="store",
+        default=None,
+        help="path to JSON file where to save a precomputed state for fast reloading",
+    )
+
+    parser.add_argument(
+        "--load-state",
+        type=str,
+        action="store",
+        default=None,
+        help="path to JSON file with a previously saved state (skips solving and reuses it)",
+    )
+
     args = parser.parse_args()
+
+    if args.save_state is not None and args.load_state is not None:
+        print("Cannot use both --save-state and --load-state at the same time")
+        return -1
 
     print("Welcome to mystery-o-matic!")
     solidity_file = args.scenario
@@ -160,49 +182,127 @@ def main() -> int:
     # Unused for now
     # tutorial_locations.render_locations(out_dir + "/tutorial")
 
-    while True:
+    # Optionally load a precomputed state to skip the slow echidna solving step
+    if args.load_state:
+        with open(args.load_state, "r") as f:
+            state = json.load(f)
+        print("Loaded precomputed state from:", args.load_state)
+        if "location_name" in state and state["location_name"] != location_name:
+            print(
+                "Warning: loaded state location_name differs from requested location:",
+                state["location_name"],
+            )
+
         solidity_file = args.scenario
         locations = Locations(
             mode, location_name, number_places, location_data, weapons_available.keys()
         )
-        print("Sorted locations:", locations.sort_locations())
+        # override weapon locations / activities if provided in the saved state
+        if "weapon_locations" in state:
+            locations.weapon_locations = state["weapon_locations"]
+        activities = state.get("activities", locations.get_activities())
 
-        weapon_locations = locations.weapon_locations
-        activities = locations.get_activities()
+        initial_locations_pairs = [tuple(x) for x in state["initial_locations_pairs"]]
+        used_weapon_location = state.get("used_weapon_location")
+        weapon_used = state.get("weapon_used")
+        txs = state["txs"]
+        events = state.get("events", [])
 
         model = Model("StoryModel", locations, nmoves, out_dir, solidity_file)
         model.generate_enums(number_characters)
-        (initial_locations_pairs, used_weapon_location) = model.generate_conditions()
-        solidity_file = model.generate_solidity()
+        # reconstruct parsed source object from saved source_text if available
+        if "source_text" in state and state.get("source_text") is not None:
+            model.source = read_solidity_from_text(state.get("source_text"))
+        else:
+            model.source = state.get("source", model.source)
 
-        print("Running the simulation..")
-        result = model.solve(used_seed, workers)
+        time_slots = get_intervals_length_from_events(model.source, "StoryModel", events)
+        if time_slots > max_time_slots:
+            print("Loaded solution is too large:", int(time_slots))
+            return -1
 
-        if result is None:
-            print("No result at all!, restarting..")
+    else:
+        while True:
+            solidity_file = args.scenario
+            locations = Locations(
+                mode, location_name, number_places, location_data, weapons_available.keys()
+            )
+            print("Sorted locations:", locations.sort_locations())
+
+            weapon_locations = locations.weapon_locations
+            activities = locations.get_activities()
+
+            model = Model("StoryModel", locations, nmoves, out_dir, solidity_file)
+            model.generate_enums(number_characters)
+            (initial_locations_pairs, used_weapon_location) = model.generate_conditions()
+            solidity_file = model.generate_solidity()
+
+            print("Running the simulation..")
+            result = model.solve(used_seed, workers)
+
+            if result is None:
+                print("No result at all!, restarting..")
+                used_seed += 1
+                seed(used_seed)
+                continue
+
+            txs = result["tests"][0]["transactions"]
+            events = []
+            if "events" in result["tests"][0]:
+                events = result["tests"][0]["events"]
+
+            time_slots = get_intervals_length_from_events(
+                model.source, "StoryModel", events
+            )
+
+            if time_slots <= max_time_slots:
+                break
+
+            print("Solution is too large:", int(time_slots))
             used_seed += 1
             seed(used_seed)
-            continue
-
-        txs = result["tests"][0]["transactions"]
-        events = []
-        if "events" in result["tests"][0]:
-            events = result["tests"][0]["events"]
-
-        time_slots = get_intervals_length_from_events(
-            model.source, "StoryModel", events
-        )
-
-        if time_slots <= max_time_slots:
-            break
-
-        print("Solution is too large:", int(time_slots))
-        used_seed += 1
-        seed(used_seed)
 
     story_clue = read_story(season, date)
 
-    weapon_used = locations.weapon_locations[used_weapon_location]
+    weapon_locations = locations.weapon_locations
+
+    # Determine which weapon was used (support both loaded state and freshly generated)
+    if "weapon_used" not in locals() or weapon_used is None:
+        if "used_weapon_location" in locals() and used_weapon_location is not None:
+            weapon_used = weapon_locations[used_weapon_location]
+        else:
+            # Fallback to first weapon if nothing else is available
+            weapon_used = list(weapon_locations.values())[0]
+
+    # Optionally save the precomputed state for fast reloads during testing
+    if args.save_state:
+        # read solidity file text if available so we don't try to serialize parser objects
+        source_text = None
+        try:
+            with open(solidity_file, "r") as _f:
+                source_text = _f.read()
+        except Exception:
+            source_text = None
+
+        state = {
+            "initial_locations_pairs": initial_locations_pairs,
+            "used_weapon_location": used_weapon_location,
+            "weapon_used": weapon_used,
+            "weapon_locations": weapon_locations,
+            "activities": activities,
+            "source_text": source_text,
+            "txs": txs,
+            "events": events,
+            "weapons_available": weapons_available,
+            "weapon_labels": weapon_labels,
+            "seed": used_seed,
+            "location_name": location_name,
+            "number_places": number_places,
+        }
+        with open(args.save_state, "w") as f:
+            json.dump(state, f, indent=2)
+        print("Saved precomputed state to:", args.save_state)
+
     mystery = Mystery(
         difficulty,
         initial_locations_pairs,

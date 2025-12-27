@@ -55,6 +55,24 @@ mystery-o-matic scenarios/simple.template.sol static out
 
 The tool will produce a static `index.html` file stored in the `out` directory.
 
+### Fast testing with precomputed state ✅
+
+When developing or testing the website you can avoid the slow fuzzing step by saving a generated scenario to a JSON file and reloading it later:
+
+- Save the current generated state:
+
+```bash
+mystery-o-matic scenarios/simple.template.sol static out --save-state test_state.json
+```
+
+- Reload a previously saved state (skips the echidna solving step and regenerates the site quickly):
+
+```bash
+mystery-o-matic scenarios/simple.template.sol static out --load-state test_state.json
+```
+
+This is useful to iterate quickly on templates and output generation without waiting for the solver.
+
 ## Integrations
 
 While the code is open-source, I'm aware of the difficulties of using or integrating other people's code. If you don't know or don't want to run this code directly, but you are still interested in using the output of this tool in your work of fiction (e.g. novel, game, film), please feel free to [contact me](https://forms.gle/dvA4Wr8LiuHFmDZN7) so I can do that for you. The generated mystery will look like this:

@@ -33,6 +33,15 @@ def read_solidity(filename):
     return parser.objectify(source_unit)
 
 
+def read_solidity_from_text(source_text):
+    """Parse solidity source text and return the objectified AST.
+
+    This mirrors `read_solidity` but operates on a string instead of a file.
+    """
+    source_unit = parser.parse(source_text, loc=False)
+    return parser.objectify(source_unit)
+
+
 def get_enum(source, contract_name, typ):
     typ = "".join(i for i in typ if not i.isdigit())
     enums_map = source.contracts[contract_name].enums
