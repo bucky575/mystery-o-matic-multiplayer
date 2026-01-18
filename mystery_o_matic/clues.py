@@ -309,13 +309,28 @@ class SawVictimWhenArrivingClue(AbstractClue):
         super().__init__()
 
     def string_english(self):
-        s = f'{self.subject}: "Saw '
-        if not self.object_is_alive:
-            # This should never happen, since the victim produced this clue
-            # when they were alive
-            s += "the body of "
+        r = randint(0, 2)
+        s = f'{self.subject}: "'
+        verb = None
 
-        s += f'{self.object} arriving to the {self.place} at {self.time}"'
+        # Introduce verbs
+        if r == 0:
+            verb = "saw"
+        elif r == 1:
+            verb = "noticed"
+        elif r == 2:
+            verb = "spotted"
+        else:
+            raise ValueError("Invalid random number: " + str(r))
+
+        r = randint(0, 1)
+        if r == 0:
+            s += f'{verb.capitalize()} {self.object} arriving while I was in the {self.place} at {self.time}"'
+        elif r == 1:
+            s += f'I was in the {self.place} when {verb} {self.object} arriving at {self.time}"'
+        else:
+            raise ValueError("Invalid random number: " + str(r))
+
         return s
 
     def string_spanish(self):
@@ -348,7 +363,28 @@ class SawVictimWhenLeavingClue(AbstractClue):
         super().__init__()
 
     def string_english(self):
-        s = f'{self.subject}: "Saw {self.object} leaving the {self.place} at {self.time}"'
+        r = randint(0, 2)
+        s = f'{self.subject}: "'
+        verb = None
+
+        # Introduce verbs
+        if r == 0:
+            verb = "saw"
+        elif r == 1:
+            verb = "noticed"
+        elif r == 2:
+            verb = "spotted"
+        else:
+            raise ValueError("Invalid random number: " + str(r))
+
+        r = randint(0, 1)
+        if r == 0:
+            s += f'{verb.capitalize()} {self.object} leaving while I was in the {self.place} at {self.time}"'
+        elif r == 1:
+            s += f'I was in the {self.place} when {verb} {self.object} leaving at {self.time}"'
+        else:
+            raise ValueError("Invalid random number: " + str(r))
+
         return s
 
     def string_spanish(self):

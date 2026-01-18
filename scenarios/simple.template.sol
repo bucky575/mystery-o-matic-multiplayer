@@ -13,7 +13,9 @@ contract StoryModel {
 
     // Clues
     event SawWhenLeaving(uint8 char0, uint8 char1, bool bool0, uint8 place, uint256 time);
+    event SawVictimWhenLeaving(uint8 char0, uint8 char1, bool bool0, uint8 place, uint256 time);
     event SawWhenArriving(uint8 char0, uint8 char1, bool bool0, uint8 place, uint256 time);
+    event SawVictimWhenArriving(uint8 char0, uint8 char1, bool bool0, uint8 place, uint256 time);
     event NotSawWhenLeaving(uint8 char0, uint8 char1, uint8 place, uint256 time);
     event NotSawWhenArriving(uint8 char0, uint8 char1, uint8 place, uint256 time);
     event Stayed(uint8 char0, uint8 place, uint256 time0, uint256 time1);
