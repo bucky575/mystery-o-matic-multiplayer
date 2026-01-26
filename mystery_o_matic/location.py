@@ -10,7 +10,7 @@ from networkx import (
 )
 from networkx.drawing.nx_agraph import to_agraph
 
-locations = ["egypt", "castle", "train", "ship", "space station", "mansion", "museum", "island", "zoo", "hospital", "sport club"]
+locations = ["egypt", "castle", "train", "ship", "space station", "mansion", "museum", "island", "zoo", "hospital", "sport club", "abandoned school"]
 
 mansions_labels = {}
 mansions_labels["en"] = {
@@ -735,6 +735,54 @@ sport_club_activities = {
     ]
 }
 
+
+abandoned_school_intro = {}
+abandoned_school_intro["en"] = " are transported into <b>an abandoned school</b> at night!"
+abandoned_school_intro["es"] = " han sido transportados a <b>una escuela abandonada</b> por la noche!"
+
+abandoned_school_labels = {}
+abandoned_school_labels["en"] = {
+    "ART CLASSROOM": "art classroom",
+    "SCIENCE LAB": "science lab",
+    "GYM": "gym",
+    "LIBRARY": "library",
+    "CAFETERIA": "cafeteria",
+}
+
+abandoned_school_labels["es"] = {
+    "ART CLASSROOM": "el aula de arte",
+    "SCIENCE LAB": "el laboratorio de ciencias",
+    "GYM": "el gimnasio",
+    "LIBRARY": "la biblioteca",
+    "CAFETERIA": "la cafetería",
+}
+
+abandoned_school_representations = {
+    "ART CLASSROOM": "🎨",
+    "SCIENCE LAB": "🔬",
+    "GYM": "💪",
+    "LIBRARY": "📚",
+    "CAFETERIA": "🍽️",
+}
+
+abandoned_school_activities = {
+    "ART CLASSROOM": [
+        {"en": "heard a voice coming from the art classroom (🎨)", "es": "escuché una voz que venía desde el aula de arte (🎨)"}
+    ],
+    "SCIENCE LAB": [
+        {"en": "heard a voice coming from the science lab (🔬)", "es": "escuché una voz que venía desde el laboratorio de ciencias (🔬)"}
+    ],
+    "GYM": [
+        {"en": "heard a voice coming from the gym (💪)", "es": "escuché una voz que venía desde el gimnasio (💪)"}
+    ],
+    "LIBRARY": [
+        {"en": "heard a voice coming from the library (📚)", "es": "escuché una voz que venía desde la biblioteca (📚)"}
+    ],
+    "CAFETERIA": [
+        {"en": "heard a voice coming from the cafeteria (🍽️)", "es": "escuché una voz que venía desde la cafetería (🍽️)"}
+    ],
+}
+
 def get_location_data(selected_location, mode):
     if selected_location is None:
         if mode == "latex":
@@ -821,6 +869,13 @@ def get_location_data(selected_location, mode):
             sport_club_labels,
             sport_club_representations,
             sport_club_activities,
+        )
+    elif location_name == "abandoned school":
+        location_data = (
+            abandoned_school_intro,
+            abandoned_school_labels,
+            abandoned_school_representations,
+            abandoned_school_activities,
         )
     else:
         raise ValueError("Unknown location name: " + location_name)
