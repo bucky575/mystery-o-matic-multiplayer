@@ -91,14 +91,14 @@ jobs:
 
     - name: Generate Murder Mystery
       run: |
-        LOCATION_ARG=""
+        LOCATION_ARGS=()
         if [ -n "${{ inputs.location }}" ]; then
-          LOCATION_ARG="--location '${{ inputs.location }}'"
+          LOCATION_ARGS=(--location "${{ inputs.location }}")
         fi
         if [ $(( $(date +%u) % 2 )) -eq 1 ]; then # Harder puzzles half of the days
-          mystery-o-matic scenarios/simple.template.sol static out --today --workers 1 --season 2 --nplaces 5 --nchars 4 --llm $LOCATION_ARG
+          mystery-o-matic scenarios/simple.template.sol static out --today --workers 1 --season 2 --nplaces 5 --nchars 4 --llm "${LOCATION_ARGS[@]}"
         else
-          mystery-o-matic scenarios/simple.template.sol static out --today --workers 1 --season 2 --llm $LOCATION_ARG
+          mystery-o-matic scenarios/simple.template.sol static out --today --workers 1 --season 2 --llm "${LOCATION_ARGS[@]}"
         fi
         rm -f out/result.json
         rm -f out/err.out
