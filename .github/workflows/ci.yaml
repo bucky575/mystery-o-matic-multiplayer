@@ -2,6 +2,26 @@ name: Generate Mystery and Deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      location:
+        description: 'Specific location for the mystery'
+        required: false
+        type: choice
+        default: ''
+        options:
+          - ''
+          - egypt
+          - castle
+          - train
+          - ship
+          - space station
+          - mansion
+          - museum
+          - island
+          - zoo
+          - hospital
+          - sport club
+          - abandoned school
   workflow_call:
   schedule:
     - cron: "0 1 * * *"
@@ -71,10 +91,14 @@ jobs:
 
     - name: Generate Murder Mystery
       run: |
+        LOCATION_ARG=""
+        if [ -n "${{ inputs.location }}" ]; then
+          LOCATION_ARG="--location '${{ inputs.location }}'"
+        fi
         if [ $(( $(date +%u) % 2 )) -eq 1 ]; then # Harder puzzles half of the days
-          mystery-o-matic scenarios/simple.template.sol static out --today --workers 1 --season 2 --nplaces 5 --nchars 4 --llm
+          mystery-o-matic scenarios/simple.template.sol static out --today --workers 1 --season 2 --nplaces 5 --nchars 4 --llm $LOCATION_ARG
         else
-          mystery-o-matic scenarios/simple.template.sol static out --today --workers 1 --season 2 --llm
+          mystery-o-matic scenarios/simple.template.sol static out --today --workers 1 --season 2 --llm $LOCATION_ARG
         fi
         rm -f out/result.json
         rm -f out/err.out
