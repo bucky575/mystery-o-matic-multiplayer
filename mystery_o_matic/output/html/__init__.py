@@ -98,6 +98,17 @@ def produce_html_output(
         elif language == "es":
             names_html["NOBODY"] = "nadie"
             names_txt["NOBODY"] = "nadie"
+
+            weapon_type_labels_es = {
+                "STABBING": "apuñalamiento",
+                "STRANGULATION": "estrangulamiento",
+                "CONTUSION": "contusión",
+                "PROJECTILE": "proyectil",
+            }
+            for weapon_type in ["STABBING", "STRANGULATION", "CONTUSION", "PROJECTILE"]:
+                label = weapon_type_labels_es[weapon_type]
+                names_html[weapon_type] = get_weapon_type_name(weapon_type, label)
+                names_txt[weapon_type] = label
         else:
             raise ValueError("Unknown language: " + language)
 

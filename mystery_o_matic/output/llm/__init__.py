@@ -54,6 +54,14 @@ def produce_llm_output(
 
     elif language == "es":
         names_txt["NOBODY"] = "nadie"
+        weapon_type_labels_es = {
+            "STABBING": "apuñalamiento",
+            "STRANGULATION": "estrangulamiento",
+            "CONTUSION": "contusión",
+            "PROJECTILE": "proyectil",
+        }
+        for weapon_type in ["STABBING", "STRANGULATION", "CONTUSION", "PROJECTILE"]:
+            names_txt[weapon_type] = weapon_type_labels_es[weapon_type]
     else:
         raise ValueError("Unknown language: " + language)
 

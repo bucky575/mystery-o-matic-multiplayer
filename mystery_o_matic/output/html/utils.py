@@ -91,11 +91,13 @@ def get_char_name(name):
         + "</a>"
     )
 
-def get_weapon_type_name(name):
+def get_weapon_type_name(name, label=None):
+    if label is None:
+        label = name.lower()
     return (
         '<a href="#/" class="link-dark" onClick="openModalWeaponType(event, \''
         + name.lower()
         + "')\">"
-        + name.lower()
+        + label
         + "</a>"
     )
