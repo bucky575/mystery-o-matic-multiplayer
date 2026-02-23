@@ -66,7 +66,8 @@ def produce_llm_output(
         raise ValueError("Unknown language: " + language)
 
     characters = list(map(lambda char: char.capitalize(), mystery.get_characters()))
-    introLocation = ", ".join(characters[:-1]) + " and " + characters[-1]
+    conjunction = " y " if language == "es" else " and "
+    introLocation = ", ".join(characters[:-1]) + conjunction + characters[-1]
     introLocation += locations.intro[language]
     introLocation = introLocation.replace("<b>", "").replace("</b>", "")
 
