@@ -930,7 +930,7 @@ class WeaponNotUsedClue(AbstractClue):
 
         weapon_type = get_weapon_type(weapon)
         if weapon_type == "projectile":
-            return s + "que no había orificio de bala."
+            return s + "que no había orificio de projectil."
         elif weapon_type == "strangulation":
             return s + "que no había signos de estrangulamiento."
         elif weapon_type == "sharp force":

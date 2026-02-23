@@ -42,7 +42,7 @@
      class="node"
      transform="translate(4,187)">
     <title
-       id="title1">kitchen 🍲</title>
+       id="title1">cocina 🍲</title>
     <path
        fill="#cccccc"
        stroke="#cccccc"
@@ -54,14 +54,14 @@
        y="-159.82001"
        font-family="Raleway"
        font-size="14px"
-       id="text1">kitchen 🍲</text>
+       id="text1">cocina 🍲</text>
   </g>
   <g
      id="node2"
      class="node"
      transform="translate(4,187)">
     <title
-       id="title2">dining room 🪑</title>
+       id="title2">comedor 🪑</title>
     <path
        fill="#cccccc"
        stroke="#cccccc"
@@ -73,7 +73,7 @@
        y="-86.830002"
        font-family="Raleway"
        font-size="14px"
-       id="text2">dining room 🪑</text>
+       id="text2">comedor 🪑</text>
   </g>
   <g
      id="edge1"
@@ -81,7 +81,7 @@
      transform="translate(4,187)"
      style="stroke-width:1.50155597;stroke-dasharray:none">
     <title
-       id="title3">kitchen 🍲--dining room 🪑</title>
+       id="title3">cocina 🍲--comedor 🪑</title>
     <path
        fill="none"
        stroke="#808080"
@@ -94,7 +94,7 @@
      class="node"
      transform="translate(4,187)">
     <title
-       id="title4">bedroom 🛏️</title>
+       id="title4">dormitorio 🛏️</title>
     <path
        fill="#cccccc"
        stroke="#cccccc"
@@ -106,7 +106,7 @@
        y="-86.830002"
        font-family="Raleway"
        font-size="14px"
-       id="text4">bedroom 🛏️</text>
+       id="text4">dormitorio 🛏️</text>
   </g>
   <g
      id="edge2"
@@ -114,7 +114,7 @@
      transform="translate(4,187)"
      style="stroke-width:1.50155597;stroke-dasharray:none">
     <title
-       id="title5">kitchen 🍲--bedroom 🛏️</title>
+       id="title5">cocina 🍲--dormitorio 🛏️</title>
     <path
        fill="none"
        stroke="#808080"
@@ -127,7 +127,7 @@
      class="node"
      transform="translate(4,187)">
     <title
-       id="title6">bathroom 🚽</title>
+       id="title6">baño 🚽</title>
     <path
        fill="#cccccc"
        stroke="#cccccc"
@@ -139,7 +139,7 @@
        y="-13.82"
        font-family="Raleway"
        font-size="14px"
-       id="text6">bathroom 🚽</text>
+       id="text6">baño 🚽</text>
   </g>
   <g
      id="edge3"
@@ -147,7 +147,7 @@
      transform="translate(4,187)"
      style="stroke-width:1.50155597;stroke-dasharray:none">
     <title
-       id="title7">bedroom 🛏️--bathroom 🚽</title>
+       id="title7">dormitorio 🛏️--baño 🚽</title>
     <path
        fill="none"
        stroke="#808080"

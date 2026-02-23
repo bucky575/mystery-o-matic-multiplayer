@@ -43,7 +43,7 @@
      class="node"
      transform="translate(4,187)">
     <title
-       id="title1">kitchen 🍲</title>
+       id="title1">cocina 🍲</title>
     <path
        fill="#b2dfee"
        stroke="#b2dfee"
@@ -55,14 +55,14 @@
        y="-159.82001"
        font-family="Raleway"
        font-size="14px"
-       id="text1">kitchen 🍲</text>
+       id="text1">cocina 🍲</text>
   </g>
   <g
      id="node2"
      class="node"
      transform="translate(4,187)">
     <title
-       id="title2">dining room 🍽️</title>
+       id="title2">comedor 🍽️</title>
     <path
        fill="#b2dfee"
        stroke="#b2dfee"
@@ -74,7 +74,7 @@
        y="-86.830002"
        font-family="Raleway"
        font-size="14px"
-       id="text2">dining room 🍽️</text>
+       id="text2">comedor 🍽️</text>
   </g>
   <g
      id="edge1"
@@ -82,7 +82,7 @@
      transform="translate(4,187)"
      style="fill:#008000;stroke:#49b776;stroke-opacity:1;stroke-width:2.99999994;stroke-dasharray:none;stroke-linejoin:round;stroke-linecap:round">
     <title
-       id="title3">kitchen 🍲--dining room 🍽️</title>
+       id="title3">cocina 🍲--comedor 🍽️</title>
     <path
        fill="none"
        stroke="#808080"
@@ -95,7 +95,7 @@
      class="node"
      transform="translate(4,187)">
     <title
-       id="title4">bedroom 🛏️</title>
+       id="title4">dormitorio 🛏️</title>
     <path
        fill="#b2dfee"
        stroke="#b2dfee"
@@ -107,7 +107,7 @@
        y="-86.830002"
        font-family="Raleway"
        font-size="14px"
-       id="text4">bedroom 🛏️</text>
+       id="text4">dormitorio 🛏️</text>
   </g>
   <g
      id="edge2"
@@ -115,7 +115,7 @@
      transform="translate(4,187)"
      style="stroke:#49b776;stroke-opacity:1;fill:#008000;stroke-width:2.99999994;stroke-dasharray:none;stroke-linecap:round">
     <title
-       id="title5">kitchen 🍲--bedroom 🛏️</title>
+       id="title5">cocina 🍲--dormitorio 🛏️</title>
     <path
        fill="none"
        stroke="#808080"
@@ -128,7 +128,7 @@
      class="node"
      transform="translate(4,187)">
     <title
-       id="title6">bathroom 🚽</title>
+       id="title6">baño 🚽</title>
     <path
        fill="#b2dfee"
        stroke="#b2dfee"
@@ -140,7 +140,7 @@
        y="-13.82"
        font-family="Raleway"
        font-size="14px"
-       id="text6">bathroom 🚽</text>
+       id="text6">baño 🚽</text>
   </g>
   <g
      id="edge3"
@@ -149,7 +149,7 @@
      style="fill:#ff2a2a;stroke-width:2.99999994;stroke-dasharray:none"
      inkscape:highlight-color="#ff5555">
     <title
-       id="title7">bedroom 🛏️--bathroom 🚽</title>
+       id="title7">dormitorio 🛏️--baño 🚽</title>
     <path
        fill="none"
        stroke="#808080"
