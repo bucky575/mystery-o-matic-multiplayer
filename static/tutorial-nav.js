@@ -69,7 +69,14 @@ function showTutorialPage(pageNum) {
 
 	// Update prev/next button states
 	document.getElementById('tut-prev').disabled = (pageNum === 1);
-	document.getElementById('tut-next').disabled = (pageNum === tutorialTotalPages);
+	var nextBtn = document.getElementById('tut-next');
+	if (pageNum === tutorialTotalPages) {
+		nextBtn.innerHTML = 'Back to the puzzle &rarr;';
+		nextBtn.disabled = false;
+	} else {
+		nextBtn.innerHTML = 'Next &rarr;';
+		nextBtn.disabled = false;
+	}
 
 	// Scroll to top of tutorial
 	var howToPlay = document.getElementById('how-to-play');
@@ -87,7 +94,11 @@ function redrawTutorialCanvases(pageEl) {
 }
 
 function tutorialNext() {
-	showTutorialPage(tutorialCurrentPage + 1);
+	if (tutorialCurrentPage === tutorialTotalPages) {
+		showPage('home');
+	} else {
+		showTutorialPage(tutorialCurrentPage + 1);
+	}
 }
 
 function tutorialPrev() {
