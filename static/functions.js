@@ -15,6 +15,10 @@ function showPage(page) {
 	document.getElementById("sleuth-o-meter").style.display = "none";
 	document.getElementById(page).style.display = "block";
 
+	if (page === "how-to-play" && typeof showTutorialPage === "function") {
+		showTutorialPage(1);
+	}
+
 	for (let i = 0; i < tables.length; i++) {
 		tables[i].redraw(true);
 		for (let j = 0; j < tableData[i].length; j++) {
