@@ -772,9 +772,9 @@ class WasVictimDeadAtClue(AbstractClue):  # UNUSED
 
     def string_spanish(self):
         if self.alternative:
-            r = "Inspeccionando la escena del crimen se revela que la víctima estaba muerta a las "
+            r = "Inspeccionando la escena del crimen se revela que la víctima ya estaba muerta a las "
         else:
-            r = "Un examen minucioso del cuerpo revela que la víctima estaba muerta a las "
+            r = "Un examen minucioso del cuerpo revela que la víctima ya estaba muerta a las "
 
         r += f"{self.time}"
         return r
