@@ -929,7 +929,7 @@ class WasMurderedBeforeClue(AbstractClue):
             t = Time(self.time.seconds)
             r += f"antes de las {t}"
         else:
-            t = Time(self.time.seconds + self.interval_size)
+            t = Time(self.time.seconds - self.interval_size)
             r += f"no después de las {t}"
 
         return r
