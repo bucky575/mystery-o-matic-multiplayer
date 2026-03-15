@@ -15,4 +15,9 @@
   <lastmod>${DATE}</lastmod>
 </url>
 
+<url>
+  <loc>https://mystery-o-matic.com/ru</loc>
+  <lastmod>${DATE}</lastmod>
+</url>
+
 </urlset>
