@@ -9,8 +9,8 @@ function getCurrentDate() {
 
 function showPage(page) {
 	if (page !== "home") {
-		gtag('event', 'page_view_custom', {
-			'page_name': page,
+		gtag('event', 'section_view', {
+			'section_name': page,
 			'language': getLanguage()
 		});
 	}
@@ -131,9 +131,9 @@ function revealAnotherClue(offset) {
 		return;
 
 	currentClue = currentClue + offset;
-	if (currentClue == maxClue + 1) {
+	if (currentClue > maxClue) {
 		gtag('event', 'reveal_clue', {
-			'clue_number': currentClue + 1,
+			'clue_number': currentClue,
 			'total_clues': clues.length,
 			'language': getLanguage()
 		});
@@ -302,11 +302,11 @@ function switchTheme() {
 	if (isKindle)
 		return;
 	var currentTheme = document.querySelector("html").getAttribute("data-bs-theme");
+	document.querySelector("html").setAttribute("data-bs-theme", currentTheme == "light" ? "dark" : "light");
 	gtag('event', 'switch_theme', {
-		'new_theme': currentTheme == "light" ? "dark" : "light",
+		'new_theme': document.querySelector("html").getAttribute("data-bs-theme"),
 		'language': getLanguage()
 	});
-	document.querySelector("html").setAttribute("data-bs-theme", currentTheme == "light" ? "dark" : "light");
 	var usingLightTheme = currentTheme == "light";
 	var links = document.getElementsByTagName("a");
 	for(let i = 0; i < links.length; i++) {
