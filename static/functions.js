@@ -8,6 +8,12 @@ function getCurrentDate() {
 }
 
 function showPage(page) {
+	if (page !== "home") {
+		gtag('event', 'page_view_custom', {
+			'page_name': page,
+			'language': getLanguage()
+		});
+	}
 	tableData = getTableData();
 	document.getElementById("home").style.display = "none";
 	document.getElementById("about").style.display = "none";
@@ -50,6 +56,10 @@ var crossClue = [];
 var currentClue = 0;
 
 function selectClues(withLies) {
+	gtag('event', 'game_start', {
+		'mode': withLies ? 'with_lies' : 'without_lies',
+		'language': getLanguage()
+	});
 	var element;
 
 	element = document.getElementById("selection-clues-box");
@@ -121,6 +131,13 @@ function revealAnotherClue(offset) {
 		return;
 
 	currentClue = currentClue + offset;
+	if (currentClue == maxClue + 1) {
+		gtag('event', 'reveal_clue', {
+			'clue_number': currentClue + 1,
+			'total_clues': clues.length,
+			'language': getLanguage()
+		});
+	}
 	maxClue = Math.max(maxClue, currentClue);
 	element = document.getElementById("clue-text");
 	element.innerHTML = clues[currentClue];
@@ -224,6 +241,13 @@ function checkAccusation() {
 	hash(input).then((result) => {
 		if (result == data.correctAnswer) {
 			rank = computeRank();
+			gtag('event', 'accusation', {
+				'result': 'win',
+				'rank': rankIndex,
+				'tries': tries,
+				'clues_viewed': maxClue,
+				'language': getLanguage()
+			});
 			document.getElementById("accusation-lose").style.display = "none";
 			document.getElementById("accusation-win-message").innerHTML += " " + rank;
 			document.getElementById("accusation-win").style.display = "block";
@@ -233,6 +257,12 @@ function checkAccusation() {
 			storyClue = document.getElementById("story-clue").textContent;
 			document.getElementById("story-notebook").value += "\n" + getCurrentDate() + ":\n" + storyClue + "\n";
 		} else {
+			gtag('event', 'accusation', {
+				'result': 'lose',
+				'tries': tries + 1,
+				'clues_viewed': maxClue,
+				'language': getLanguage()
+			});
 			document.getElementById("accusation-lose").style.display = "block";
 			document.getElementById("accusation-lose").scrollIntoView();
 			tries += 1;
@@ -249,6 +279,10 @@ function switchTheme() {
 	if (isKindle)
 		return;
 	var currentTheme = document.querySelector("html").getAttribute("data-bs-theme");
+	gtag('event', 'switch_theme', {
+		'new_theme': currentTheme == "light" ? "dark" : "light",
+		'language': getLanguage()
+	});
 	document.querySelector("html").setAttribute("data-bs-theme", currentTheme == "light" ? "dark" : "light");
 	var usingLightTheme = currentTheme == "light";
 	var links = document.getElementsByTagName("a");
