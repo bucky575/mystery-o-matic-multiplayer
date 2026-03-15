@@ -254,6 +254,29 @@ function checkAccusation() {
 			document.getElementById("accusation-win").scrollIntoView();
 			document.getElementById("accusation-button").disabled = true;
 
+			var shopEl = document.getElementById("shop-suggestion");
+			if (shopEl && getLanguage() === "en") {
+				var shopMugs = {
+					"super sleuth": {
+						url: "https://www.etsy.com/listing/1686213456/super-sleuth-mug",
+						label: "Super Sleuth"
+					},
+					"seasoned P.I": {
+						url: "https://www.etsy.com/listing/1703753361/seasoned-pi-mug",
+						label: "Seasoned P.I."
+					}
+				};
+				var mug = shopMugs[rankIndex];
+				if (mug) {
+					shopEl.innerHTML = '&#9749; You earned the <b>' + mug.label + '</b> rank! Celebrate with the official <a class="link-dark" href="' + mug.url + '" target="_blank" rel="noopener noreferrer">' + mug.label + ' mug</a> from our store.';
+					shopEl.style.removeProperty("display");
+					gtag('event', 'shop_suggestion_shown', {
+						'rank': rankIndex,
+						'product_url': mug.url
+					});
+				}
+			}
+
 			storyClue = document.getElementById("story-clue").textContent;
 			document.getElementById("story-notebook").value += "\n" + getCurrentDate() + ":\n" + storyClue + "\n";
 		} else {
