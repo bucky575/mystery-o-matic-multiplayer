@@ -74,6 +74,21 @@ mystery-o-matic scenarios/simple.template.sol static out --load-state test_state
 
 This is useful to iterate quickly on templates and output generation without waiting for the solver.
 
+## Adding a new language
+
+Clue text is generated through language renderers in `mystery_o_matic/lang/`. Each language has its own module implementing the `LanguageRenderer` interface.
+
+To add a new language (e.g. Portuguese `pt`):
+
+1. Create `mystery_o_matic/lang/pt.py` with a class that extends `LanguageRenderer` and implements all its abstract methods (see `lang/en.py` as a reference). Call `register_renderer(PortugueseRenderer())` at the bottom of the file.
+2. Import the new module in `mystery_o_matic/mystery.py`:
+   ```python
+   import mystery_o_matic.lang.pt  # noqa: F401
+   ```
+3. Add the language code to the languages list in `__main__.py` (e.g. `["en", "es", "ru", "pt"]`).
+4. Create the HTML template at `static/pt/index.template.html` (copy an existing one and translate the UI).
+5. Add the new package to `setup.py` in the `packages` list.
+
 ## Integrations
 
 While the code is open-source, I'm aware of the difficulties of using or integrating other people's code. If you don't know or don't want to run this code directly, but you are still interested in using the output of this tool in your work of fiction (e.g. novel, game, film), please feel free to [contact me](https://forms.gle/dvA4Wr8LiuHFmDZN7) so I can do that for you. The generated mystery will look like this:

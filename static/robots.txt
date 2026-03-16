@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mystery-o-matic.com/sitemap.xml

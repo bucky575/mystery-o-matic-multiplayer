@@ -5,6 +5,11 @@ from mystery_o_matic.clues import *
 from mystery_o_matic.solidity import get_tx, get_event
 from mystery_o_matic.time import Time
 
+# Register language renderers (must happen before any clue.string() calls)
+import mystery_o_matic.lang.en  # noqa: F401
+import mystery_o_matic.lang.es  # noqa: F401
+import mystery_o_matic.lang.ru  # noqa: F401
+
 
 def get_intervals_length_from_events(source, contract_name, events):
     """
