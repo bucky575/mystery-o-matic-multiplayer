@@ -187,11 +187,23 @@ def main() -> int:
         with open(args.load_state, "r") as f:
             state = json.load(f)
         print("Loaded precomputed state from:", args.load_state)
-        if "location_name" in state and state["location_name"] != location_name:
-            print(
-                "Warning: loaded state location_name differs from requested location:",
-                state["location_name"],
-            )
+
+        # Use location from state if not explicitly specified
+        if "location_name" in state:
+            if args.location is not None and state["location_name"] != location_name:
+                print(
+                    "Warning: loaded state location_name differs from requested location:",
+                    state["location_name"],
+                )
+            location_name = state["location_name"]
+            location_name, location_data = get_location_data(location_name, args.mode)
+            number_places = state.get("number_places", number_places)
+
+        # Use weapons from state if available, to match the saved mystery
+        if "weapons_available" in state:
+            weapons_available = state["weapons_available"]
+        if "weapon_labels" in state:
+            weapon_labels = state["weapon_labels"]
 
         solidity_file = args.scenario
         locations = Locations(
