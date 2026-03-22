@@ -156,6 +156,14 @@ school_weapons = [
     {"$ROPE": "🪢", "$CHAIN": "⛓️", "$WIRE_EXTENSION": "🔌"},
 ]
 
+arctic_base_weapons = [
+    {"$PISTOL": "🔫"},
+    {"$KNIFE": "🔪", "$AXE": "🪓", "$SCREWDRIVER": "🪛"},
+    {"$POISON": "⚗️"},
+    {"$HAMMER": "🔨", "$WRENCH": "🔧"},
+    {"$ROPE": "🪢", "$CHAIN": "⛓️", "$WIRE_EXTENSION": "🔌"},
+]
+
 def get_available_weapons(num_weapons, location_name):
 
     if location_name == "mansion":
@@ -182,6 +190,8 @@ def get_available_weapons(num_weapons, location_name):
         weapons_sets = sport_club_weapons[:]
     elif location_name == "abandoned school":
         weapons_sets = school_weapons[:]
+    elif location_name == "arctic base":
+        weapons_sets = arctic_base_weapons[:]
     else:
         raise ValueError("Unknown available weapons for" + location_name)
 
