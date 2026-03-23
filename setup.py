@@ -14,6 +14,7 @@ setup(
     long_description=open("README.md").read(),
     packages=[
         "mystery_o_matic",
+        "mystery_o_matic.locations",
         "mystery_o_matic.lang",
         "mystery_o_matic.output",
         "mystery_o_matic.output.html",
