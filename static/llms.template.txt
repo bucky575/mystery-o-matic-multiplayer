@@ -16,13 +16,13 @@ The location: each place can be connected with the others, allowing characters t
 
 The weapons: various weapons are scattered throughout the rooms and the killer will pick up one of the weapons before the crime, but don't expect them to be where they "should" be. That hammer? It might be in the bathroom instead of a workshop. Logic won't help you here!
 
-The timeline: the murder occurred within a specific time window (e.g., between 8:00 and 9:30). You'll need to reconstruct the movements of the suspects and identify when the fatal blow was struck. There is, however, one important detail that separates these puzzles from other logic whodunit games. Our puzzles try to mimic real life, where statements and clues are often chaotic, redundant or incomplete. In that sense, reconstructing the complete timeline is not necessarily to solve the murder, and often it is impossible!.
+The timeline: the murder occurred within a specific time window (e.g., between 8:00 and 9:30). You'll need to reconstruct the movements of the suspects and identify when the fatal blow was struck. There is, however, one important detail that separates these puzzles from other logic whodunit games. Our puzzles try to mimic real life, where statements and clues are often chaotic, redundant or incomplete. In that sense, reconstructing the complete timeline is not necessarily to solve the murder, and often it is impossible!
 
 The statements: you'll get statements from suspects and evidence from the scene. Everyone will be telling the truth, but not necessarily the whole story. You will need to carefully deduce and combine facts in order to uncover the truth.
 
 🕗 Using the Timeline Board
 
-The Timeline Board is a grid that allows you to keep track of key events, movements, and deductions as you piece together the story behind the murder. Think of it as your detective's whiteboard – it's where all the magic happens. It’s up to you to fill in the board with what you’ve deduced. In this tutorial, Alice has been murdered before 9:30 in the mansion, her body found in the kitchen. We’ll use the Timeline Board to reconstruct this crime. Let’s start with some basic facts we know for sure:
+The Timeline Board is a grid that allows you to keep track of key events, movements, and deductions as you piece together the story behind the murder. Think of it as your detective’s whiteboard – it’s where all the magic happens. It’s up to you to fill in the board with what you’ve deduced. As you work through the clues, you should add your deductions to the board step by step and verify them before moving on. In this tutorial, Alice has been murdered before 9:30 in the mansion, her body found in the kitchen. We’ll use the Timeline Board to reconstruct this crime. Let’s start with some basic facts we know for sure:
 
 We know where everyone was at 9:30:
  - Alice's body was in the kitchen
@@ -75,6 +75,8 @@ The second we finish adding these into the timetable, other deductions start pop
 
 But where was Bob at 8:00? This is where our room layout comes in handy.
 
+Remember from the room layout: the bedroom is directly connected to the kitchen and the bathroom, but NOT to the dining room (you'd need to go through the kitchen first).
+
 Since the bedroom connects to both the kitchen and bathroom, Bob could have come from either one. But here's a solid deduction – Bob couldn't have been in the dining room at 8:00 because it doesn't connect to the bedroom!
 
 🔎 Bob was not in the dining room at 8:00
@@ -113,7 +115,7 @@ Not only does this clue place Bob in the bathroom at 9:00, but we can backtrack 
 🔎 Bob was in the bedroom at 8:45
 🔎 Bob was NOT in the kitchen, dining room or bathroom at 8:45
 
-Finally, sometimes we get somehow vague clues from suspects:
+Finally, sometimes we get vague clues from suspects:
 
 ☞ Carol: "I heard someone washing the dishes at 8:45"
 
@@ -147,7 +149,7 @@ Following characters around is not enough. We need to figure out the murder weap
 
 ☞ Inspecting the body reveals no signs of stabbing
 
-To discard a particular weapon we need to know what kind of wound they produce. Just click on the type of wound described in the clue (e.g. "stabbing") and you will see a list of potential weapons:
+To discard a particular weapon we need to know what kind of wound they produce. Each wound type is associated with a list of potential weapons. Here are the stabbing weapons:
 
   🔪 A classic choice for chefs... and assassins. Sharp, sleek, and perfect for slicing more than just vegetables.
   🪓 Lumberjacks love it. So do people with unresolved anger issues.
@@ -157,27 +159,72 @@ To discard a particular weapon we need to know what kind of wound they produce. 
   ⚔️ Chivalry isn’t dead, but someone might be after this gets unsheathed. Elegant, deadly, and hard to conceal.
   🔱 Why settle for one point when you can have three? Poseidon approves, and so will your suspect.
 
+Other wound types and their associated weapons are:
+
+Contusion weapons:
+  🔨 When subtlety isn't your style. Great for building birdhouses—or delivering not-so-gentle reminders.
+  🔧 Great for fixing leaky pipes. Also great for causing leaky pipes—of the human variety.
+  🕯️ Ah, the classic dinner party mood-setter. Elegant, sophisticated, and surprisingly sturdy when wielded with intent.
+  🪨 Simple, effective, and available almost everywhere. When in doubt, just… rock 'n' roll.
+
+Strangulation weapons:
+  🪢 So versatile! You can tie a boat, climb a mountain, or… you know… get creative with knots.
+  ⛓️ Heavy metal isn't just a music genre. Ideal for securing bikes… or bodies.
+  🔌 Is it a tool? Is it a trap? Either way, it's shocking how effective this household item can be.
+
+Ballistics weapons:
+  🔫 For those who prefer their murder from a safe distance. Bang! Problem solved… unless you miss.
+  🏹 Violence with a touch of medieval flair. Silent, precise, and dramatic.
+
 Using this list, we can discard the scissors from the list of potential weapons in this case.
 
-🎓 Solving your first case
+🎓 Solving your first case using elimination
 
-Time to put it all together and solve our very first murder.  Think for a while and then click to reveal each solution:
+Time to put it all together and solve our very first murder. With all our deductions filled in the timeline board, let's reveal each solution. Notice that in each step we use a key technique: elimination. We deduce the answer not from a single clue that hands it to us, but by ruling out every other possibility. This is not guesswork, it is sound deductive reasoning. The puzzle guarantees a closed set of suspects, weapons, and rooms, so if we can rule out all options but one, the remaining one MUST be true.
 
-1. Who was the killer?
+1. When was the murder committed?
 
-Either Bob and Carol are suspects. Well, Bob's got a solid alibi – he wasn't even at the crime scene when it happened (either 8:45 or 9:00). That leaves Carol as the killer.
+The victim's scream narrows it down to either 8:45 or 9:00. But we already know that Alice was alive at 8:45 (happily washing the dishes). That rules out 8:45, leaving only one possibility:
 
-2. Which weapon was used?
+🔎 8:45 is ruled out (Alice was alive and in the kitchen)
+🔎 The murder was committed at 9:00
 
-We can rule out the scissors, leaving us with the gun, hammer, or rope. But wait – we know Carol's our killer, and she was only in the dining room before the murder. That means the murder weapon was the hammer!
+2. Who was the killer?
 
-3. When the murder was committed?
+Either Bob or Carol are suspects. Let's check who could have been at the crime scene (the kitchen) at 9:00. Let's revisit what we know:
 
-The victim's scream narrows it down to either 8:45 or 9:00. Since Carol (our now-confirmed killer) wasn't at the scene at 8:45 and we know that Alice was alive before 9:00, so the murder was committed at 9:00.
+🔎 Bob was in the bedroom at 8:45
+🔎 Bob was in the bathroom at 9:00
+
+Bob wasn't even at the crime scene when it happened, he has a solid alibi. That leaves only one suspect:
+
+🔎 Bob is ruled out (he was in the bathroom at 9:00)
+🔎 Carol is the killer, she's the only suspect who was in the kitchen at 9:00
+
+We didn't need a clue saying "Carol is the killer." Ruling out Bob was enough to reach a certain conclusion.
+
+3. Which weapon was used?
+
+We had four weapons. Let's eliminate them one by one:
+
+🔎 The scissors (✂️) are ruled out, the body showed no signs of stabbing
+🔎 The pistol (🔫) is ruled out, Carol never visited the bedroom (🛏️) where it was located
+🔎 The rope (🪢) is ruled out, Carol never visited the bathroom (🚽) where it was located
+🔎 The murder weapon was the hammer (🔨), it was in the dining room (🪑), the only place Carol visited before the murder
+
+Three weapons eliminated, one remains. That's our answer.
+
+We actually used this same elimination technique earlier in the tutorial without calling it out. Remember when Carol said she heard someone washing dishes at 8:45? We knew Bob was in the bedroom and Carol wasn't in the kitchen. That left Alice as the only person who could have been there:
+
+🔎 Bob was in the bedroom at 8:45, not him
+🔎 Carol was NOT in the kitchen at 8:45, not her
+🔎 Alice was in the kitchen at 8:45, the only remaining possibility
+
+In each of these cases, we started with a complete list of possibilities and eliminated options one by one using verified facts: statements from truthful characters, physical evidence, and movement constraints. The conclusion follows necessarily from the facts. It is not a guess, not an assumption, and not an inference from incomplete data. This technique is fundamental to solving cases, since often the puzzle will NOT give you a direct clue pointing to the answer. Instead, you must arrive at it by systematically ruling out what's impossible until only the truth remains.
 
 You know what's really clever about this approach? While we've pieced together most of the timeline, there's still some mystery about Alice's movements - like where she was at 8:30. And that's not an oversight - it's actually showing us something important! Remember that early note about how "reconstructing all the timeline is not necessary to solve the murder, and often it is impossible"? Well, we're seeing that principle in action. We solved the case conclusively (Carol did it with the hammer at 9:00) without needing to track every single place Alice visited. It's a perfect example of how these puzzles mirror a more realistic detective work.
 
-Case closed! Ready to tackle a real one?
+Case closed! Ready to tackle the next one?
 
 🚀 Beyond the basics
 
