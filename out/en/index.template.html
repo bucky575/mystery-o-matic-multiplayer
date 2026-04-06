@@ -1,0 +1,1650 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+	<!-- Google fonts -->
+	<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-C7DCY6FN81"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+		gtag('config', 'G-C7DCY6FN81', { 'anonymize_ip': true });
+	</script>
+
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<link href="../css/main.css" rel="stylesheet">
+	<link href="../css/sticky-notes.css" rel="stylesheet">
+
+	<link href="../emoji.css" rel="stylesheet" type="text/css" />
+	<script src="../emoji.js" type="text/javascript"></script>
+
+	<!-- PWA -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
+	<title class="notranslate">mystery-o-matic: solve a murder mystery and save the day!</title>
+	<link rel="canonical" href="https://mystery-o-matic.com/en" />
+
+	<link rel="alternate" hreflang="en" href="https://mystery-o-matic.com/en" />
+	<link rel="alternate" hreflang="es" href="https://mystery-o-matic.com/es" />
+	<link rel="alternate" hreflang="ru" href="https://mystery-o-matic.com/ru" />
+
+	<!-- SEO -->
+	<meta name="description"
+		content="Solve a daily murder mystery in just 5 minutes and slowly uncover how to defeat the evil timeloop" />
+	<meta property="og:title" content="mystery-o-matic: solve a murder mystery and save the day!" />
+	<meta property="og:description"
+		content="Solve a daily murder mystery in just 5 minutes and slowly uncover how to defeat the evil timeloop" />
+	<meta property="og:image" content="https://mystery-o-matic.com/images/preview.jpg" />
+	<meta property="og:locale" content="en_US" />
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@mystery_o_matic">
+	<meta name="twitter:creator" content="@mystery_o_matic">
+	<meta name="twitter:title" content="mystery-🕰️-matic">
+	<meta name="twitter:description" content="Solve a daily murder mystery in just 5 minutes">
+
+</head>
+
+<body>
+	<!-- Modals -->
+	<div class="modal fade" id="portraitModal" tabindex="-1" aria-labelledby="portraitLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="portraitLabel">📸 Suspect portrait</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<img id="portraitImage" src="../images/alice.jpg" class="w-100" alt="...">
+				</div>
+				<div class="modal-footer">
+					<div class="col text-center">
+						<button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">I have seen
+							enough</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="weaponTypeModalContusion" tabindex="-1" aria-labelledby="portraitLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="portraitLabel">👉 Weapon of choice: contusion </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">🔨 When subtlety isn’t your style. Great for building birdhouses—or
+							delivering not-so-gentle reminders</li>
+						<li class="list-group-item">🔧 Great for fixing leaky pipes. Also great for causing leaky
+							pipes—of the human variety.</li>
+						<li class="list-group-item">🕯️ Ah, the classic dinner party mood-setter. Elegant,
+							sophisticated, and surprisingly sturdy when wielded with intent.</li>
+						<li class="list-group-item">🪨 Simple, effective, and available almost everywhere. When in
+							doubt, just… rock ‘n’ roll.</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<div class="col text-center">
+						<button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">I have seen
+							enough</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="weaponTypeModalStrangulation" tabindex="-1" aria-labelledby="portraitLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="portraitLabel">👉 Weapon of choice: strangulation </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">🪢 So versatile! You can tie a boat, climb a mountain, or… you know…
+							get creative with knots.</li>
+						<li class="list-group-item">⛓️ Heavy metal isn’t just a music genre. Ideal for securing bikes…
+							or bodies.</li>
+						<li class="list-group-item">🔌 Is it a tool? Is it a trap? Either way, it’s shocking how
+							effective this household item can be.</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<div class="col text-center">
+						<button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">I have seen
+							enough</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="weaponTypeModalProjectile" tabindex="-1" aria-labelledby="portraitLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="portraitLabel">👉 Weapon of choice: ballistics </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">🔫 For those who prefer their murder from a safe distance. Bang!
+							Problem solved… unless you miss.</li>
+						<li class="list-group-item">🏹 Violence with a touch of medieval flair. Silent, precise, and
+							dramatic.</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<div class="col text-center">
+						<button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">I have seen
+							enough</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal fade" id="weaponTypeModalStabbing" tabindex="-1" aria-labelledby="portraitLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="portraitLabel">👉 Weapon of choice: stabbing </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">🔪 A classic choice for chefs... and assassins. Sharp, sleek, and
+							perfect for slicing more than just vegetables.</li>
+						<li class="list-group-item">🪓 Lumberjacks love it. So do people with unresolved anger issues.
+						</li>
+						<li class="list-group-item">✂️ “Snip, snip! Whether you’re crafting or… cutting ties
+							permanently, they’re sharp enough for the job.</li>
+						<li class="list-group-item">🪛 Good for assembling furniture, opening paint cans, and,
+							apparently, creating unsolvable crime scenes.</li>
+						<li class="list-group-item">🗡️ Like a knife, but fancier and with more flair. Great for
+							stabbing…and looking cool while doing it.</li>
+						<li class="list-group-item">⚔️ Chivalry isn’t dead, but someone might be after this gets
+							unsheathed. Elegant, deadly, and hard to conceal.</li>
+						<li class="list-group-item">🔱 Why settle for one point when you can have three? Poseidon
+							approves, and so will your suspect.</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<div class="col text-center">
+						<button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">I have seen
+							enough</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal fade" id="languageSelector" tabindex="-1" aria-labelledby="languageSelector" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title w-100 text-center notranslate" id="">
+						Switch language
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="col text-center">
+						<a href="/en" type="button" class="close btn btn-secondary notranslate">English 🗽</a>
+						<a href="/es" type="button" class="close btn btn-secondary notranslate">Español 💃</a>
+						<a href="/ru" type="button" class="close btn btn-secondary notranslate">Русский 🪆</a>
+						<!-- <button type="button" class="close btn btn-secondary notranslate" data-bs-dismiss="modal" onClick="translateContent('pt')">Português 🦜</button>
+						<button type="button" class="close btn btn-secondary notranslate" data-bs-dismiss="modal" onClick="translateContent('ca')">Català 🌹</button> -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container p-3 text-center">
+		<h1>
+			<img id="logoImage" src="../images/logo_light.png" class="w-100" style="max-width:600px"
+				alt="mystery-o-matic: A mystery a day, keeps the coroner away!">
+		</h1>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+		integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+		crossorigin="anonymous"></script>
+
+	<div id="google_translate_element">
+	</div>
+
+	<p class="floating-button float">
+		<a href="#/" id="home-button" style="display:none" onClick="showPage('home')"
+			class="link-underline link-underline-opacity-0">🧩</a>
+		<a href="#/" id="switch-theme-button" onClick="switchTheme()"
+			class="link-underline link-underline-opacity-0">🌓</a>
+		<a href="#/" id="translate-button" onClick="checkIfWebsiteShouldBeTranslated(true)"
+			class="link-underline link-underline-opacity-0">🗺️</a>
+	</p>
+
+	<div id="about" style="display:none">
+		<div class="container mt-5">
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-8">
+					<p>mystery-o-matic is a website that offers free murder mysteries for daily solving.
+						It was created by two passionate individuals who share a deep love for mystery and a strong
+						dedication to offering a unique experience to fellow detectives.</p>
+
+					<p> Unlike typical games, the daily mysteries on this website require deductive thinking, but they
+						are
+						designed to mirror the unpredictability of real-life scenarios, making them more challenging and
+						varied in difficulty. Instead of following a predefined deduction path,
+						each daily mystery is synthesized through random exploration,
+						offering a refreshing twist compared to traditional deductive logic games.
+					</p>
+
+					<p>The creators drew inspiration from popular games
+						like <a class="link-dark" href="https://en.wikipedia.org/wiki/Cluedo">Cluedo</a> (naturally), <a
+							class="link-dark" href="http://www.squidi.net/three/entry.php?id=69">Squidi's "Infinite
+							Detective"</a> and
+						<a class="link-dark" href="https://murdle.com/">Murdle</a> to shape the captivating world of
+						mystery-o-matic.
+						The code that automatically produces the daily puzzles, as well as the rest of the website <a
+							class="link-dark" href="https://github.com/mystery-o-matic/mystery-o-matic.github.io">is
+							open-source</a>!
+
+						Images from suspects are from Freepik: <a
+							href="https://www.freepik.com/free-vector/detective-office-interior-flat-cartoon-composition-with-crime-scene-diagram-board-computer-monitor-criminal-profile-illustration_16399785.htm#query=detective%20background&position=2&from_view=search&track=ais">[1]</a>,
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_24555042.htm#&position=8&from_view=collections">[2]</a>
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_24555045.htm#&position=9&from_view=collections">[3]</a>
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_23669474.htm#&position=3&from_view=collections">[4]</a>
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_23669480.htm#&position=1&from_view=collections">[5]</a>
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_23985547.htm#&position=0&from_view=collections">[6]</a>
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_23985544.htm#&position=4&from_view=collections">[7]</a>
+					</p>
+
+					<p>The website is still in beta, therefore, rules, interface and design are subject to change!
+						Please feel free to <a class="link-dark" href="https://forms.gle/dvA4Wr8LiuHFmDZN7">provide
+							feedback here</a> or in <a class="link-dark"
+							href="https://www.reddit.com/r/mystery_o_matic/">our subreddit</a>.
+					</p>
+					<p>If you enjoy the website and wish to support our work, you can donate cryptocurrency to:
+						0xd0FD96CD73762Fd081cf2269D79F359e4314629b
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="sleuth-o-meter" style="display:none">
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+
+				<div class="section-header">🌡️ Sleuth-o-meter</div>
+
+				<p>This section shows the different scoring levels that you can get after solving a daily mystery.
+					<emph>To return to the game, simply click the 🧩 icon in the bottom-right corner of the screen.
+					</emph>
+				</p>
+
+
+				<p>Mystery-o-matic brings back the venerable <a class="link-dark"
+						href="https://www.benshoof.org/blog/super-sleuth">sleuth-o-meter™</a> from
+					<a class="link-dark" href="https://www.mobygames.com/game/461/the-colonels-bequest/">Laura Bow's
+						mysteries</a> to keep track of your score:
+				</p>
+
+				<div class="container d-flex aligns-items-center justify-content-center bg-secondary bg-gradient">
+					<div class="row align-items-center">
+						<div class="col-9">
+							<lu class="list-group">
+								<li class="list-group-item list-group-item-danger">Super Sleuth</li>
+								<li class="list-group-item list-group-item-warning">Seasoned P.I.</li>
+								<li class="list-group-item list-group-item-success">Amateur Gumshoe</li>
+								<li class="list-group-item list-group-item-info">Absent Minded</li>
+								<li class="list-group-item list-group-item-primary">Barely Conscious</li>
+							</lu>
+						</div>
+						<div class="col-3">
+							<img src="../images/sleuth-o-meter.png" style="max-width: 100%; height: 50%;" alt="...">
+						</div>
+					</div>
+				</div>
+
+				<p>Each clue revealed will decrease your score. Keep in mind that the website is still in beta, so
+					this scoring system, the interface or design is subject to change.
+					Please feel free to provide feedback <a class="link-dark"
+						href="https://forms.gle/dvA4Wr8LiuHFmDZN7">here</a> or in <a class="link-dark"
+						href="https://www.reddit.com/r/mystery_o_matic/">our subreddit</a>.
+				</p>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="how-to-play" style="display:none">
+		<div class="d-flex" style="max-width: 1100px; margin: 0 auto;">
+
+			<!-- Sidebar (desktop) -->
+			<nav id="tutorial-sidebar" class="tutorial-sidebar d-none d-md-flex">
+				<button class="tutorial-sidebar-toggle" onclick="toggleTutorialSidebar()" aria-label="Toggle sidebar">&#9666;</button>
+				<ol class="list-unstyled mb-0">
+					<li class="tutorial-sidebar-item active" data-page="tut-welcome">
+						<span class="tutorial-sidebar-icon">🕵️</span>
+						<span class="tutorial-sidebar-label">Welcome Detective!</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-timeline">
+						<span class="tutorial-sidebar-icon">🕗</span>
+						<span class="tutorial-sidebar-label">Using the Timeline Board</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-first-clue">
+						<span class="tutorial-sidebar-icon">🔎</span>
+						<span class="tutorial-sidebar-label">Your First Clue</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-deductions">
+						<span class="tutorial-sidebar-icon">🧠</span>
+						<span class="tutorial-sidebar-label">Making Deductions</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-movement">
+						<span class="tutorial-sidebar-icon">🚶</span>
+						<span class="tutorial-sidebar-label">Movement Rules</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-backtrack">
+						<span class="tutorial-sidebar-icon">↩️</span>
+						<span class="tutorial-sidebar-label">Backtracking</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-indirect">
+						<span class="tutorial-sidebar-icon">💬</span>
+						<span class="tutorial-sidebar-label">Indirect Clues</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-time-death">
+						<span class="tutorial-sidebar-icon">⌛</span>
+						<span class="tutorial-sidebar-label">Time of Death</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-weapon">
+						<span class="tutorial-sidebar-icon">🔪</span>
+						<span class="tutorial-sidebar-label">The smoking gun</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-solved">
+						<span class="tutorial-sidebar-icon">🎓</span>
+						<span class="tutorial-sidebar-label">Solving your first case</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-weapons-id">
+						<span class="tutorial-sidebar-icon">🔫</span>
+						<span class="tutorial-sidebar-label">Weapon identification</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-liars">
+						<span class="tutorial-sidebar-icon">🤥</span>
+						<span class="tutorial-sidebar-label">Dealing with liars</span>
+					</li>
+				</ol>
+			</nav>
+
+			<!-- Main content area -->
+			<div class="tutorial-content">
+
+				<!-- Mobile step indicator -->
+				<div class="d-md-none text-center py-2 mb-2 border-bottom">
+					<div class="tutorial-mobile-dots">
+						<span class="tutorial-step-dot active" data-page="tut-welcome">🕵️</span>
+						<span class="tutorial-step-dot" data-page="tut-timeline">🕗</span>
+						<span class="tutorial-step-dot" data-page="tut-first-clue">🔎</span>
+						<span class="tutorial-step-dot" data-page="tut-deductions">🧠</span>
+						<span class="tutorial-step-dot" data-page="tut-movement">🚶</span>
+						<span class="tutorial-step-dot" data-page="tut-backtrack">↩️</span>
+						<span class="tutorial-step-dot" data-page="tut-indirect">💬</span>
+						<span class="tutorial-step-dot" data-page="tut-time-death">⌛</span>
+						<span class="tutorial-step-dot" data-page="tut-weapon">🔪</span>
+						<span class="tutorial-step-dot" data-page="tut-solved">🎓</span>
+						<span class="tutorial-step-dot" data-page="tut-weapons-id">🔫</span>
+						<span class="tutorial-step-dot" data-page="tut-liars">🤥</span>
+					</div>
+				</div>
+
+				<!-- PAGE 1: Welcome -->
+				<div class="tutorial-page" id="tut-welcome">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🕵️ Welcome Detective!</div>
+							<p><b>Tip:</b> to return to the game at any time, click the 🧩 icon in the bottom-right corner of the screen.</p>
+
+							<ul>
+								<li><b>The suspects</b>: you’ll meet a colorful cast of characters including <b>Alice, Bob, Carol,
+										Dave, Frida and Eddie</b>. One of them has met an unfortunate end while some of the others
+									are our prime suspects. Spoiler alert: in this tutorial, poor Alice is our victim so we’ll focus
+									on Bob and Carol as suspects.</li>
+								<li><b>The crime</b>: a gruesome murder has taken place, and we need to determine how it happened.
+									Once the fatal act occurs, <b>the victim’s body remains exactly where they fell</b>–this is a
+									crucial detail for your investigation.</li>
+								<li><b>The location</b>: each place can be connected with the others, allowing characters to move
+									freely. For this tutorial, we’ll explore a chilling mystery set in an eerie Victorian mansion,
+									where people have been mysteriously disappearing from time to time. The layout changes from case
+									to case, with three to five rooms to explore. Here’s how the rooms connect:
+									<div class="text-center">
+										<img src="locations_tutorial.svg" class="mx-auto" style="max-width: 60%; max-height: 200px;"
+											alt="Location Graph">
+									</div>
+								</li>
+								<li><b>The weapons</b>: various weapons are scattered throughout the rooms and <b>the killer will
+										pick up one of the weapons before the crime</b>, but don’t expect them to be where they
+									"should" be. That hammer? It might be in the bathroom instead of a workshop. Logic won’t help
+									you here!</li>
+								<li><b>The timeline</b>: the murder occurred within a specific time window (e.g., between 8:00 and
+									9:30). You’ll need to reconstruct the movements of the suspects and identify when the fatal blow
+									was struck. There is, however, one important detail that separates these puzzles from other
+									logic whodunit games. Our puzzles try to mimic real life, where statements and clues are often
+									chaotic, redundant or incomplete. In that sense, <b>reconstructing the complete timeline is not
+										necessary to solve the murder, and often it is impossible!</b>.</li>
+								<li><b>The statements</b>: you’ll get statements from suspects and evidence from the scene.
+									<b>Everyone will be telling the truth, but not necessarily the whole story</b>. You will need to
+									carefully deduce and combine facts in order to uncover the truth.</li>
+							</ul>
+							</p>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 2: Timeline Board -->
+				<div class="tutorial-page" id="tut-timeline" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🕗 Using the Timeline Board</div>
+							<p>In this tutorial, <b>Alice has been murdered before 9:30 in the mansion, her body found in the
+									kitchen (🍲)</b>. We’ll use the <b>Timeline Board</b> to reconstruct this crime. Let’s start with
+								<b>some basic facts we know for sure</b>:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center py-2">
+
+											<div class="row align-items-center">
+												<div class="col-9 border-end">
+													<div class="text-start">
+														We know where everyone was at <b>9:30:</b><br /><br />
+														<b>Alice’s body</b> was in the kitchen (🍲)</br>
+														<b>Bob</b> was in the bathroom (🚽)</br>
+														<b>Carol</b> was in the dining room (🪑)
+													</div>
+												</div>
+												<div class="col-3">
+													<div class="d-flex justify-content-center align-items-center">
+														<img id="locations-small" src="locations_tutorial_small.svg"
+															class="align-middle invert-in-dark-theme"
+															style="max-height: 60%; max-width: 100%; object-fit: contain; display: block;"
+															alt="...">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>
+								The list of initial clues describe where each character was at 9:30, the end of the timeline. It is
+								your job to deduce, using the suspect statements and other clues,
+								who the killer is, which weapon was used, and when the crime occurred. We can mark the timeline with
+								three simple
+								symbols: ✓ means someone was there, ✗ means they weren’t, and ? means we’re not sure.
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-0" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-0" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-0" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-0" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+
+								<div class="col-12 text-center">
+									<canvas id="clues-table-weapons:tutorial-0" oncontextmenu="return false" height="40" width="500"
+										onclick="checkWeaponClicked(this, event.offsetX, event.offsetY)">
+										Your browser does not support the HTML canvas tag.</canvas>
+									<br />
+									<a onclick="clearTable(':tutorial-0');" class="btn btn-danger" role="button">Clear ♻️</a>
+								</div>
+
+							</div>
+							</p>
+
+							<p>
+								At the bottom of the timeline board lies the weapon section, which shows where each available weapon
+								was located. For instance, the killer took the murder weapon from one of the following locations:
+
+							<ul>
+								<li>The hammer (🔨) from the dining room (🪑)</li>
+								<li>The pistol (🔫) from the bedroom (🛏️)</li>
+								<li>The scissors (✂️) from the kitchen (🍲)</li>
+								<li>The rope (🪢) from the bathroom (🚽)</li>
+							</ul>
+							</p>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 3: Your First Clue -->
+				<div class="tutorial-page" id="tut-first-clue" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🔎 Your First Clue</div>
+
+							<p>
+								Here’s where it gets fun! <b>Our suspects may move between rooms every 15 minutes</b> (they’re
+								suspiciously punctual), following the location’s layout.
+								</br>
+								They can only move to directly connected rooms during each 15-minute interval, no shortcuts
+								allowed! Think of it like moving across a chessboard, you have to pass through the squares one at a
+								time.
+								</br>
+								For example, if Carol wants to go from the dining room (🪑) to the bedroom (🛏️), she must:
+
+							<ol>
+								<li>Move from the dining room (🪑) to the kitchen (🍲) during one 15-minute interval.</li>
+
+								<li>Stay there for any number of 15-minutes intervals (even if other suspects are also there).</li>
+
+								<li>Move from the kitchen (🍲) to the bedroom (🛏️) during another 15-minute interval.</li>
+							</ol>
+							She cannot teleport directly from the dining room (🪑) to the bedroom (🛏️), even though they might seem close.
+							This rule is crucial for making deductions - if you know where and when someone started and ended up,
+							you can often figure out where they must have been in between!
+							<br />
+							Once the movement rules are clarified, let’s start this case, with the following statement:
+							</p>
+
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ <b>Bob</b>: "I saw <b>Alice</b> when
+													I arrived in the bedroom (🛏️) at 8:15"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<p><br />What can we deduce? Quite a lot actually:<br /></p>
+
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice was in the bedroom at 8:15
+								</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was also in the bedroom at
+									8:15</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was NOT in the bedroom at
+									8:00</li>
+							</ul>
+							<p><br />Click on each deduction to strikethrough the text, which will help you focus on other clues
+								(try it with the clues shown above next to the magnifying glass!). <br />
+								Using these deductions we can start completing the timeline board:
+							</p>
+							<p>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-1" oncontextmenu="return false" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-1');" class="btn btn-danger" role="button">Clear ♻️</a>
+								<a onclick="checkTutorialTable('bedroom:tutorial-1', 'bedroom:tutorial-3.5');" class="btn btn-info"
+									role="button">Check 🎯</a>
+							</div>
+							</p>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 4: Making Deductions -->
+				<div class="tutorial-page" id="tut-deductions" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🧠 Making Deductions</div>
+
+							<p>The second we finish adding these into the timetable, other deductions start popping up! Since our
+								suspects haven’t mastered the art of being in two places at once, we can also figure out where they
+								weren’t:<br /></p>
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice was not in the bathroom,
+									kitchen, or dining room at 8:15 </li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was not in the bathroom,
+									kitchen, or dining room at 8:15</li>
+							</ul>
+							</p>
+
+							<p>Let’s add the missing deductions:<br /></p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-2" oncontextmenu="return false" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-2" oncontextmenu="return false" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-2" oncontextmenu="return false" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-2');" class="btn btn-danger" role="button">Clear ♻️</a>
+								<a onclick="checkTutorialTable('kitchen:tutorial-2', 'kitchen:tutorial-3.5'); checkTutorialTable('dining room:tutorial-2', 'dining room:tutorial-3.5'); checkTutorialTable('bathroom:tutorial-2', 'bathroom:tutorial-3.5');"
+									class="btn btn-info" role="button">Check 🎯</a>
+							</div>
+							</p>
+
+							<p>But where was Bob at 8:00? This is where our room layout comes in handy:</p>
+
+
+							<ul class="list-group">
+								<div class="text-center">
+									<img src="locations_tutorial_highlighted_bedroom.svg" class="mx-auto"
+										style="max-width: 60%; max-height: 200px;" alt="Location Graph">
+								</div>
+							</ul>
+
+							<p>
+								In this map, the bedroom has solid lines connecting it to the kitchen and bathroom. These solid
+								lines represent direct connections - rooms that characters can move between in one 15-minute
+								interval. The dotted line to the dining room shows an indirect connection - characters need to go
+								through another room first to get there.
+								Since the bedroom connects to both the kitchen and bathroom, Bob could have come from either one.
+								But here’s a solid deduction – <b>Bob couldn’t have been in the dining room at 8:00 because it
+									doesn’t connect to the bedroom!</b></p>
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was not in the dining room at
+									8:00 </li>
+							</ul>
+							</p>
+							<p>
+								Using this information, we can add another deduction into the timeline board:
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-3" oncontextmenu="return false" height="115"
+									width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-3');" class="btn btn-danger" role="button">Clear ♻️</a>
+								<a onclick="checkTutorialTable('dining room:tutorial-3', 'dining room:tutorial-4');"
+									class="btn btn-info" role="button">Check 🎯</a>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 5: Movement Rules -->
+				<div class="tutorial-page" id="tut-movement" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🚶 Movement Rules</div>
+							<p>
+								Other types of clues describe where the suspects spent some time. For instance:
+							</p>
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text"><b>☞ Carol</b>: "I was in the dining
+													room (🪑) from 8:00 to 8:45"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+							<p>
+								This tells us:
+
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was in the dining room from
+									8:00 to 8:45</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was NOT in any of the other
+									rooms from 8:00 to 8:45</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was NOT in the dining room
+									at 9:00</li>
+							</ul>
+							</p>
+							<p>
+
+								Where was Carol at 9:00? Let’s go back to the mansion map to figure it out:
+
+							<ul class="list-group">
+								<div class="text-center">
+									<img src="locations_tutorial_highlighted_dining_room.svg" class="mx-auto"
+										style="max-width: 60%; max-height: 200px;" alt="Location Graph">
+								</div>
+							</ul>
+
+							Looking at our room layout, <b>Carol must have headed to the kitchen at 9:00 (and therefore, she is not
+								somewhere else!) – it’s the only place she could reach from the dining room!</b>
+							</p>
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was in the kitchen at 9:00
+								</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was NOT in bedroom, dining
+									room or bathroom at 9:00 </li>
+							</ul>
+							</p>
+							<p>
+								Let’s complete the timeline board with all these deductions:
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-4" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-4" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-4" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-4" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-4');" class="btn btn-danger" role="button">Clear ♻️</a>
+								<a onclick="checkTutorialTable('kitchen:tutorial-4', 'kitchen:tutorial-5'); checkTutorialTable('bedroom:tutorial-4', 'bedroom:tutorial-5'); checkTutorialTable('dining room:tutorial-4', 'dining room:tutorial-5'); checkTutorialTable('bathroom:tutorial-4', 'bathroom:tutorial-5');"
+									class="btn btn-info" role="button">Check 🎯</a>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 6: Backtracking -->
+				<div class="tutorial-page" id="tut-backtrack" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">↩️ Backtracking</div>
+
+							<p>
+								Here’s another juicy clue type:
+							</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text"><b>☞ Bob</b>: "Saw nobody when I
+													arrived to the bathroom (🚽) at 9:00"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+							<p>
+								Let’s break it down:
+
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was in the bathroom at 9:00
+								</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was NOT in the kitchen,
+									bedroom or dining room at 9:00 </li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Neither Alice or Carol were in
+									the bathroom at 9:00 </li>
+							</ul>
+							</p>
+							<p>What else can we get from this clue? Let’s take another look to the location graph:</p>
+
+							<ul class="list-group">
+								<div class="text-center">
+									<img src="locations_tutorial_highlighted_bathroom.svg" class="mx-auto"
+										style="max-width: 60%; max-height: 200px;" alt="Location Graph">
+								</div>
+							</ul>
+
+							<p>Not only does this clue place Bob in the bathroom at 9:00, but we can backtrack – <b>he must have
+									been in the bedroom at 8:45 since it’s the only way to reach the bathroom!</b>
+								In other words:
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was in the bedroom at 8:45
+								</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob was NOT in the kitchen,
+									dining room or bathroom at 8:45 </li>
+							</ul>
+							</p>
+
+							<p>
+								Time to add our shiny new deductions to the timeline board:
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-5" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-5" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-5" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-5" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-5');" class="btn btn-danger" role="button">Clear ♻️</a>
+								<a onclick="checkTutorialTable('kitchen:tutorial-5', 'kitchen:tutorial-6'); checkTutorialTable('bedroom:tutorial-5', 'bedroom:tutorial-6'); checkTutorialTable('dining room:tutorial-5', 'dining room:tutorial-6'); checkTutorialTable('bathroom:tutorial-5', 'bathroom:tutorial-6');"
+									class="btn btn-info" role="button">Check 🎯</a>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 7: Indirect Clues -->
+				<div class="tutorial-page" id="tut-indirect" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">💬 Indirect Clues</div>
+							<p>Finally, sometimes we get vague clues from suspects:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text"><b>☞ Carol</b>: "I heard someone
+													washing the dishes at 8:45"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>This clue tells us that someone was in the kitchen. Wait a minute, can you wash dishes in the
+								bathroom? Nope, absolutely ridiculous (looking at you The Sims™). Let’s review what we deduced so
+								far: </p>
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Someone was (alive!) at the
+									kitchen at 8:45</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was NOT in the kitchen at
+									8:45</li>
+							</ul>
+							</p>
+							<p>It can be tempting to try to guess where Carol was, but this is not possible. Characters sometimes
+								can hear or see someone in other rooms, but their location cannot be inferred from this kind of
+								clue.
+								However, what we can deduce using our previous observations is who was in the kitchen. Clearly, it
+								was not Carol (she was elsewhere at 8:45 actually!). Also, we know that Bob was in the bedroom,
+								which means that <b>Alice was in the kitchen at 8:45</b>.
+								<br />
+							<p>
+								Our first attempt to deduce facts was not great, so let’s review our previous deduction and refine
+								them:
+							</p>
+
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice was in the kitchen at 8:45
+								</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice was NOT in the bedroom,
+									dining room or bathroom at 8:45 </li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol was NOT in the kitchen at
+									8:45</li>
+							</ul>
+							</p>
+
+							<p>
+								Back to the timeline board...
+							</p>
+
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-6" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-6" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-6" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-6" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-6');" class="btn btn-danger" role="button">Clear ♻️</a>
+								<a onclick="checkTutorialTable('kitchen:tutorial-6', 'kitchen:tutorial-7'); checkTutorialTable('bedroom:tutorial-6', 'bedroom:tutorial-7'); checkTutorialTable('dining room:tutorial-6', 'dining room:tutorial-7'); checkTutorialTable('bathroom:tutorial-6', 'bathroom:tutorial-7');"
+									class="btn btn-info" role="button">Check 🎯</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 8: Time of Death -->
+				<div class="tutorial-page" id="tut-time-death" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">⌛ Determining Time of Death</div>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ A blood-curdling scream from the
+													victim was heard between 8:45 and 9:00</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>
+								Since our suspects move every 15 minutes like clockwork, the murder had to happen either at 8:45 or
+								9:00. However, we already know that Alice was alive at 8:45 (and happily washing the dishes). So the
+								only option here is that murder happened at 9:00. Remember that once the killer strikes, the
+								victim’s body is never moved, so we can easily complete Alice’s timeline until 9:30.
+								<br />
+
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice was killed at 9:00 in the
+									kitchen</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice’s body is in the kitchen
+									from 9:15 to 9:30 </li>
+							</ul>
+							<br />
+
+							Let’s note our findings in the timeline board:
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-7" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+								<br />
+								<a onclick="clearTable('kitchen:tutorial-7');" class="btn btn-danger" role="button">Clear ♻️</a>
+								<a onclick="checkTutorialTable('kitchen:tutorial-7', 'kitchen:tutorial-final');"
+									class="btn btn-info" role="button">Check 🎯</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 9: The Weapon -->
+				<div class="tutorial-page" id="tut-weapon" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🔪 Finding the smoking gun</div>
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ Inspecting the body reveals no signs
+													of <a href="#/" class="link-dark"
+														onClick="openModalWeaponType(event, 'stabbing')">stabbing</a></p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>
+								To discard a particular weapon we need to know what kind of wound they produce. Just click on the
+								type of wound described in the clue (e.g. <a href="#/" class="link-dark"
+									onClick="openModalWeaponType(event, 'stabbing')">stabbing</a>) and you will see a list of
+								potential weapons.
+							</p>
+
+							<p>
+								Armed with this information, we can discard a weapon in the the bottom of the timeline board table,
+								just clicking the corresponding weapon/location icon: ✂️🍲
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-weapons:tutorial-1" oncontextmenu="return false" height="40" width="500"
+									onclick="checkWeaponClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 10: Case Solved -->
+				<div class="tutorial-page" id="tut-solved" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🎓 Solving your first case using elimination</div>
+							<p>Time to put it all together and solve our very first murder. <b>We include all our deductions in the
+									following read-only timeline board</b>:</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-final" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-final" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-final" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-final" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-weapons:tutorial-final" oncontextmenu="return false" height="40" width="500"
+									onclick="checkWeaponClicked(this, event.offsetX, event.offsetY)">
+									Your browser does not support the HTML canvas tag.</canvas>
+							</div>
+
+							<p>
+								Notice that in each step we use a key technique: <b>elimination</b>. We deduce the answer not from a single clue that hands it to us, but by ruling out every other possibility. This is not guesswork, it is sound deductive reasoning. The puzzle guarantees a closed set of suspects, weapons, and rooms, so <b>if we can rule out all options but one, the remaining one MUST be true</b>.
+							</p>
+							<p>
+								Think for a while and then click to reveal each solution:
+							</p>
+
+							<p>
+							<div class="accordion">
+								<div class="accordion-item">
+									<h2 class="accordion-header" id="headingOne">
+										<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+											data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+											1. When was the murder committed?
+										</button>
+									</h2>
+									<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+										data-bs-parent="#accordionExample">
+										<div class="accordion-body">
+											The victim’s scream narrows it down to either 8:45 or 9:00. But we already know that Alice was alive at 8:45 (happily washing the dishes). That rules out 8:45, leaving only one possibility:
+											<ul class="list-group mt-2">
+												<li class="list-group-item">🔎 8:45 is ruled out (Alice was alive and in the kitchen)</li>
+												<li class="list-group-item">🔎 <b>The murder was committed at 9:00</b></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="accordion-item">
+									<h2 class="accordion-header" id="headingTwo">
+										<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+											data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+											2. Who was the killer?
+										</button>
+									</h2>
+									<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+										data-bs-parent="#accordionExample">
+										<div class="accordion-body">
+											Either Bob or Carol are suspects. Let’s check who could have been at the crime scene (the kitchen) at 9:00:
+											<ul class="list-group mt-2">
+												<li class="list-group-item">🔎 Bob was in the bedroom at 8:45</li>
+												<li class="list-group-item">🔎 Bob was in the bathroom at 9:00</li>
+											</ul>
+											<br/>
+											Bob wasn’t even at the crime scene when it happened, he has a solid alibi. That leaves only one suspect:
+											<ul class="list-group mt-2">
+												<li class="list-group-item">🔎 Bob is ruled out (he was in the bathroom at 9:00)</li>
+												<li class="list-group-item">🔎 <b>Carol is the killer</b>, she’s the only suspect who was in the kitchen at 9:00</li>
+											</ul>
+											<br/>
+											We didn’t need a clue saying "Carol is the killer." Ruling out Bob was enough to reach a certain conclusion.
+										</div>
+									</div>
+								</div>
+								<div class="accordion-item">
+									<h2 class="accordion-header" id="headingThree">
+										<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+											data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+											3. Which weapon was used?
+										</button>
+									</h2>
+									<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+										data-bs-parent="#accordionExample">
+										<div class="accordion-body">
+											We had four weapons. Let’s eliminate them one by one:
+											<ul class="list-group mt-2">
+												<li class="list-group-item">🔎 The scissors (✂️) are ruled out, the body showed no signs of stabbing</li>
+												<li class="list-group-item">🔎 The pistol (🔫) is ruled out, Carol never visited the bedroom (🛏️) where it was located</li>
+												<li class="list-group-item">🔎 The rope (🪢) is ruled out, Carol never visited the bathroom (🚽) where it was located</li>
+												<li class="list-group-item">🔎 <b>The murder weapon was the hammer</b> (🔨), it was in the dining room (🪑), the only place Carol visited before the murder</li>
+											</ul>
+											<br/>
+											Three weapons eliminated, one remains. That’s our answer.
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>
+								We actually used this same elimination technique earlier in the tutorial without calling it out. Remember when Carol said she heard someone washing dishes at 8:45? We knew Bob was in the bedroom and Carol wasn’t in the kitchen. That left Alice as the only person who could have been there:
+								<ul class="list-group mt-2">
+									<li class="list-group-item">🔎 Bob was in the bedroom at 8:45, not him</li>
+									<li class="list-group-item">🔎 Carol was NOT in the kitchen at 8:45, not her</li>
+									<li class="list-group-item">🔎 Alice was in the kitchen at 8:45, the only remaining possibility</li>
+								</ul>
+							</p>
+
+							<p>
+								In each of these cases, we started with a complete list of possibilities and eliminated options one by one using verified facts: statements from truthful characters, physical evidence, and movement constraints. The conclusion follows necessarily from the facts. <b>It is not a guess, not an assumption, and not an inference from incomplete data</b>. This technique is fundamental to solving cases, since often the puzzle will NOT give you a direct clue pointing to the answer. Instead, you must arrive at it by systematically ruling out what’s impossible until only the truth remains.
+							</p>
+
+							<p>
+								You know what’s really clever about this approach? While we’ve pieced together most of the timeline,
+								there’s still some mystery about Alice’s movements - like where she was at 8:30. And that’s not an
+								oversight - it’s actually showing us something important! Remember that early note about how
+								"reconstructing all the timeline is not necessary to solve the murder, and often it is impossible"?
+								Well, we’re seeing that principle in action. We solved the case conclusively (Carol did it with the
+								hammer at 9:00) without needing to track every single place Alice visited. It’s a perfect example of
+								how these puzzles mirror a more realistic detective work.
+							</p>
+							<p>
+								<b>Case closed!</b> That was not too hard, wasn’t it? Well, if you want to be a super sleuth 🕵️, you need to learn a few
+								additional tips and tricks. The next sections will help you deal with more complicated (and interesting!)
+								cases.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 11: Weapon Identification -->
+				<div class="tutorial-page" id="tut-weapons-id" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🔫 Better identification of weapons</div>
+
+							<p>There’s a powerful technique to either confirm or eliminate potential murder weapons quickly, based
+								on this critical clue:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ The killer was alone when they
+													retrieved the murder weapon.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>By combining this insight with your suspicions about the killer and the timing of the crime, you can
+								make decisive deductions. Let’s examine how this works:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ Alice: "I was in the bedroom from
+													8:00 to 8:30"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>Assuming that <b>Alice is NOT the killer and the crime happened after 8:30</b>, then we can arrive at
+								the following deduction:</p>
+
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 The killer didn’t take the weapon
+									from the bedroom.</li>
+							</ul>
+							</p>
+
+							<p>
+								On the contrary, if <b>Alice IS the killer and the crime happened after 8:30</b>, then we will need
+								to check if she was alone at 8:00, 8:15 or 8:30 to deduce:
+							</p>
+
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 The killer did take the weapon
+									from the bedroom.</li>
+							</ul>
+							</p>
+							<p>Using this deductive technique, we can quickly identify the weapon used and solve the case!</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 12: Dealing with liars -->
+				<div class="tutorial-page" id="tut-liars" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🤥 Dealing with liars</div>
+
+							<p>Before starting each mystery, you can decide if the killer can lie in their statements or not. If you
+								are up to a challenge, you will have to consider that every statement from the suspects can be a
+								lie.</p>
+
+							<p>Lying during a crime investigation is a serious business! The killer must be very careful since the
+								rest of the suspects will always tell the truth. In practice, they will only provide a false
+								statement if it somehow helps to cover their tracks during the time and place of the murder.</p>
+
+							<p>Identifying the killer using unreliable information is usually harder since we don’t know if the
+								statements are true or not. Not all hope is lost, since the rest of the suspects will always tell
+								the truth. Detecting a lie is easy: we need to look for an inconsistency between two statements.
+								Let’s see an example:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ Bob: "I was in the kitchen from 9:00
+													to 10:00"</p>
+												<hr>
+												<p id="clue-text-tutorial" class="card-text">☞ Carol: "I saw nobody when I arrived
+													to the kitchen at 9:30"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>This contradiction immediately tells you something crucial, we know that exactly one of the following
+								statements must be true:</p>
+
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob is the killer.</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol is the killer.</li>
+							</ul>
+							</p>
+
+							<p>
+								Pro Tip™: begin by assuming all statements are truthful. When you encounter a contradiction, you’ve
+								identified a pair of potential killers.
+							</p>
+
+							<p>We can go one step further: once we know (or suspect) who is the killer, we can <b>deduce which
+								statements are true and which ones are false</b> using the time and place of the murder.
+								Let’s take a look at what Bob was saying:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ Bob: "Stayed in the bedroom from 8:00
+													to 9:00"</p>
+												<hr>
+												<p id="clue-text-tutorial" class="card-text">☞ Bob: "I was in the kitchen from 9:00
+													to 10:00"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>Assuming that <b>Bob is the killer</b> and that the <b>murder happened after 9:30 in the
+								bathroom (🚽)</b>, we know that he only provides false claims to avoid getting caught
+								regarding the time and place of the murder. So <b>both of these statements must be true</b>:</p>
+
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item">🔎 Bob was in the bedroom (🛏️) from 8:00 to 9:00</li>
+								<li class="list-group-item">🔎 Bob was in the kitchen (🍲) from 9:00 to 10:00</li>
+							</ul>
+							</p>
+
+							<p>The first statement must be true since <b>Bob has no reason to risk lying</b>, it doesn’t
+								cover the time or place of the murder. The second statement must also be true as <b>we know
+								that Bob is the killer and the time/place of the crime</b>, lying about being in the
+								kitchen doesn’t help him hide anything about the bathroom after 9:30.</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Pagination controls -->
+				<hr style="max-width:980px; margin:1.0em auto 0; border:none; height:1px; background:rgba(24,24,24,0.50);">
+				<div class="compact-card mt-3"><div class="compact-card-body d-flex justify-content-between align-items-center">
+					<button id="tut-prev" class="btn btn-outline-secondary" onclick="tutorialPrev()" disabled>
+						&larr; Previous
+					</button>
+					<span id="tut-page-indicator" class="text-secondary small">1 / 12</span>
+					<button id="tut-next" class="btn btn-outline-secondary" onclick="tutorialNext()">
+						Next &rarr;
+					</button>
+				</div></div>
+
+			</div><!-- .tutorial-content -->
+		</div><!-- .d-flex layout -->
+	</div>
+
+	<div id="home">
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+				<p>
+					A group of friends stumbles upon an eerie abandoned mansion. Now confined within its sinister
+					grasp, they find themselves thrust into a chilling series of murders. Each day brings a fresh
+					enigma, with one of them as the unfortunate victim and the rest as suspects.
+					<br />
+				</p>
+				<div class="col-12 text-center d-flex justify-content-center gap-2">
+					<a href="#game" class="btn btn-danger" role="button">No time to explain!</a>
+					<a href="#" class="btn btn-outline-secondary" role="button" onclick="showPage('how-to-play'); return false;">First time?</a>
+				</div>
+
+				<p>
+					<br />
+				<div class="card">
+					<div class="card-body">
+						<b>A mystery-o-matic book is officially in the works and set for publication in 2026! 📔</b>
+						Packed with a good number of puzzles featuring carefully calibrated difficulty levels and
+						woven into an overarching narrative, this book promises a thrilling experience. <a
+							href="https://stats.sender.net/forms/e5yRQR/view">Notify me when it's ready!</a>
+					</div>
+				</div>
+				</p>
+			</div>
+		</div>
+
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+				<div class="section-header">🤖 <span class="font-monospace">beep boop</span>, a new mystery is up</div>
+				<p><span id='span-today'></span></p>
+
+				<p>Get ready to solve a fresh murder mystery! Your goal is to figure out <b>who</b> did it, <b>when</b>
+					it happened, and <b>what</b> weapon was used.</p>
+				$introLocation
+				<p>Help them solve this mystery checking out these initial clues:</p>
+				<div class="row align-items-center">
+					<div class="col">
+						$initialClues
+					</div>
+					<div class="col-sm d-flex justify-content-center">
+						<img id="locations-big" src="locations_big.svg" style="max-width: 100%; height: 100%;"
+							alt="...">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+				<div class="section-header">🥾 Let the game begin!</div>
+				<p>Get ready to solve this puzzle! You'll get clues that slowly uncover the truth behind the murder. The
+					daily puzzle can be solved in two modes. In <strong>the easy mode, everyone will be telling the
+						truth</strong>. Optionally, <strong> the killer can sometimes lie if you want a harder
+						challenge</strong>.</p>
+				<p><strong>Each clue you read will affect your score</strong>. Think carefully as you search for
+					evidence and question the suspects to solve the mystery. When you crack it, you'll get a rank from
+					the wonderful <a href="#" class="link-dark"
+						onClick="showPage('sleuth-o-meter')"><strong>sleuth-o-meter™</strong></a>.</p>
+				<p>Are you up for the challenge? Let's start investigating!</p>
+			</div>
+		</div>
+
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+				<div class="section-header">📔 Detective’s Journal & Clues</div>
+				<p>Use this table to keep track of your facts, clues and deductions. You can check the <a href="#"
+						onClick="showPage('how-to-play')" class="link-dark">how to
+						play section</a> if you need it.</p>
+				<div class="d-flex justify-content-center align-items-center">
+					<div style="width: 99%" id="clues">
+						<div class="compact-card" style="height: auto;">
+							<div id="game" class="compact-card-body text-center py-2">
+
+								<div id="selection-clues-box" class="card" style="display:block">
+									<div class="card-body text-center py-2">
+							<p class="card-text mb-2">Start choosing whether the killer never lies (easier) or is allowed to lie
+										(harder).</p>
+									<button id="without-lies-button" type="button" class="btn btn-outline-secondary"
+										onclick="selectClues(false)">No lies 🕊️</button>
+									<button id="with-lies-button" type="button" class="btn btn-outline-secondary"
+										onclick="selectClues(true)">Lie to me 👹</button>
+								</div>
+								</div>
+								<div id="clues-box" class="row align-items-center" style="display:none">
+									<div class="col-9 border-end" display="none">
+										<h6 id="clue-title" class="card-title">Clue</h6>
+										<p id="clue-text" class="card-text" onClick="toggleClueStrikeout(this)">CLUE</p>
+										<div id="clues-buttons"
+											class="row align-items-center justify-content-start text-center"
+											style="display:none">
+											<div class="col">
+												<button id="previous-clue-button" type="button"
+													class="btn btn-outline-secondary btn-sm"
+													onclick="revealAnotherClue(-1)">Previous clue</button>
+												<button id="next-clue-button" type="button"
+													class="btn btn-outline-secondary btn-sm"
+													onclick="revealAnotherClue(1)">Next clue</button>
+											</div>
+										</div>
+									</div>
+									<div class="col-3">
+										<div class="d-flex justify-content-center align-items-center">
+											<img id="locations-small" src="locations_small.svg"
+												class="align-middle invert-in-dark-theme"
+												style="max-height: 100%; max-width: 100%; object-fit: contain; display: block;"
+												alt="...">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<p></p>
+				$cluesTables
+				<div class="col-12 text-center">
+					<canvas id="clues-table-weapons" oncontextmenu="return false" height="40" width="500"
+						onclick="checkWeaponClicked(this, event.offsetX, event.offsetY)">
+						Your browser does not support the HTML canvas tag.</canvas>
+				</div>
+			</div>
+		</div>
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+				<div class="section-header">👉 Time for accusations</div>
+
+				<p>After working overnight collecting evidence and analyzing clues, it's time to crack this case by
+					choosing the suspect, the time of murder, and the weapon. A word of warning: if you select the wrong
+					answer you can try again, but <emp>the loop</emp> will punish you lowering your final score.</p>
+
+				<ul class="sticky-notes">
+					<li class="sticky-notes">
+						<a href="#/" class="sticky-notes" onClick="javascript:void(0)">
+							<h6 class="sticky-notes">The murderer was…</h6>
+							<select class="form-select sticky-notes" id="who-selector">
+								<option value="" disabled selected>...</option>
+								$selectSuspects
+							</select>
+						</a>
+					</li>
+
+					<li class="sticky-notes">
+						<a href="#/" class="sticky-notes" onClick="javascript:void(0)">
+							<h6 class="sticky-notes">The weapon was…</h6>
+							<select class="form-select sticky-notes" id="how-selector">
+								<option value="" disabled selected>...</option>
+								$selectWeapon
+							</select>
+						</a>
+					</li>
+
+					<li class="sticky-notes">
+						<a href="#/" class="sticky-notes" onClick="javascript:void(0)">
+							<h6 class="sticky-notes">Time of murder was…</h6>
+							<select class="form-select sticky-notes" id="when-selector">
+								<option value="" disabled selected>...</option>
+								$selectIntervals
+							</select>
+						</a>
+					</li>
+				</ul>
+				<div class="row align-items-center justify-content-start">
+					<button id="accusation-button" type="button" class="btn btn-danger btn-sm"
+						onclick="checkAccusation()">Accuse!</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="accusation-win" class="compact-card mt-0" style="display:none">
+			<div class="compact-card-body">
+				<div class="section-header">🤖 Answer is.. <span class="font-monospace">beep boop, correct!</span></div>
+				<p>The weight of evidence against the accused was immense, leaving no room for doubt. The loop is
+					pleased.
+				<div id="story-clue">$storyClue</div>
+				</p>
+				<p id="accusation-win-message">Congratulations on cracking the case!, you solved today's mystery
+					with <a href="#" class="link-dark" onClick="showPage('sleuth-o-meter')">sleuth-o-meter™</a> rank
+					of </p>
+				<p>
+					<!--Optionally, you can use this local notebook to track down the story progression:
+
+				<div class="form-group">
+					<textarea class="form-control" id="story-notebook" rows="5"></textarea>
+				</div>-->
+				</p>
+				<p id="shop-suggestion" style="display:none"></p>
+				<p><b>Come back tomorrow for another challenge.</b></p>
+			</div>
+		</div>
+
+		<div id="accusation-lose" class="compact-card mt-0" style="display:none">
+			<div class="compact-card-body">
+				<div class="section-header">🤖 Answer is.. <span class="font-monospace">beep boop, wrong!</span></div>
+
+				<p>You're confronted with a baffling puzzle filled with contradictory evidence.
+					It's clear that either the suspect's identity, the timing of the crime,
+					or even the weapon involved might be wrong, casting doubt on the investigation.</p>
+				<p>The loop is displeased and resets abruptly, leaving you without any clues for the day. You can
+					return tomorrow for another challenge.</p>
+			</div>
+		</div>
+	</div>
+
+	<footer class="py-3 my-4">
+		<ul class="nav justify-content-center border-bottom pb-3 mb-3">
+			<li class="nav-item"><a href="#" onClick="showPage('home')" class="nav-link px-2 text-muted">Daily
+					Mystery</a></li>
+			<li class="nav-item"><a href="https://web.archive.org/web/20240000000000*/https://mystery-o-matic.com"
+					class="nav-link px-2 text-muted">Old Mysteries<sup>🔗</sup></a>
+			<li class="nav-item"><a href="#" onClick="showPage('how-to-play')" class="nav-link px-2 text-muted">How to
+					play</a></li>
+			<li class="nav-item"><a href="#" onClick="showPage('about')" class="nav-link px-2 text-muted">About</a>
+			<li class="nav-item"><a href="https://mysteryomatic.etsy.com/"
+					class="nav-link px-2 text-muted">Shop<sup>🔗</sup></a>
+
+			</li>
+		</ul>
+		<p class="text-center text-muted">© 2024 Gabbo Industries 🏭 Inc.</p>
+	</footer>
+	<script>
+		sessionStorage.language = "en";
+	</script>
+	<script src="../data.js"></script>
+	<script src="../tutorialData.js"></script>
+	<script src="../table.js"></script>
+	<script src="../translation.js"></script>
+	<script src="../functions.js"></script>
+	<script src="../tutorial-nav.js"></script>
+	<script>
+		WebFont.load({
+			google: {
+				families: ['Raleway']
+			},
+			active: function () { createTables(); }
+		});
+	</script>
+</body>
+
+</html>

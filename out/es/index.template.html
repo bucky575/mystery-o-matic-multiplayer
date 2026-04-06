@@ -1,0 +1,1643 @@
+<!doctype html>
+<html lang="es" data-bs-theme="light">
+
+<head>
+	<!-- Google fonts -->
+	<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-C7DCY6FN81"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+		gtag('config', 'G-C7DCY6FN81', { 'anonymize_ip': true });
+	</script>
+
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+	<link href="../css/main.css" rel="stylesheet">
+	<link href="../css/sticky-notes.css" rel="stylesheet">
+
+	<link href="../emoji.css" rel="stylesheet" type="text/css" />
+	<script src="../emoji.js" type="text/javascript"></script>
+
+	<!-- PWA -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="mobile-web-app-capable" content="yes">
+	<link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
+	<title class="notranslate">mystery-o-matic: ¡resuelve el crimen y salva el día!</title>
+	<link rel="canonical" href="https://mystery-o-matic.com/es" />
+
+	<link rel="alternate" hreflang="en" href="https://mystery-o-matic.com/en" />
+	<link rel="alternate" hreflang="es" href="https://mystery-o-matic.com/es" />
+	<link rel="alternate" hreflang="ru" href="https://mystery-o-matic.com/ru" />
+
+	<!-- SEO -->
+	<meta name="description"
+		content="Resuelve un misterio de asesinato diario en solo 5 minutos y descubre cómo derrotar al malvado bucle temporal" />
+	<meta property="og:title" content="mystery-o-matic: ¡resuelve el crimen y salva el día!" />
+	<meta property="og:description"
+		content="Resuelve un misterio de asesinato diario en solo 5 minutos y descubre cómo derrotar al malvado bucle temporal" />
+	<meta property="og:image" content="https://mystery-o-matic.com/images/preview.jpg" />
+	<meta property="og:locale" content="es_ES" />
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:site" content="@mystery_o_matic">
+	<meta name="twitter:creator" content="@mystery_o_matic">
+	<meta name="twitter:title" content="mystery-🕰️-matic">
+	<meta name="twitter:description" content="Resuelve un misterio de asesinato diario en solo 5 minutos">
+
+</head>
+
+<body>
+	<!-- Modals -->
+	<div class="modal fade" id="portraitModal" tabindex="-1" aria-labelledby="portraitLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="portraitLabel">📸 Retrato del sospechoso</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<img id="portraitImage" src="../images/alice.jpg" class="w-100" alt="...">
+				</div>
+				<div class="modal-footer">
+					<div class="col text-center">
+						<button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">He visto
+							suficiente</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="weaponTypeModalContusion" tabindex="-1" aria-labelledby="portraitLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="portraitLabel">👉 Arma elegida: contusión </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">🔨 Cuando la sutileza no es tu estilo. Genial para construir
+							pajareras o para dar recordatorios no tan amables.</li>
+						<li class="list-group-item">🔧 Genial para arreglar tuberías con fugas. También genial para
+							causar fugas en tuberías, pero de las humanas.</li>
+						<li class="list-group-item">🕯️ Ah, el clásico para ambientar una cena. Elegante,
+							sofisticado y sorprendentemente resistente cuando se usa con intención.</li>
+						<li class="list-group-item">🪨 Simple, efectivo y disponible en casi todas partes. En caso de
+							duda, simplemente... rock 'n' roll.</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<div class="col text-center">
+						<button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">He visto
+							suficiente</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="weaponTypeModalStrangulation" tabindex="-1" aria-labelledby="portraitLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="portraitLabel">👉 Arma elegida: estrangulamiento </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">🪢 ¡Tan versátil! Puedes amarrar un barco, escalar una montaña
+							o... ya sabes... ponerte creativo con los nudos.</li>
+						<li class="list-group-item">⛓️ El heavy metal no es solo un género musical. Ideal para
+							asegurar bicicletas... o cuerpos.</li>
+						<li class="list-group-item">🔌 ¿Es una herramienta? ¿Es una trampa? De cualquier manera, es
+							sorprendente lo efectivo que puede ser este artículo doméstico.</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<div class="col text-center">
+						<button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">He visto
+							suficiente</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="weaponTypeModalProjectile" tabindex="-1" aria-labelledby="portraitLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="portraitLabel">👉 Arma elegida: balística </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">🔫 Para aquellos que prefieren su asesinato a una distancia
+							segura. ¡Bang! Problema resuelto... a menos que falles.</li>
+						<li class="list-group-item">🏹 Violencia con un toque de estilo medieval. Silencioso, preciso
+							y dramático.</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<div class="col text-center">
+						<button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">He visto
+							suficiente</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal fade" id="weaponTypeModalStabbing" tabindex="-1" aria-labelledby="portraitLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="portraitLabel">👉 Arma elegida: apuñalamiento </h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">🔪 Una elección clásica para chefs... y asesinos. Afilado,
+							elegante y perfecto para cortar algo más que verduras.</li>
+						<li class="list-group-item">🪓 A los leñadores les encanta. También a las personas con
+							problemas de ira no resueltos.</li>
+						<li class="list-group-item">✂️ "¡Corta, corta! Ya sea que estés haciendo manualidades o...
+							cortando lazos permanentemente, son lo suficientemente afiladas para el trabajo.</li>
+						<li class="list-group-item">🪛 Bueno para montar muebles, abrir latas de pintura y,
+							aparentemente, crear escenas de crímenes sin resolver.</li>
+						<li class="list-group-item">🗡️ Como un cuchillo, pero más elegante y con más estilo. Genial
+							para apuñalar... y lucir genial mientras lo haces.</li>
+						<li class="list-group-item">⚔️ La caballería no ha muerto, pero alguien podría estarlo
+							después de que esto se desenvaine. Elegante, mortal y difícil de ocultar.</li>
+						<li class="list-group-item">🔱 ¿Por qué conformarse con un punto cuando puedes tener tres?
+							Poseidón lo aprueba, y tu sospechoso también.</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<div class="col text-center">
+						<button type="button" class="close btn btn-secondary" data-bs-dismiss="modal">He visto
+							suficiente</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal fade" id="languageSelector" tabindex="-1" aria-labelledby="languageSelector" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title w-100 text-center notranslate" id="">
+						Cambiar idioma
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="col text-center">
+						<a href="/en" type="button" class="close btn btn-secondary notranslate">English 🗽</a>
+						<a href="/es" type="button" class="close btn btn-secondary notranslate">Español 💃</a>
+						<a href="/ru" type="button" class="close btn btn-secondary notranslate">Русский 🪆</a>
+						<!-- <button type="button" class="close btn btn-secondary notranslate" data-bs-dismiss="modal" onClick="translateContent('pt')">Português 🦜</button>
+						<button type="button" class="close btn btn-secondary notranslate" data-bs-dismiss="modal" onClick="translateContent('ca')">Català 🌹</button> -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container p-3 text-center">
+		<h1>
+			<img id="logoImage" src="../images/logo_light.png" class="w-100" style="max-width:600px"
+				alt="mystery-o-matic: ¡Un misterio al día, aleja a la policía!">
+		</h1>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+		integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+		crossorigin="anonymous"></script>
+
+	<div id="google_translate_element">
+	</div>
+
+	<p class="floating-button float">
+		<a href="#/" id="home-button" style="display:none" onClick="showPage('home')"
+			class="link-underline link-underline-opacity-0">🧩</a>
+		<a href="#/" id="switch-theme-button" onClick="switchTheme()"
+			class="link-underline link-underline-opacity-0">🌓</a>
+		<a href="#/" id="translate-button" onClick="checkIfWebsiteShouldBeTranslated(true)"
+			class="link-underline link-underline-opacity-0">🗺️</a>
+	</p>
+
+	<div id="about" style="display:none">
+		<div class="container mt-5">
+			<div class="row justify-content-center">
+				<div class="col-12 col-lg-8">
+					<p>mystery-o-matic es un sitio web que ofrece un misterio de asesinato gratuito para resolver a
+						diario.
+						Fue creado por dos entusiastas que comparten un profundo amor por el misterio y un fuerte
+						compromiso con ofrecer una experiencia única a otros detectives.</p>
+
+					<p> A diferencia de los juegos típicos, los misterios diarios de este sitio web requieren
+						pensamiento deductivo, pero están
+						diseñados para reflejar la imprevisibilidad de los escenarios de la vida real, haciéndolos más
+						desafiantes y
+						variados. En lugar de seguir una ruta de deducción predefinida,
+						cada misterio diario se sintetiza a través de la exploración aleatoria,
+						ofreciendo un giro refrescante en comparación con los juegos tradicionales de lógica deductiva.
+					</p>
+
+					<p>Los creadores se inspiraron en juegos populares
+						como <a class="link-dark" href="https://es.wikipedia.org/wiki/Cluedo">Cluedo</a>
+						(obviamente), <a
+							class="link-dark" href="http://www.squidi.net/three/entry.php?id=69">"Infinite
+							Detective" de Squidi</a> y
+						<a class="link-dark" href="https://murdle.com/">Murdle</a> para dar forma al cautivador mundo
+						de mystery-o-matic.
+						El código que produce automáticamente los enigmas diarios, así como el resto del sitio web, <a
+							class="link-dark"
+							href="https://github.com/mystery-o-matic/mystery-o-matic.github.io">¡es de código
+							abierto</a>!
+
+						Las imágenes de los sospechosos son de Freepik: <a
+							href="https://www.freepik.com/free-vector/detective-office-interior-flat-cartoon-composition-with-crime-scene-diagram-board-computer-monitor-criminal-profile-illustration_16399785.htm#query=detective%20background&position=2&from_view=search&track=ais">[1]</a>,
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_24555042.htm#&position=8&from_view=collections">[2]</a>
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_24555045.htm#&position=9&from_view=collections">[3]</a>
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_23669474.htm#&position=3&from_view=collections">[4]</a>
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_23669480.htm#&position=1&from_view=collections">[5]</a>
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_23985547.htm#&position=0&from_view=collections">[6]</a>
+						<a
+							href="https://www.freepik.com/free-vector/hand-drawn-flat-design-shrug-illustration_23985544.htm#&position=4&from_view=collections">[7]</a>
+					</p>
+
+					<p>El sitio web aún está en beta, por lo tanto, las reglas, la interfaz y el diseño están sujetos
+						a cambios.
+						No dudes en <a class="link-dark" href="https://forms.gle/dvA4Wr8LiuHFmDZN7">enviarnos tus
+							comentarios aquí</a> o a <a class="link-dark"
+							href="https://www.reddit.com/r/mystery_o_matic/">nuestro subreddit</a>.
+					</p>
+					<p>Si disfrutas del sitio web y deseas patrocinar nuestro trabajo, puedes donar criptomonedas a:
+						0xd0FD96CD73762Fd081cf2269D79F359e4314629b
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="sleuth-o-meter" style="display:none">
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+
+				<div class="section-header">🌡️ Sleuth-o-meter</div>
+
+				<p>Esta sección muestra los diferentes niveles de puntuación que puedes obtener después de resolver un
+					misterio diario.
+					<emph>Para regresar al juego, simplemente haz clic en el ícono 🧩 en la esquina inferior derecha
+						de la pantalla.
+					</emph>
+				</p>
+
+
+				<p>mystery-o-matic trae de vuelta el venerable <a class="link-dark"
+						href="https://www.benshoof.org/blog/super-sleuth">sleuth-o-meter™</a> de los
+					<a class="link-dark" href="https://www.mobygames.com/game/461/the-colonels-bequest/">misterios de
+						Laura Bow</a> para llevar un registro de tu puntaje:
+				</p>
+
+				<div class="container d-flex aligns-items-center justify-content-center bg-secondary bg-gradient">
+					<div class="row align-items-center">
+						<div class="col-9">
+							<lu class="list-group">
+								<li class="list-group-item list-group-item-danger">Súper Detective</li>
+								<li class="list-group-item list-group-item-warning">IP Experimentado</li>
+								<li class="list-group-item list-group-item-success">Sabueso Novato</li>
+								<li class="list-group-item list-group-item-info">Despistado</li>
+								<li class="list-group-item list-group-item-primary">Semiconsciente</li>
+							</lu>
+						</div>
+						<div class="col-3">
+							<img src="../images/sleuth-o-meter.png" style="max-width: 100%; height: 50%;" alt="...">
+						</div>
+					</div>
+				</div>
+
+				<p>Cada pista revelada disminuirá tu puntaje. Ten en cuenta que el sitio web aún está en beta, por lo
+					que este sistema de puntuación, la interfaz o el diseño están sujetos a cambios.
+					No dudes en enviarnos tus comentarios <a class="link-dark"
+						href="https://forms.gle/dvA4Wr8LiuHFmDZN7">aquí</a> o a <a class="link-dark"
+						href="https://www.reddit.com/r/mystery_o_matic/">nuestro subreddit</a>.
+				</p>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="how-to-play" style="display:none">
+		<div class="d-flex" style="max-width: 1100px; margin: 0 auto;">
+
+			<!-- Sidebar (desktop) -->
+			<nav id="tutorial-sidebar" class="tutorial-sidebar d-none d-md-flex">
+				<button class="tutorial-sidebar-toggle" onclick="toggleTutorialSidebar()" aria-label="Toggle sidebar">&#9666;</button>
+				<ol class="list-unstyled mb-0">
+					<li class="tutorial-sidebar-item active" data-page="tut-welcome">
+						<span class="tutorial-sidebar-icon">🕵️</span>
+						<span class="tutorial-sidebar-label">¡Bienvenido, detective!</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-timeline">
+						<span class="tutorial-sidebar-icon">🕗</span>
+						<span class="tutorial-sidebar-label">Tablero de Cronología</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-first-clue">
+						<span class="tutorial-sidebar-icon">🔎</span>
+						<span class="tutorial-sidebar-label">Tu Primera Pista</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-deductions">
+						<span class="tutorial-sidebar-icon">🧠</span>
+						<span class="tutorial-sidebar-label">Haciendo Deducciones</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-movement">
+						<span class="tutorial-sidebar-icon">🚶</span>
+						<span class="tutorial-sidebar-label">Reglas de Movimiento</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-backtrack">
+						<span class="tutorial-sidebar-icon">↩️</span>
+						<span class="tutorial-sidebar-label">Retrocediendo</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-indirect">
+						<span class="tutorial-sidebar-icon">💬</span>
+						<span class="tutorial-sidebar-label">Pistas Indirectas</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-time-death">
+						<span class="tutorial-sidebar-icon">⌛</span>
+						<span class="tutorial-sidebar-label">Hora de la Muerte</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-weapon">
+						<span class="tutorial-sidebar-icon">🔪</span>
+						<span class="tutorial-sidebar-label">El arma homicida</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-solved">
+						<span class="tutorial-sidebar-icon">🎓</span>
+						<span class="tutorial-sidebar-label">Resolviendo tu primer caso</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-weapons-id">
+						<span class="tutorial-sidebar-icon">🔫</span>
+						<span class="tutorial-sidebar-label">Identificación de armas</span>
+					</li>
+					<li class="tutorial-sidebar-item" data-page="tut-liars">
+						<span class="tutorial-sidebar-icon">🤥</span>
+						<span class="tutorial-sidebar-label">Lidiando con mentirosos</span>
+					</li>
+				</ol>
+			</nav>
+
+			<!-- Main content area -->
+			<div class="tutorial-content">
+
+				<!-- Mobile step indicator -->
+				<div class="d-md-none text-center py-2 mb-2 border-bottom">
+					<div class="tutorial-mobile-dots">
+						<span class="tutorial-step-dot active" data-page="tut-welcome">🕵️</span>
+						<span class="tutorial-step-dot" data-page="tut-timeline">🕗</span>
+						<span class="tutorial-step-dot" data-page="tut-first-clue">🔎</span>
+						<span class="tutorial-step-dot" data-page="tut-deductions">🧠</span>
+						<span class="tutorial-step-dot" data-page="tut-movement">🚶</span>
+						<span class="tutorial-step-dot" data-page="tut-backtrack">↩️</span>
+						<span class="tutorial-step-dot" data-page="tut-indirect">💬</span>
+						<span class="tutorial-step-dot" data-page="tut-time-death">⌛</span>
+						<span class="tutorial-step-dot" data-page="tut-weapon">🔪</span>
+						<span class="tutorial-step-dot" data-page="tut-solved">🎓</span>
+						<span class="tutorial-step-dot" data-page="tut-weapons-id">🔫</span>
+						<span class="tutorial-step-dot" data-page="tut-liars">🤥</span>
+					</div>
+				</div>
+
+				<!-- PAGE 1: Welcome -->
+				<div class="tutorial-page" id="tut-welcome">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🕵️ ¡Bienvenido, detective!</div>
+							<p><b>Consejo:</b> para regresar al juego en cualquier momento, haz clic en el ícono 🧩 en la esquina inferior derecha de la pantalla.</p>
+
+							<ul>
+								<li><b>Los sospechosos</b>: conocerás a un elenco de personajes pintorescos que incluye a
+									<b>Alice, Bob, Carol, Dave, Frida y Eddie</b>. Uno de ellos ha tenido un final desafortunado,
+									mientras que algunos de los otros son nuestros principales sospechosos. Alerta de spoiler: en
+									este tutorial, la pobre Alice es nuestra víctima, así que nos centraremos en Bob y Carol como
+									sospechosos.</li>
+								<li><b>El crimen</b>: ha ocurrido un espantoso asesinato y necesitamos determinar cómo sucedió.
+									Una vez que ocurre el acto fatal, <b>el cuerpo de la víctima permanece exactamente donde
+										cayó</b>, un detalle crucial para tu investigación.</li>
+								<li><b>La ubicación</b>: cada lugar puede estar conectado con los demás, permitiendo que los
+									personajes se muevan libremente. Para este tutorial, exploraremos un escalofriante misterio
+									ambientado en una espeluznante mansión victoriana, donde la gente ha estado desapareciendo
+									misteriosamente de vez en cuando. El diseño cambia de un caso a otro, con tres a cinco
+									habitaciones para explorar. Así es como se conectan las habitaciones:
+									<div class="text-center">
+										<img src="locations_tutorial.svg" class="mx-auto" style="max-width: 60%; max-height: 200px;"
+											alt="Gráfico de Ubicaciones">
+									</div>
+								</li>
+								<li><b>Las armas</b>: varias armas están esparcidas por las habitaciones y <b>el asesino recogerá
+										una de las armas antes del crimen</b>, pero no esperes que estén donde "deberían". ¿Ese
+									martillo? Podría estar en el baño en lugar de un taller. ¡La lógica no te ayudará aquí!</li>
+								<li><b>La cronología</b>: el asesinato ocurrió dentro de un período de tiempo específico (por
+									ejemplo, entre las 8:00 y las 9:30). Deberás reconstruir los movimientos de los sospechosos e
+									identificar cuándo se dio el golpe fatal. Sin embargo, hay un detalle importante que diferencia
+									estos rompecabezas de otros juegos de lógica de misterio. Nuestros rompecabezas intentan imitar
+									la vida real, donde las declaraciones y pistas a menudo son caóticas, redundantes o incompletas.
+									En ese sentido, <b>reconstruir la cronología completa no es necesario para resolver el
+										asesinato, ¡y a menudo es imposible!</b>.</li>
+								<li><b>Las declaraciones</b>: obtendrás declaraciones de los sospechosos y pruebas de la escena.
+									<b>Todos dirán la verdad, pero no necesariamente toda la historia</b>. Deberás deducir y
+									combinar cuidadosamente los hechos para descubrir la verdad.</li>
+							</ul>
+							</p>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 2: Timeline Board -->
+				<div class="tutorial-page" id="tut-timeline" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🕗 Usando el Tablero de Cronología</div>
+							<p>En este tutorial, <b>Alice ha sido asesinada antes de las 9:30 en la mansión, y su cuerpo fue
+									encontrado en la cocina (🍲)</b>. Usaremos el <b>Tablero de Cronología</b> para reconstruir este
+								crimen. Comencemos con
+								<b>algunos hechos básicos que sabemos con certeza</b>:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center py-2">
+
+											<div class="row align-items-center">
+												<div class="col-9 border-end">
+													<div class="text-start">
+														Sabemos dónde estaba cada uno a las <b>9:30:</b><br /><br />
+														<b>El cuerpo de Alice</b> estaba en la cocina (🍲)</br>
+														<b>Bob</b> estaba en el baño (🚽)</br>
+														<b>Carol</b> estaba en el comedor (🪑)
+													</div>
+												</div>
+												<div class="col-3">
+													<div class="d-flex justify-content-center align-items-center">
+														<img id="locations-small" src="locations_tutorial_small.svg"
+															class="align-middle invert-in-dark-theme"
+															style="max-height: 60%; max-width: 100%; object-fit: contain; display: block;"
+															alt="...">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>
+								La lista de pistas iniciales describe dónde estaba cada personaje a las 9:30, el final de la
+								cronología. Es tu trabajo deducir, usando las declaraciones de los sospechosos y otras pistas,
+								quién es el asesino, qué arma se usó y cuándo ocurrió el crimen. Podemos marcar la cronología con
+								tres símbolos
+								simples: ✓ significa que alguien estuvo allí, ✗ significa que no, y ? significa que no estamos
+								seguros.
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-0" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-0" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-0" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-0" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+
+								<div class="col-12 text-center">
+									<canvas id="clues-table-weapons:tutorial-0" oncontextmenu="return false" height="40" width="500"
+										onclick="checkWeaponClicked(this, event.offsetX, event.offsetY)">
+										Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+									<br />
+									<a onclick="clearTable(':tutorial-0');" class="btn btn-danger" role="button">Limpiar ♻️</a>
+								</div>
+
+							</div>
+							</p>
+
+							<p>
+								En la parte inferior del tablero de cronología se encuentra la sección de armas, que muestra dónde
+								se encontraba cada arma disponible. Por ejemplo, el asesino tomó el arma homicida de una de las
+								siguientes ubicaciones:
+
+							<ul>
+								<li>El martillo (🔨) del comedor (🪑)</li>
+								<li>La pistola (🔫) del dormitorio (🛏️)</li>
+								<li>Las tijeras (✂️) de la cocina (🍲)</li>
+								<li>La cuerda (🪢) del baño (🚽)</li>
+							</ul>
+							</p>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 3: Your First Clue -->
+				<div class="tutorial-page" id="tut-first-clue" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🔎 Tu Primera Pista</div>
+
+							<p>
+								¡Aquí es donde se pone divertido! <b>Nuestros sospechosos pueden moverse entre habitaciones cada
+									15 minutos</b> (son sospechosamente puntuales), siguiendo el diseño de la ubicación.
+								</br>
+								Solo pueden moverse a habitaciones directamente conectadas durante cada intervalo de 15 minutos,
+								¡no se permiten atajos! Piénsalo como moverte en un tablero de ajedrez: tienes que pasar por las
+								casillas una por una.
+								</br>
+								Por ejemplo, si Carol quiere ir del comedor (🪑) al dormitorio (🛏️), debe:
+
+							<ol>
+								<li>Moverse del comedor (🪑) a la cocina (🍲) durante un intervalo de 15 minutos.</li>
+
+								<li>Permanecer allí durante cualquier número de intervalos de 15 minutos (incluso si otros
+									sospechosos también están allí).</li>
+
+								<li>Moverse de la cocina (🍲) al dormitorio (🛏️) durante otro intervalo de 15 minutos.</li>
+							</ol>
+							No puede teletransportarse directamente del comedor (🪑) al dormitorio (🛏️), aunque parezcan cercanos.
+							Esta regla es crucial para hacer deducciones: si sabes dónde y cuándo alguien comenzó y terminó, a
+							menudo puedes averiguar dónde debe haber estado en el medio.
+							<br />
+							Una vez aclaradas las reglas de movimiento, comencemos este caso, con la siguiente declaración:
+							</p>
+
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ <b>Bob</b>: "Vi a <b>Alice</b>
+													cuando llegué al dormitorio (🛏️) a las 8:15"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<p><br />¿Qué podemos deducir? Bastante, en realidad:<br /></p>
+
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice estaba en el dormitorio a
+									las 8:15</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob también estaba en el
+									dormitorio a las 8:15</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob NO estaba en el dormitorio
+									a las 8:00</li>
+							</ul>
+							<p><br />Haz clic en cada deducción para tachar el texto, lo que te ayudará a concentrarte en otras
+								pistas (¡pruébalo con las pistas que se muestran arriba junto a la lupa!). <br />
+								Usando estas deducciones podemos comenzar a completar el tablero de cronología:
+							</p>
+							<p>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-1" oncontextmenu="return false" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-1');" class="btn btn-danger" role="button">Limpiar ♻️</a>
+								<a onclick="checkTutorialTable('bedroom:tutorial-1', 'bedroom:tutorial-3.5');" class="btn btn-info"
+									role="button">Comprobar 🎯</a>
+							</div>
+							</p>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 4: Making Deductions -->
+				<div class="tutorial-page" id="tut-deductions" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🧠 Haciendo Deducciones</div>
+
+							<p>En el momento en que terminamos de agregar esto en el tablero de cronología, ¡comienzan a surgir otras
+								deducciones! Como nuestros sospechosos no han dominado el arte de estar en dos lugares a la vez,
+								también podemos averiguar dónde no estaban:<br /></p>
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice no estaba en el baño,
+									la cocina o el comedor a las 8:15 </li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob no estaba en el baño,
+									la cocina o el comedor a las 8:15</li>
+							</ul>
+							</p>
+
+							<p>Agreguemos las deducciones que faltan:<br /></p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-2" oncontextmenu="return false" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-2" oncontextmenu="return false" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-2" oncontextmenu="return false" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-2');" class="btn btn-danger" role="button">Limpiar ♻️</a>
+								<a onclick="checkTutorialTable('kitchen:tutorial-2', 'kitchen:tutorial-3.5'); checkTutorialTable('dining room:tutorial-2', 'dining room:tutorial-3.5'); checkTutorialTable('bathroom:tutorial-2', 'bathroom:tutorial-3.5');"
+									class="btn btn-info" role="button">Comprobar 🎯</a>
+							</div>
+							</p>
+
+							<p>¿Pero dónde estaba Bob a las 8:00? Aquí es donde nuestro diseño de la habitación es útil:</p>
+
+
+							<ul class="list-group">
+								<div class="text-center">
+									<img src="locations_tutorial_highlighted_bedroom.svg" class="mx-auto"
+										style="max-width: 60%; max-height: 200px;" alt="Gráfico de Ubicaciones">
+								</div>
+							</ul>
+
+							<p>
+								En este mapa, el dormitorio tiene líneas continuas que lo conectan con la cocina y el baño. Estas
+								líneas continuas representan conexiones directas, habitaciones entre las que los personajes pueden
+								moverse en un intervalo de 15 minutos. La línea de puntos hacia el comedor muestra una conexión
+								indirecta: los personajes deben pasar primero por otra habitación para llegar allí.
+								Como el dormitorio se conecta tanto con la cocina como con el baño, Bob podría haber venido de
+								cualquiera de los dos. Pero aquí hay una deducción sólida: ¡<b>Bob no podría haber estado en el
+									comedor a las 8:00 porque no se conecta con el dormitorio!</b></p>
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob no estaba en el comedor a
+									las 8:00 </li>
+							</ul>
+							</p>
+							<p>
+								Usando esta información, podemos agregar otra deducción en el tablero de cronología:
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-3" oncontextmenu="return false" height="115"
+									width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-3');" class="btn btn-danger" role="button">Limpiar ♻️</a>
+								<a onclick="checkTutorialTable('dining room:tutorial-3', 'dining room:tutorial-4');"
+									class="btn btn-info" role="button">Comprobar 🎯</a>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 5: Movement Rules -->
+				<div class="tutorial-page" id="tut-movement" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🚶 Reglas de Movimiento</div>
+							<p>
+								Otros tipos de pistas describen dónde los sospechosos pasaron algún tiempo. Por ejemplo:
+							</p>
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text"><b>☞ Carol</b>: "Estuve en el
+													comedor (🪑) de 8:00 a 8:45"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+							<p>
+								Esto nos dice:
+
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol estuvo en el comedor de
+									8:00 a 8:45</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol NO estuvo en ninguna de
+									las otras habitaciones de 8:00 a 8:45</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol NO estaba en el comedor
+									a las 9:00</li>
+							</ul>
+							</p>
+							<p>
+
+								¿Dónde estaba Carol a las 9:00? Volvamos al mapa de la mansión para averiguarlo:
+
+							<ul class="list-group">
+								<div class="text-center">
+									<img src="locations_tutorial_highlighted_dining_room.svg" class="mx-auto"
+										style="max-width: 60%; max-height: 200px;" alt="Gráfico de Ubicaciones">
+								</div>
+							</ul>
+
+							Mirando nuestro diseño de la habitación, ¡<b>Carol debe haberse dirigido a la cocina a las 9:00 (y por
+								lo tanto, no está en otro lugar)! ¡Es el único lugar al que podía llegar desde el comedor!</b>
+							</p>
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol estaba en la cocina a
+									las 9:00
+								</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol NO estaba en el
+									dormitorio, comedor o baño a las 9:00 </li>
+							</ul>
+							</p>
+							<p>
+								Completemos el tablero de cronología con todas estas deducciones:
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-4" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-4" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-4" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-4" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-4');" class="btn btn-danger" role="button">Limpiar ♻️</a>
+								<a onclick="checkTutorialTable('kitchen:tutorial-4', 'kitchen:tutorial-5'); checkTutorialTable('bedroom:tutorial-4', 'bedroom:tutorial-5'); checkTutorialTable('dining room:tutorial-4', 'dining room:tutorial-5'); checkTutorialTable('bathroom:tutorial-4', 'bathroom:tutorial-5');"
+									class="btn btn-info" role="button">Comprobar 🎯</a>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 6: Backtracking -->
+				<div class="tutorial-page" id="tut-backtrack" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">↩️ Retrocediendo</div>
+
+							<p>
+								Aquí hay otro tipo de pista muy reveladora:
+							</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text"><b>☞ Bob</b>: "No vi a nadie cuando
+													llegué al baño (🚽) a las 9:00"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+							<p>
+								Vamos a desglosarlo:
+
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob estaba en el baño a las
+									9:00
+								</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob NO estaba en la cocina,
+									el dormitorio o el comedor a las 9:00 </li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Ni Alice ni Carol estaban en
+									el baño a las 9:00 </li>
+							</ul>
+							</p>
+							<p>¿Qué más podemos sacar de esta pista? Echemos otro vistazo al gráfico de ubicación:</p>
+
+							<ul class="list-group">
+								<div class="text-center">
+									<img src="locations_tutorial_highlighted_bathroom.svg" class="mx-auto"
+										style="max-width: 60%; max-height: 200px;" alt="Gráfico de Ubicaciones">
+								</div>
+							</ul>
+
+							<p>No solo esta pista ubica a Bob en el baño a las 9:00, sino que podemos retroceder: ¡<b>debe haber
+									estado en el dormitorio a las 8:45 ya que es la única forma de llegar al baño!</b>
+								En otras palabras:
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob estaba en el dormitorio a
+									las 8:45
+								</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob NO estaba en la cocina,
+									el comedor o el baño a las 8:45 </li>
+							</ul>
+							</p>
+
+							<p>
+								Es hora de agregar nuestras nuevas y brillantes deducciones al tablero de cronología:
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-5" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-5" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-5" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-5" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-5');" class="btn btn-danger" role="button">Limpiar ♻️</a>
+								<a onclick="checkTutorialTable('kitchen:tutorial-5', 'kitchen:tutorial-6'); checkTutorialTable('bedroom:tutorial-5', 'bedroom:tutorial-6'); checkTutorialTable('dining room:tutorial-5', 'dining room:tutorial-6'); checkTutorialTable('bathroom:tutorial-5', 'bathroom:tutorial-6');"
+									class="btn btn-info" role="button">Comprobar 🎯</a>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 7: Indirect Clues -->
+				<div class="tutorial-page" id="tut-indirect" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">💬 Pistas Indirectas</div>
+							<p>Finalmente, a veces obtenemos pistas vagas de los sospechosos:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text"><b>☞ Carol</b>: "Escuché a alguien
+													lavando los platos a las 8:45"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>Esta pista nos dice que alguien estaba en la cocina. Espera un momento, ¿puedes lavar los platos en
+								el baño? No, absolutamente ridículo (te estoy mirando a ti, The Sims™). Repasemos lo que hemos
+								deducido hasta ahora: </p>
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alguien estaba (¡vivo!) en la
+									cocina a las 8:45</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol NO estaba en la cocina a
+									las 8:45</li>
+							</ul>
+							</p>
+							<p>Puede ser tentador tratar de adivinar dónde estaba Carol, pero esto no es posible. Los personajes
+								a veces pueden oír o ver a alguien en otras habitaciones, pero su ubicación no se puede inferir de
+								este tipo de pista.
+								Sin embargo, lo que podemos deducir usando nuestras observaciones anteriores es quién estaba en la
+								cocina. Claramente, no era Carol (¡en realidad estaba en otro lugar a las 8:45!). Además, sabemos
+								que Bob estaba en el dormitorio, lo que significa que <b>Alice estaba en la cocina a las 8:45</b>.
+								<br />
+							<p>
+								Nuestro primer intento de deducir hechos no fue muy bueno, así que repasemos nuestra deducción
+								anterior y refinémosla:
+							</p>
+
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice estaba en la cocina a
+									las 8:45
+								</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice NO estaba en el
+									dormitorio, el comedor o el baño a las 8:45 </li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol NO estaba en la cocina a
+									las 8:45</li>
+							</ul>
+							</p>
+
+							<p>
+								De vuelta al tablero de cronología...
+							</p>
+
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-6" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-6" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-6" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-6" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+								<br />
+								<a onclick="clearTable(':tutorial-6');" class="btn btn-danger" role="button">Limpiar ♻️</a>
+								<a onclick="checkTutorialTable('kitchen:tutorial-6', 'kitchen:tutorial-7'); checkTutorialTable('bedroom:tutorial-6', 'bedroom:tutorial-7'); checkTutorialTable('dining room:tutorial-6', 'dining room:tutorial-7'); checkTutorialTable('bathroom:tutorial-6', 'bathroom:tutorial-7');"
+									class="btn btn-info" role="button">Comprobar 🎯</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 8: Time of Death -->
+				<div class="tutorial-page" id="tut-time-death" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">⌛ Determinando la Hora de la Muerte</div>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ Se escuchó un grito espeluznante
+													de la víctima entre las 8:45 y las 9:00</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>
+								Como nuestros sospechosos se mueven cada 15 minutos como un reloj, el asesinato tuvo que ocurrir a
+								las 8:45 o a las 9:00. Sin embargo, ya sabemos que Alice estaba viva a las 8:45 (y lavando los
+								platos felizmente). Así que la única opción aquí es que el asesinato ocurrió a las 9:00. Recuerda
+								que una vez que el asesino ataca, el cuerpo de la víctima nunca se mueve, por lo que podemos
+								completar fácilmente la cronología de Alice hasta las 9:30.
+								<br />
+
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Alice fue asesinada a las 9:00
+									en la cocina</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 El cuerpo de Alice está en la
+									cocina de 9:15 a 9:30 </li>
+							</ul>
+							<br />
+
+							Anotemos nuestros hallazgos en el tablero de cronología:
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-7" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+								<br />
+								<a onclick="clearTable('kitchen:tutorial-7');" class="btn btn-danger" role="button">Limpiar ♻️</a>
+								<a onclick="checkTutorialTable('kitchen:tutorial-7', 'kitchen:tutorial-final');"
+									class="btn btn-info" role="button">Comprobar 🎯</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 9: The Weapon -->
+				<div class="tutorial-page" id="tut-weapon" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🔪 Encontrando el arma homicida</div>
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ La inspección del cuerpo no revela
+													signos de <a href="#/" class="link-dark"
+														onClick="openModalWeaponType(event, 'stabbing')">apuñalamiento</a></p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>
+								Para descartar un arma en particular, necesitamos saber qué tipo de herida producen. Simplemente
+								haz clic en el tipo de herida descrito en la pista (por ejemplo, <a href="#/" class="link-dark"
+									onClick="openModalWeaponType(event, 'stabbing')">apuñalamiento</a>) y verás una lista de
+								posibles armas.
+							</p>
+
+							<p>
+								Armados con esta información, podemos descartar un arma en la parte inferior de la tabla del tablero
+								de cronología, simplemente haciendo clic en el icono correspondiente del arma/ubicación: ✂️🍲
+							</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-weapons:tutorial-1" oncontextmenu="return false" height="40" width="500"
+									onclick="checkWeaponClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 10: Case Solved -->
+				<div class="tutorial-page" id="tut-solved" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🎓 Resolviendo tu primer caso</div>
+							<p>Es hora de juntar todo y resolver nuestro primer asesinato. <b>Incluimos todas nuestras deducciones
+									en el siguiente tablero de cronología de solo lectura</b>:</p>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-kitchen:tutorial-final" height="115" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bedroom:tutorial-final" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-dining room:tutorial-final" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-bathroom:tutorial-final" height="95" width="500"
+									onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<div class="col-12 text-center">
+								<canvas id="clues-table-weapons:tutorial-final" oncontextmenu="return false" height="40" width="500"
+									onclick="checkWeaponClicked(this, event.offsetX, event.offsetY)">
+									Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+							</div>
+
+							<p>
+								Piensa un momento y luego haz clic para revelar cada solución:
+							</p>
+
+							<p>
+							<div class="accordion">
+								<div class="accordion-item">
+									<h2 class="accordion-header" id="headingOne">
+										<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+											data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+											1. ¿Quién fue el asesino?
+										</button>
+									</h2>
+									<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+										data-bs-parent="#accordionExample">
+										<div class="accordion-body">
+											Tanto Bob como Carol son sospechosos. Bueno, Bob tiene una coartada sólida: ni siquiera
+											estaba en la escena del crimen cuando ocurrió (ni a las 8:45 ni a las 9:00). <b>Eso
+												deja a Carol como la asesina.</b>
+										</div>
+									</div>
+								</div>
+								<div class="accordion-item">
+									<h2 class="accordion-header" id="headingTwo">
+										<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+											data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+											2. ¿Qué arma se usó?
+										</button>
+									</h2>
+									<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+										data-bs-parent="#accordionExample">
+										<div class="accordion-body">
+											Podemos descartar las tijeras, lo que nos deja con la pistola, el martillo o la cuerda.
+											Pero espera, sabemos que Carol es nuestra asesina, y solo estuvo en el comedor antes
+											del asesinato. ¡<b>Eso significa que el arma homicida fue el martillo</b>!
+										</div>
+									</div>
+								</div>
+								<div class="accordion-item">
+									<h2 class="accordion-header" id="headingThree">
+										<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+											data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+											3. ¿Cuándo se cometió el asesinato?
+										</button>
+									</h2>
+									<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+										data-bs-parent="#accordionExample">
+										<div class="accordion-body">
+											El grito de la víctima lo reduce a las 8:45 o a las 9:00. Como Carol (nuestra ahora
+											confirmada asesina) no estaba en la escena a las 8:45 y sabemos que Alice estaba viva
+											antes de las 9:00, entonces <b>el asesinato se cometió a las 9:00</b>.
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>
+								¿Sabes qué es realmente inteligente de este enfoque? Aunque hemos reconstruido la mayor parte de
+								la cronología, todavía hay algo de misterio sobre los movimientos de Alice, como dónde estaba a las
+								8:30. Y eso no es un descuido, ¡en realidad nos está mostrando algo importante! ¿Recuerdas esa nota
+								anterior sobre cómo "reconstruir toda la cronología no es necesario para resolver el asesinato, y a
+								menudo es imposible"? Bueno, estamos viendo ese principio en acción. Resolvimos el caso de manera
+								concluyente (Carol lo hizo con el martillo a las 9:00) sin necesidad de rastrear cada lugar que
+								Alice visitó. Es un ejemplo perfecto de cómo estos rompecabezas reflejan un trabajo de detective
+								más realista.
+							</p>
+							<p>
+								<b>¡Caso cerrado!</b> Eso no fue muy difícil, ¿verdad? Bueno, si quieres ser un súper detective 🕵️, necesitas aprender
+								algunos consejos y trucos adicionales. Las siguientes secciones te ayudarán a lidiar con casos más complicados
+								(¡e interesantes!).
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 11: Weapon Identification -->
+				<div class="tutorial-page" id="tut-weapons-id" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🔫 Mejor identificación de armas</div>
+
+							<p>Hay una técnica poderosa para confirmar o eliminar rápidamente posibles armas homicidas, basada en
+								esta pista crucial:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ El asesino estaba solo cuando
+													recuperó el arma homicida.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>Al combinar esta información con tus sospechas sobre el asesino y el momento del crimen, puedes
+								hacer deducciones decisivas. Examinemos cómo funciona esto:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ Alice: "Estuve en el dormitorio
+													de 8:00 a 8:30"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>Suponiendo que <b>Alice NO es la asesina y el crimen ocurrió después de las 8:30</b>, entonces
+								podemos llegar a la siguiente deducción:</p>
+
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 El asesino no tomó el arma
+									del dormitorio.</li>
+							</ul>
+							</p>
+
+							<p>
+								Por el contrario, si <b>Alice ES la asesina y el crimen ocurrió después de las 8:30</b>, entonces
+								necesitaremos verificar si estaba sola a las 8:00, 8:15 o 8:30 para deducir:
+							</p>
+
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 El asesino tomó el arma del
+									dormitorio.</li>
+							</ul>
+							</p>
+							<p>¡Usando esta técnica deductiva, podemos identificar rápidamente el arma utilizada y resolver el
+								caso!</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- PAGE 12: Dealing with liars -->
+				<div class="tutorial-page" id="tut-liars" style="display:none">
+					<div class="compact-card mt-0">
+						<div class="compact-card-body">
+							<div class="section-header">🤥 Lidiando con mentirosos</div>
+
+							<p>Antes de comenzar cada misterio, puedes decidir si el asesino puede mentir en sus declaraciones o
+								no. Si estás preparado para un desafío, tendrás que considerar que cada declaración de los
+								sospechosos puede ser una mentira.</p>
+
+							<p>¡Mentir durante una investigación criminal es un asunto serio! El asesino debe tener mucho cuidado
+								ya que el resto de los sospechosos siempre dirán la verdad. En la práctica, solo proporcionarán una
+								declaración falsa si de alguna manera ayuda a cubrir sus huellas durante el momento y el lugar del
+								asesinato.</p>
+
+							<p>Identificar al asesino usando información no confiable suele ser más difícil ya que no sabemos si
+								las declaraciones son verdaderas o no. No toda la esperanza está perdida, ya que el resto de los
+								sospechosos siempre dirán la verdad. Detectar una mentira es fácil: debemos buscar una
+								inconsistencia entre dos declaraciones. Veamos un ejemplo:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ Bob: "Estuve en la cocina de 9:00
+													a 10:00"</p>
+												<hr>
+												<p id="clue-text-tutorial" class="card-text">☞ Carol: "No vi a nadie cuando
+													llegué a la cocina a las 9:30"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>Esta contradicción te dice inmediatamente algo crucial, sabemos que exactamente una de las
+								siguientes afirmaciones debe ser cierta:</p>
+
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Bob es el asesino.</li>
+								<li class="list-group-item" onClick="toggleClueStrikeout(this)">🔎 Carol es la asesina.</li>
+							</ul>
+							</p>
+
+							<p>
+								Consejo profesional™: comienza asumiendo que todas las declaraciones son veraces. Cuando encuentres
+								una contradicción, habrás identificado a un par de posibles asesinos.
+							</p>
+
+							<p>Podemos ir un paso más allá: una vez que sabemos (o sospechamos) quién es el asesino, podemos
+								<b>deducir qué declaraciones son verdaderas y cuáles son falsas</b> usando el momento y lugar del
+								asesinato. Veamos qué decía Bob:</p>
+
+							<p>
+							<div class="d-flex justify-content-center align-items-center">
+								<div style="width: 99%" id="clues-tutorial">
+									<div class="card" style="height: auto;">
+										<div class="card-body text-center">
+											<div class="row align-items-center">
+												<p id="clue-text-tutorial" class="card-text">☞ Bob: "Estuve en el dormitorio de
+													8:00 a 9:00"</p>
+												<hr>
+												<p id="clue-text-tutorial" class="card-text">☞ Bob: "Estuve en la cocina de 9:00
+													a 10:00"</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							</p>
+
+							<p>Suponiendo que <b>Bob es el asesino</b> y que el <b>asesinato ocurrió después de las 9:30 en el
+								baño (🚽)</b>, sabemos que solo proporciona afirmaciones falsas para evitar ser atrapado
+								respecto al momento y lugar del asesinato. Así que <b>ambas declaraciones deben ser verdaderas</b>:</p>
+
+							<p>
+							<ul class="list-group">
+								<li class="list-group-item">🔎 Bob estaba en el dormitorio (🛏️) de 8:00 a 9:00</li>
+								<li class="list-group-item">🔎 Bob estaba en la cocina (🍲) de 9:00 a 10:00</li>
+							</ul>
+							</p>
+
+							<p>La primera declaración debe ser verdadera ya que <b>Bob no tiene razón para arriesgarse a mentir</b>,
+								no cubre el momento ni el lugar del asesinato. La segunda declaración también debe ser verdadera ya que
+								<b>sabemos que Bob es el asesino y el momento/lugar del crimen</b>, mentir sobre estar en la cocina
+								no le ayuda a ocultar nada sobre el baño después de las 9:30.</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Pagination controls -->
+				<hr style="max-width:980px; margin:1.0em auto 0; border:none; height:1px; background:rgba(24,24,24,0.50);">
+				<div class="compact-card mt-3"><div class="compact-card-body d-flex justify-content-between align-items-center">
+					<button id="tut-prev" class="btn btn-outline-secondary" onclick="tutorialPrev()" disabled>
+						&larr; Anterior
+					</button>
+					<span id="tut-page-indicator" class="text-secondary small">1 / 12</span>
+					<button id="tut-next" class="btn btn-outline-secondary" onclick="tutorialNext()">
+						Siguiente &rarr;
+					</button>
+				</div></div>
+
+			</div><!-- .tutorial-content -->
+		</div><!-- .d-flex layout -->
+	</div>
+
+	<div id="home">
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+				<p>
+					Un grupo de amigos tropieza con una inquietante mansión abandonada. Ahora, confinados en sus
+					siniestras garras, se encuentran en una escalofriante serie de asesinatos. Cada día trae un nuevo
+					enigma, con uno de ellos como desafortunada víctima y el resto como sospechosos.
+					<br />
+				</p>
+				<div class="col-12 text-center d-flex justify-content-center gap-2">
+					<a href="#game" class="btn btn-danger" role="button">¡No hay tiempo que perder!</a>
+					<a href="#" class="btn btn-outline-secondary" role="button" onclick="showPage('how-to-play'); return false;">¿Primera vez?</a>
+				</div>
+
+				<p>
+					<br />
+				<div class="card">
+					<div class="card-body">
+						<b>¡Un libro de mystery-o-matic está oficialmente en desarrollo y programado para publicarse en
+							2026! 📔</b>
+						Lleno de una buena cantidad de rompecabezas con niveles de dificultad cuidadosamente calibrados
+						y entrelazados en una narrativa general, este libro promete una experiencia emocionante. <a
+							href="https://stats.sender.net/forms/e5yRQR/view">¡Avísame cuando esté listo!</a>
+					</div>
+				</div>
+				</p>
+			</div>
+		</div>
+
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+				<div class="section-header">🤖 <span class="font-monospace">beep boop</span>, hay un nuevo misterio
+				</div>
+				<p><span id='span-today'></span></p>
+
+				<p>¡Prepárate para resolver un nuevo asesinato misterioso! Tu objetivo es averiguar <b>quién</b> lo
+					hizo, <b>cuándo</b> sucedió y <b>qué</b> arma se utilizó.</p>
+				$introLocation
+				<p>Ayúdales a resolver este misterio revisando estas pistas iniciales:</p>
+				<div class="row align-items-center">
+					<div class="col">
+						$initialClues
+					</div>
+					<div class="col-sm d-flex justify-content-center">
+						<img id="locations-big" src="locations_big.svg" style="max-width: 100%; height: 100%;"
+							alt="...">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+				<div class="section-header">🥾 ¡Que comience el juego!</div>
+				<p>¡Prepárate para resolver este rompecabezas! Recibirás pistas que poco a poco descubrirán la verdad
+					detrás del asesinato. El rompecabezas diario se puede resolver en dos modos. En <strong>el modo
+						fácil, todos dirán la verdad</strong>. Opcionalmente, <strong> el asesino a veces puede mentir
+						si deseas un desafío más difícil</strong>.</p>
+				<p><strong>Cada pista que leas afectará tu puntuación</strong>. Piensa cuidadosamente mientras buscas
+					evidencias y cuestionas a los sospechosos para resolver el misterio. Cuando lo resuelvas, obtendrás
+					un rango del maravilloso <a href="#" class="link-dark"
+						onClick="showPage('sleuth-o-meter')"><strong>sleuth-o-meter™</strong></a>.</p>
+				<p>¿Estás listo para el desafío? ¡Empecemos a investigar!</p>
+			</div>
+		</div>
+
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+				<div class="section-header">📔 Tu diario de detective y tus pistas</div>
+				<p>Usa esta tabla para llevar un registro de los hechos, pistas y deducciones. Puedes consultar la
+					sección <a href="#" onClick="showPage('how-to-play')" class="link-dark">cómo se juega</a> si lo
+					necesitas.</p>
+				<div class="d-flex justify-content-center align-items-center">
+					<div style="width: 99%" id="clues">
+						<div class="compact-card" style="height: auto;">
+							<div id="game" class="compact-card-body text-center py-2">
+
+								<div id="selection-clues-box" class="card" style="display:block">
+									<div class="card-body text-center py-2">
+							<p class="card-text mb-2">Elige si el asesino solo dice la verdad (más fácil) o si puede mentir
+										(más difícil).</p>
+									<button id="without-lies-button" type="button" class="btn btn-outline-secondary"
+										onclick="selectClues(false)">Sin mentiras 🕊️</button>
+									<button id="with-lies-button" type="button" class="btn btn-outline-secondary"
+										onclick="selectClues(true)">Miénteme 👹</button>
+								</div>
+								</div>
+								<div id="clues-box" class="row align-items-center" style="display:none">
+									<div class="col-9 border-end" display="none">
+										<h6 id="clue-title" class="card-title">Pista</h6>
+										<p id="clue-text" class="card-text" onClick="toggleClueStrikeout(this)">PISTA
+										</p>
+										<div id="clues-buttons"
+											class="row align-items-center justify-content-start text-center"
+											style="display:none">
+											<div class="col">
+												<button id="previous-clue-button" type="button"
+													class="btn btn-outline-secondary btn-sm"
+													onclick="revealAnotherClue(-1)">Pista anterior</button>
+												<button id="next-clue-button" type="button"
+													class="btn btn-outline-secondary btn-sm"
+													onclick="revealAnotherClue(1)">Próxima pista</button>
+											</div>
+										</div>
+									</div>
+									<div class="col-3">
+										<div class="d-flex justify-content-center align-items-center">
+											<img id="locations-small" src="locations_small.svg"
+												class="align-middle invert-in-dark-theme"
+												style="max-height: 100%; max-width: 100%; object-fit: contain; display: block;"
+												alt="...">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<p></p>
+				$cluesTables
+				<div class="col-12 text-center">
+					<canvas id="clues-table-weapons" oncontextmenu="return false" height="40" width="500"
+						onclick="checkWeaponClicked(this, event.offsetX, event.offsetY)">
+						Tu navegador no soporta la etiqueta canvas de HTML.</canvas>
+				</div>
+			</div>
+		</div>
+		<div class="compact-card mt-0">
+			<div class="compact-card-body">
+				<div class="section-header">👉 Hora de las acusaciones</div>
+
+				<p>Después de trabajar toda la noche recolectando evidencias y analizando pistas, es hora de resolver
+					este caso eligiendo al sospechoso, la hora del asesinato y el arma. Una advertencia: si seleccionas
+					la respuesta incorrecta, puedes intentarlo de nuevo, pero <emp>el bucle</emp> te castigará
+					reduciendo tu puntuación final.</p>
+
+				<ul class="sticky-notes">
+					<li class="sticky-notes">
+						<a href="#/" class="sticky-notes" onClick="javascript:void(0)">
+							<h6 class="sticky-notes">El asesino fue…</h6>
+							<select class="form-select sticky-notes" id="who-selector">
+								<option value="" disabled selected>...</option>
+								$selectSuspects
+							</select>
+						</a>
+					</li>
+
+					<li class="sticky-notes">
+						<a href="#/" class="sticky-notes" onClick="javascript:void(0)">
+							<h6 class="sticky-notes">El arma fue…</h6>
+							<select class="form-select sticky-notes" id="how-selector">
+								<option value="" disabled selected>...</option>
+								$selectWeapon
+							</select>
+						</a>
+					</li>
+
+					<li class="sticky-notes">
+						<a href="#/" class="sticky-notes" onClick="javascript:void(0)">
+							<h6 class="sticky-notes">La hora del asesinato fue…</h6>
+							<select class="form-select sticky-notes" id="when-selector">
+								<option value="" disabled selected>...</option>
+								$selectIntervals
+							</select>
+						</a>
+					</li>
+				</ul>
+				<div class="row align-items-center justify-content-start">
+					<button id="accusation-button" type="button" class="btn btn-danger btn-sm"
+						onclick="checkAccusation()">¡Acúsalo!</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="accusation-win" class="compact-card mt-0" style="display:none">
+			<div class="compact-card-body">
+				<div class="section-header">🤖 La respuesta es... <span class="font-monospace">bip bop,
+						¡correcto!</span></div>
+				<p>El peso de la evidencia contra el acusado era inmenso, sin dejar lugar a dudas. El bucle está
+					complacido.
+				<div id="story-clue">$storyClue</div>
+				</p>
+				<p id="accusation-win-message">¡Felicidades por resolver el caso! Has resuelto el asesinato misterioso
+					de hoy con un rango <a href="#" class="link-dark"
+						onClick="showPage('sleuth-o-meter')">sleuth-o-meter™</a> de </p>
+				<p>
+					<!--Opcionalmente, puedes usar este anotador local para seguir el progreso de la historia:
+
+				<div class="form-group">
+					<textarea class="form-control" id="story-notebook" rows="5"></textarea>
+				</div>-->
+				</p>
+				<p id="shop-suggestion" style="display:none"></p>
+				<p><b>Vuelve mañana para otro desafío.</b></p>
+			</div>
+		</div>
+
+		<div id="accusation-lose" class="compact-card mt-0" style="display:none">
+			<div class="compact-card-body">
+				<div class="section-header">🤖 La respuesta es... <span class="font-monospace">bip bop,
+						¡incorrecto!</span></div>
+
+				<p>Te enfrentas a un rompecabezas desconcertante lleno de evidencia contradictoria.
+					Está claro que la identidad del sospechoso, la hora del crimen,
+					o incluso el arma involucrada podrían estar equivocados, sembrando dudas en la investigación.</p>
+				<p>El bucle está descontento y se reinicia abruptamente, dejándote sin pistas para el día. Puedes
+					volver mañana para otro desafío.</p>
+			</div>
+		</div>
+	</div>
+
+	<footer class="py-3 my-4">
+		<ul class="nav justify-content-center border-bottom pb-3 mb-3">
+			<li class="nav-item"><a href="#" onClick="showPage('home')" class="nav-link px-2 text-muted">Misterio
+					diario</a></li>
+			<li class="nav-item"><a href="https://web.archive.org/web/20240000000000*/https://mystery-o-matic.com"
+					class="nav-link px-2 text-muted">Misterios anteriores<sup>🔗</sup></a>
+			<li class="nav-item"><a href="#" onClick="showPage('how-to-play')" class="nav-link px-2 text-muted">Cómo
+					jugar</a></li>
+			<li class="nav-item"><a href="#" onClick="showPage('about')" class="nav-link px-2 text-muted">Nosotros</a>
+			<li class="nav-item"><a href="https://mysteryomatic.etsy.com/"
+					class="nav-link px-2 text-muted">Tienda<sup>🔗</sup></a>
+
+			</li>
+		</ul>
+		<p class="text-center text-muted">© 2024 Industrias Gabbo 🏭 Inc.</p>
+	</footer>
+	<script>
+		sessionStorage.language = "es";
+	</script>
+	<script src="../data.js"></script>
+	<script src="../tutorialData.js"></script>
+	<script src="../table.js"></script>
+	<script src="../translation.js"></script>
+	<script src="../functions.js"></script>
+	<script src="../tutorial-nav.js"></script>
+	<script>
+		WebFont.load({
+			google: {
+				families: ['Raleway']
+			},
+			active: function () { createTables(); }
+		});
+	</script>
+</body>
+
+</html>

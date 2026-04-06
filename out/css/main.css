@@ -1,0 +1,236 @@
+body {
+	font-family: 'Raleway', sans-serif;
+	font-size: 17px;
+	line-height: 1.7;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+canvas {
+	margin: 0;
+	padding: 0;
+	display: none;
+	max-width: 100%;
+}
+
+.float{
+	position:fixed;
+	width:15vh;
+	height:5vh;
+	bottom:10px;
+	right:10px;
+	font-size: 4vh;
+	background-color: transparent;
+	color:#000;
+	text-align:right;
+	z-index: 1000;
+}
+
+.floating-button{
+	margin-top:22px;
+}
+
+#google_translate_element {
+	display: none;
+}
+
+body > .skiptranslate {
+	display: none;
+}
+
+/* Glyph, by Harry Roberts */
+
+hr.styled-hr {
+	overflow: visible; /* For IE */
+	padding: 0;
+	margin: -0.5em 0;
+	border: none;
+	border-top: medium double var(--bs-gray);
+	text-align: center;
+}
+hr.styled-hr:after {
+	content: "⚙️";
+	display: inline;
+	position: relative;
+	top: -0.8em;
+	font-size: 1.2em;
+	padding: 0 0.25em;
+}
+
+a:visited {
+    color: var(--bs-link-color);
+}
+
+/* Compact cards: leaner containers with theme-aware colors */
+.compact-card {
+	max-width: 980px;
+	margin: 0 auto 1.25rem;
+	background: var(--compact-card-bg, #ffffff);
+	/*border: 1px solid rgba(0,0,0,0.06);
+	border-radius: 10px;
+	box-shadow: 0 1px 4px rgba(16,24,40,0.03);*/
+	overflow: hidden;
+}
+
+.compact-card-body {
+	padding: 0.6rem 0.9rem;
+	color: var(--compact-card-color, #111827);
+}
+
+.section-header {
+	font-weight: 700;
+	font-size: 1rem;
+	padding: 0.45rem 0.75rem;
+	background: linear-gradient(90deg, rgba(241,73,02,0.10), rgba(241,73,02,0.02));
+	border-bottom: 1px solid rgba(99,102,241,0.10);
+	color: #F14902;
+	border-radius: 6px;
+	margin-bottom: 0.5rem;
+}
+
+[data-bs-theme="dark"] .compact-card {
+	background: #212529;
+}
+
+[data-bs-theme="dark"] .compact-card-body {
+	color: #e6eef8;
+}
+
+[data-bs-theme="dark"] .section-header {
+	color: #F14902;
+	background: linear-gradient(90deg, rgba(241,73,02,0.06), rgba(241,73,02,0.02));
+}
+
+/* Restore a subtle, theme-aware border and divider for the clues box (no markup changes) */
+#clues-box {
+	border: 1px solid rgba(0,0,0,0.06);
+	border-radius: 8px;
+}
+
+#clues-box .col-9 {
+	border-right: 1px solid rgba(0,0,0,0.06);
+	padding-right: 1rem;
+}
+
+/* Dark theme adjustments */
+[data-bs-theme="dark"] #clues-box {
+	border-color: rgba(255,255,255,0.04);
+	color: #e6eef8;
+}
+[data-bs-theme="dark"] #clues-box .col-9 {
+	border-right-color: rgba(255,255,255,0.06);
+}
+
+/* ===== Tutorial Pagination ===== */
+
+.tutorial-sidebar {
+	position: sticky;
+	top: 20px;
+	align-self: flex-start;
+	flex-direction: column;
+	width: 200px;
+	min-width: 200px;
+	padding: 0.75rem 0;
+	margin-right: 0.5rem;
+	border-right: 1px solid rgba(0,0,0,0.08);
+	transition: width 0.2s ease, min-width 0.2s ease;
+	max-height: calc(100vh - 40px);
+	overflow-y: auto;
+}
+
+.tutorial-sidebar.collapsed {
+	width: 44px;
+	min-width: 44px;
+}
+
+.tutorial-sidebar.collapsed .tutorial-sidebar-label {
+	display: none;
+}
+
+.tutorial-sidebar-toggle {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 1rem;
+	padding: 0.25rem 0.5rem;
+	color: var(--bs-body-color);
+	text-align: right;
+	transition: transform 0.2s ease;
+	width: 100%;
+}
+
+.tutorial-sidebar.collapsed .tutorial-sidebar-toggle {
+	transform: rotate(180deg);
+}
+
+.tutorial-sidebar-item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.4rem 0.6rem;
+	cursor: pointer;
+	border-radius: 4px;
+	font-size: 0.85rem;
+	color: var(--bs-body-color);
+	transition: background 0.15s ease;
+}
+
+.tutorial-sidebar-item:hover {
+	background: rgba(241, 73, 2, 0.06);
+}
+
+.tutorial-sidebar-item.active {
+	background: rgba(241, 73, 2, 0.12);
+	font-weight: 700;
+	color: #F14902;
+}
+
+.tutorial-sidebar-icon {
+	flex-shrink: 0;
+	width: 24px;
+	text-align: center;
+	font-size: 1rem;
+	line-height: 1;
+}
+
+.tutorial-step-dot {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: rgba(0,0,0,0.06);
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background 0.15s ease;
+}
+
+.tutorial-step-dot.active {
+	background: rgba(241, 73, 2, 0.15);
+}
+
+.tutorial-mobile-dots {
+	display: grid;
+	grid-template-columns: repeat(6, 32px);
+	gap: 6px;
+	justify-content: center;
+}
+
+.tutorial-content {
+	flex: 1;
+	min-width: 0;
+}
+
+/* Dark theme */
+[data-bs-theme="dark"] .tutorial-sidebar {
+	border-right-color: rgba(255,255,255,0.06);
+}
+
+[data-bs-theme="dark"] .tutorial-step-dot {
+	background: rgba(255,255,255,0.08);
+}
+
+[data-bs-theme="dark"] .tutorial-step-dot.active {
+	background: rgba(241, 73, 2, 0.2);
+}
