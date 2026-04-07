@@ -543,28 +543,94 @@ a{color:var(--text)}
 
 <script>
 // ===== PUZZLE DATA =====
-const LOCATIONS = [
-  { icon: '🐒', label: 'Monkey Island' },
-  { icon: '🦜', label: 'Aviary' },
-  { icon: '🦁', label: 'Lion Enclosure' },
-  { icon: '🦎', label: 'Reptile House' },
-];
-const PERSONS = ['alice', 'eddie', 'frida'];
-const TIMES   = ['4:00','4:15','4:30','4:45','5:00','5:15','5:30','5:45','6:00','6:15'];
-const WEAPONS = [
-  { icon: '🔫', label: 'Pistol' },
-  { icon: '🧪', label: 'Poison' },
-  { icon: '🔌', label: 'Wire Ext.' },
-  { icon: '🔨', label: 'Hammer' },
-];
+const DATA_JS_URL = 'https://bucky575.github.io/mystery-o-matic-multiplayer/out/data.js';
 
-const CLUES = [
-  { tag:'YOUR CLUE',   text:'Eddie was not in the monkey island between 4:00 and 5:00. He can confirm this.' },
-  { tag:'YOUR CLUE',   text:'Alice heard unusual sounds near the reptile house around 4:30.' },
-  { tag:'SHARED CLUE', text:'The hammer was found untouched in the reptile house after the murder.' },
-  { tag:'SHARED CLUE', text:'The killer was seen near the aviary just before 5:15.' },
-  { tag:'YOUR CLUE',   text:'No one entered the monkey island between 5:00 and 6:00 except Frida.' },
-];
+// These will be populated by loadPuzzle() before anything renders
+let LOCATIONS = [];
+let PERSONS   = [];
+let TIMES     = [];
+let WEAPONS   = [];
+let CLUES     = [];
+let CORRECT_ANSWER_HASH = '';
+let VICTIM    = '';
+
+async function loadPuzzle() {
+  try {
+    const res  = await fetch(DATA_JS_URL);
+    const text = await res.text();
+
+    // data.js is a JS file starting with "data = {...}"
+    // Strip the variable assignment to get pure JSON
+    const jsonStr = text.replace(/^\s*data\s*=\s*/, '').replace(/;?\s*$/, '');
+    const d = JSON.parse(jsonStr);
+
+    // ── LOCATIONS ──────────────────────────────────────────────────────
+    LOCATIONS = d.locationOrder.map(([, name]) => ({
+      icon:  d.locationIcons[name] || '📍',
+      label: name.charAt(0).toUpperCase() + name.slice(1),
+      key:   name,
+    }));
+
+    // ── WEAPONS ────────────────────────────────────────────────────────
+    WEAPONS = Object.keys(d.weaponMap).map(key => ({
+      icon:  d.weaponIcons[key] || '🔪',
+      label: key.replace('$', '').replace(/_/g, ' ')
+                .toLowerCase().replace(/\b\w/g, c => c.toUpperCase()),
+      key:   key,
+    }));
+
+    // ── PERSONS (suspects only — exclude victim) ───────────────────────
+    PERSONS = d.characterNames.filter(name => name !== d.victim);
+    VICTIM  = d.victim;
+
+    // ── TIMES (derived from timeOffset + numIntervals × 15 min) ────────
+    TIMES = [];
+    for (let i = 0; i <= d.numIntervals; i++) {
+      const totalSec = d.timeOffset + i * 15 * 60;
+      const h = Math.floor(totalSec / 3600);
+      const m = (totalSec % 3600) / 60;
+      TIMES.push(`${h}:${m.toString().padStart(2, '0')}`);
+    }
+
+    // ── CLUES ──────────────────────────────────────────────────────────
+    // Easy mode = additionalClues.en
+    // Hard mode = additionalCluesWithLies.en
+    // Each clue is already an HTML string — strip tags to get plain text
+    const rawClues = d.additionalClues?.en || [];
+    CLUES = rawClues.map((html, i) => ({
+      tag:  'CLUE ' + (i + 1),
+      text: html.replace(/<[^>]+>/g, ''),  // strip HTML tags for plain display
+      html: html,                           // keep original for rich display later
+    }));
+
+    // ── ANSWER HASH ────────────────────────────────────────────────────
+    CORRECT_ANSWER_HASH = d.correctAnswer;
+
+    // ── REBUILD STATE MAPS now that dimensions are known ───────────────
+    rebuildStateMaps()
+    populateAccuseDropdowns();
+
+  } catch (err) {
+    console.error('Failed to load puzzle:', err);
+    document.body.innerHTML = `
+      <div style="padding:2rem;font-family:monospace;color:#c00">
+        <strong>Failed to load today's puzzle.</strong><br>
+        ${err.message}
+      </div>`;
+  }
+}
+
+function rebuildStateMaps() {
+  // Re-initialise state maps with correct dimensions from real data
+  const fresh = () => LOCATIONS.map(() => PERSONS.map(() => TIMES.map(() => 0)));
+  ['solo','mine','p2','p3','shared'].forEach(key => {
+    states[key] = {
+      cells:      fresh(),
+      locStruck:  LOCATIONS.map(() => false),
+      weapStruck: WEAPONS.map(()   => false),
+    };
+  });
+}
 
 // ===== STATE =====
 let mode = 'solo';
@@ -582,13 +648,7 @@ function makeStateMap() {
   return LOCATIONS.map(() => PERSONS.map(() => TIMES.map(() => 0)));
 }
 // icon strip states: stateMap[tableId].icons[locIdx|weapIdx] = bool (struck)
-const states = {
-  solo:   { cells: makeStateMap(), locStruck: LOCATIONS.map(()=>false), weapStruck: WEAPONS.map(()=>false) },
-  mine:   { cells: makeStateMap(), locStruck: LOCATIONS.map(()=>false), weapStruck: WEAPONS.map(()=>false) },
-  p2:     { cells: makeStateMap(), locStruck: LOCATIONS.map(()=>false), weapStruck: WEAPONS.map(()=>false) },
-  p3:     { cells: makeStateMap(), locStruck: LOCATIONS.map(()=>false), weapStruck: WEAPONS.map(()=>false) },
-  shared: { cells: makeStateMap(), locStruck: LOCATIONS.map(()=>false), weapStruck: WEAPONS.map(()=>false) },
-};
+
 
 // ===== JOURNAL RENDERER =====
 function buildJournal(mountEl, tableId, readonly) {
@@ -914,8 +974,36 @@ function accuse() {
   alert('🔍 Accusation submitted!\n\nSuspect: ' + s + '\nTime: ' + t + '\nWeapon: ' + w + '\n\nIn the live version your score will be calculated by the sleuth-o-meter™.');
 }
 
+function populateAccuseDropdowns() {
+  const suspectSel = document.getElementById('suspectSelect');
+  const timeSel    = document.getElementById('timeSelect');
+  const weaponSel  = document.getElementById('weaponSelect');
+
+  suspectSel.innerHTML = '<option value="">— Who did it? —</option>' +
+    PERSONS.map(p => `<option value="${p}">${p.charAt(0).toUpperCase()+p.slice(1)}</option>`).join('');
+
+  timeSel.innerHTML = '<option value="">— When? —</option>' +
+    TIMES.map(t => `<option value="${t}">${t}</option>`).join('');
+
+  weaponSel.innerHTML = '<option value="">— With what? —</option>' +
+    WEAPONS.map(w => `<option value="${w.label.toLowerCase()}">${w.icon} ${w.label}</option>`).join('');
+}
+
 // ===== INIT =====
-renderClue();
+// ===== INIT =====
+// State maps start empty — rebuildStateMaps() fills them after puzzle loads
+const states = {
+  solo:   { cells: [], locStruck: [], weapStruck: [] },
+  mine:   { cells: [], locStruck: [], weapStruck: [] },
+  p2:     { cells: [], locStruck: [], weapStruck: [] },
+  p3:     { cells: [], locStruck: [], weapStruck: [] },
+  shared: { cells: [], locStruck: [], weapStruck: [] },
+};
+
+// Boot sequence — load puzzle data, then render first clue
+loadPuzzle().then(() => {
+  renderClue();
+});
 </script>
 </body>
 </html>
