@@ -541,7 +541,14 @@ a{color:var(--text)}
 
 </div><!-- end page-wrapper -->
 
+<!-- Add this line just before your existing <script> tag -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+// ===== SUPABASE INIT =====
+const { createClient } = window.supabase;
+const sb = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+
 // ===== PUZZLE DATA =====
 const DATA_JS_URL = 'https://bucky575.github.io/mystery-o-matic-multiplayer/out/data.js';
 
@@ -827,25 +834,94 @@ function chooseLie(btn) {
 function randomCode(len=7) {
   return Array.from({length:len}, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
 }
-function generateRoom() {
+async function generateRoom() {
   const name = document.getElementById('createName').value.trim();
   if (!name) { document.getElementById('createName').focus(); return; }
-  const code = randomCode();
-  currentRoom = code; currentPlayer = name;
-  const el = document.getElementById('roomCodeDisplay');
-  el.style.display = 'inline'; el.textContent = 'Room: ' + code;
-  setTimeout(() => enterLobby([name], code), 500);
+
+  const btn = document.querySelector('.mp-create-section button');
+  btn.disabled = true;
+  btn.textContent = 'Creating...';
+
+  try {
+    // Get today's room_id from Supabase
+    const today = new Date().toISOString().split('T')[0];
+    const { data: room, error } = await sb
+      .from('rooms')
+      .select('id')
+      .eq('puzzle_date', today)
+      .maybeSingle();
+
+    if (error) throw new Error('Database error: ' + error.message);
+    if (!room) throw new Error("Today's puzzle isn't ready yet. Check back soon!");
+
+    currentRoom   = room.id;
+    currentPlayer = name;
+
+    // Store in localStorage for reconnect
+    localStorage.setItem('mp_room_id',     currentRoom);
+    localStorage.setItem('mp_player_name', currentPlayer);
+    localStorage.setItem('mp_puzzle_date', today);
+
+    // Show the room ID as shareable code
+    const el = document.getElementById('roomCodeDisplay');
+    el.style.display = 'inline';
+    el.textContent   = 'Room ID: ' + currentRoom;
+
+    setTimeout(() => enterLobby([name], currentRoom), 500);
+
+  } catch (err) {
+    showMpError(err.message);
+    btn.disabled    = false;
+    btn.textContent = 'Create Room';
+  }
 }
 function refreshRoom() {
   document.getElementById('roomCodeDisplay').style.display = 'none';
   document.getElementById('createName').value = '';
 }
-function joinRoom() {
+async function joinRoom() {
   const name = document.getElementById('joinName').value.trim();
-  const code = document.getElementById('joinCode').value.trim().toUpperCase();
-  if (!name || !code) return;
-  currentRoom = code; currentPlayer = name;
-  enterLobby([name, 'Player 2'], code);
+  const code = document.getElementById('joinCode').value.trim();
+  if (!name || !code) {
+    showMpError('Please enter both your name and a Room ID.');
+    return;
+  }
+
+  const btn = document.querySelector('.mp-join-section button');
+  btn.disabled = true;
+  btn.textContent = 'Joining...';
+
+  try {
+    // Validate the room ID exists in Supabase
+    const { data: room, error } = await sb
+      .from('rooms')
+      .select('id, puzzle_date')
+      .eq('id', code)
+      .maybeSingle();
+
+    if (error) throw new Error('Database error: ' + error.message);
+    if (!room) throw new Error('Room not found. Check the Room ID and try again.');
+
+    // Check it's today's puzzle (optional guard)
+    const today = new Date().toISOString().split('T')[0];
+    if (room.puzzle_date !== today) {
+      throw new Error("This room is from a previous day and is no longer active.");
+    }
+
+    currentRoom   = room.id;
+    currentPlayer = name;
+
+    localStorage.setItem('mp_room_id',     currentRoom);
+    localStorage.setItem('mp_player_name', currentPlayer);
+    localStorage.setItem('mp_puzzle_date', today);
+
+    enterLobby([name, 'Player 2'], currentRoom);
+
+  } catch (err) {
+    showMpError(err.message);
+    btn.disabled    = false;
+    btn.textContent = 'Join Room';
+  }
 }
 function selectCount(btn, count) {
   document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
@@ -914,7 +990,18 @@ function goBack() {
   document.querySelectorAll('.lie-btn').forEach(b => b.classList.remove('active'));
   currentClue = 0; renderClue();
 }
-
+function showMpError(msg) {
+  let el = document.getElementById('mp-error');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'mp-error';
+    el.style.cssText = 'color:#c00;font-size:.85rem;margin-top:.5rem;padding:.4rem .75rem;background:#fff0f0;border:1px solid #f0c0c0;border-radius:4px;';
+    document.getElementById('mpSetupCard').appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 5000);
+}
 // ===== CLUE NAV =====
 function renderClue() {
   const c = CLUES[currentClue];
@@ -1003,6 +1090,19 @@ const states = {
 // Boot sequence — load puzzle data, then render first clue
 loadPuzzle().then(() => {
   renderClue();
+  // Reconnect returning multiplayer player
+  const today        = new Date().toISOString().split('T')[0];
+  const storedDate   = localStorage.getItem('mp_puzzle_date');
+  const storedRoom   = localStorage.getItem('mp_room_id');
+  const storedPlayer = localStorage.getItem('mp_player_name');
+
+  if (storedRoom && storedPlayer && storedDate === today) {
+    // Same day — skip join screen, go straight to lobby
+    currentRoom   = storedRoom;
+    currentPlayer = storedPlayer;
+    switchMode('multi');
+    enterLobby([storedPlayer], storedRoom);
+  }
 });
 </script>
 </body>
