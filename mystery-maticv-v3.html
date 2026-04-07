@@ -404,8 +404,8 @@ a{color:var(--text)}
         <p id="clueText">Eddie was not in the monkey island between 4:00 and 5:00. He can confirm this.</p>
       </div>
       <div class="clue-footer">
-        <button class="btn-ghost" onclick="prevClue()">← Previous Clue</button>
-        <button class="btn-teal" onclick="nextClue()">Next Clue →</button>
+        <button class="btn-ghost" onclick="mode === 'lobby' ? prevMyClue() : prevClue()">← Previous Clue</button>
+        <button class="btn-teal" onclick="mode === 'lobby' ? nextMyClue() : nextClue()">Next Clue →</button>
       </div>
     </div>
   </section>
@@ -547,7 +547,7 @@ a{color:var(--text)}
 <script>
 // ===== SUPABASE INIT =====
 const { createClient } = window.supabase;
-const sb = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+const sb = createClient('https://atjnnkqzwynurhfxtswq.supabase.co', 'sb_publishable_KHrysbPNgaYneARmgznUXw_bCNSjAZT');
 
 // ===== PUZZLE DATA =====
 const DATA_JS_URL = 'https://bucky575.github.io/mystery-o-matic-multiplayer/out/data.js';
@@ -838,31 +838,34 @@ async function generateRoom() {
   const name = document.getElementById('createName').value.trim();
   if (!name) { document.getElementById('createName').focus(); return; }
 
-  const btn = document.querySelector('.mp-create-section button');
+  const btn = document.querySelector('#mpSetupCard button[onclick*="generateRoom"]');
   btn.disabled = true;
   btn.textContent = 'Creating...';
 
   try {
-    // Get today's room_id from Supabase
     const today = new Date().toISOString().split('T')[0];
+
+    // INSERT a brand new room row every time
     const { data: room, error } = await sb
       .from('rooms')
-      .select('id')
-      .eq('puzzle_date', today)
-      .maybeSingle();
+      .insert({
+        puzzle_date:  today,
+        player_count: playerCount,
+        created_by:   name,
+      })
+      .select()
+      .single();
 
     if (error) throw new Error('Database error: ' + error.message);
-    if (!room) throw new Error("Today's puzzle isn't ready yet. Check back soon!");
 
     currentRoom   = room.id;
     currentPlayer = name;
 
-    // Store in localStorage for reconnect
     localStorage.setItem('mp_room_id',     currentRoom);
     localStorage.setItem('mp_player_name', currentPlayer);
     localStorage.setItem('mp_puzzle_date', today);
+    localStorage.setItem('mp_player_count', playerCount);
 
-    // Show the room ID as shareable code
     const el = document.getElementById('roomCodeDisplay');
     el.style.display = 'inline';
     el.textContent   = 'Room ID: ' + currentRoom;
@@ -870,6 +873,7 @@ async function generateRoom() {
     setTimeout(() => enterLobby([name], currentRoom), 500);
 
   } catch (err) {
+    console.error('generateRoom error:', err);
     showMpError(err.message);
     btn.disabled    = false;
     btn.textContent = 'Create Room';
@@ -887,37 +891,38 @@ async function joinRoom() {
     return;
   }
 
-  const btn = document.querySelector('.mp-join-section button');
+  const btn = document.querySelector('#mpSetupCard button[onclick*="joinRoom"]');
   btn.disabled = true;
   btn.textContent = 'Joining...';
 
   try {
-    // Validate the room ID exists in Supabase
     const { data: room, error } = await sb
       .from('rooms')
-      .select('id, puzzle_date')
+      .select('id, puzzle_date, player_count')
       .eq('id', code)
       .maybeSingle();
 
     if (error) throw new Error('Database error: ' + error.message);
     if (!room) throw new Error('Room not found. Check the Room ID and try again.');
 
-    // Check it's today's puzzle (optional guard)
     const today = new Date().toISOString().split('T')[0];
     if (room.puzzle_date !== today) {
-      throw new Error("This room is from a previous day and is no longer active.");
+      throw new Error('This room is from a previous day and is no longer active.');
     }
 
     currentRoom   = room.id;
     currentPlayer = name;
+    playerCount   = room.player_count; // use the count set by room creator
 
-    localStorage.setItem('mp_room_id',     currentRoom);
-    localStorage.setItem('mp_player_name', currentPlayer);
-    localStorage.setItem('mp_puzzle_date', today);
+    localStorage.setItem('mp_room_id',      currentRoom);
+    localStorage.setItem('mp_player_name',  currentPlayer);
+    localStorage.setItem('mp_puzzle_date',  today);
+    localStorage.setItem('mp_player_count', playerCount);
 
-    enterLobby([name, 'Player 2'], currentRoom);
+    enterLobby([name], currentRoom);
 
   } catch (err) {
+    console.error('joinRoom error:', err);
     showMpError(err.message);
     btn.disabled    = false;
     btn.textContent = 'Join Room';
@@ -930,7 +935,7 @@ function selectCount(btn, count) {
 }
 
 // ===== ENTER LOBBY =====
-function enterLobby(players, roomCode) {
+async function enterLobby(players, roomCode) {
   mode = 'lobby';
   document.getElementById('modeToggleWrapper').style.display = 'none';
   document.getElementById('mpSetupCard').classList.remove('visible');
@@ -964,6 +969,8 @@ function enterLobby(players, roomCode) {
   const show3 = playerCount >= 3;
   document.getElementById('tab-p3').style.display = show3 ? '' : 'none';
   document.getElementById('notes-tab-p3').style.display = show3 ? '' : 'none';
+
+  await assignAndLoadClues(currentRoom, currentPlayer)
 
   buildJournal(document.getElementById('mpJournalMount-mine'),   'mine',   false);
   buildJournal(document.getElementById('mpJournalMount-p2'),     'p2',     true);
@@ -1013,6 +1020,81 @@ function renderClue() {
 }
 function prevClue() { if (currentClue > 0) { currentClue--; renderClue(); } }
 function nextClue() { if (currentClue < CLUES.length-1) { currentClue++; renderClue(); } }
+
+// ===== CLUE ASSIGNMENT =====
+const CLUES_PER_PLAYER = 4;
+let myClueIndices = [];
+let myCurrentCluePos = 0;
+
+async function assignAndLoadClues(roomId, playerName) {
+  // Check if slot already assigned (reconnect)
+  let { data: existing } = await sb
+    .from('room_players')
+    .select('slot')
+    .eq('room_id', roomId)
+    .eq('player_name', playerName)
+    .maybeSingle();
+
+  let mySlot;
+
+  if (existing) {
+    mySlot = existing.slot;
+  } else {
+    // Count existing players to get next slot
+    const { count } = await sb
+      .from('room_players')
+      .select('*', { count: 'exact', head: true })
+      .eq('room_id', roomId);
+
+    mySlot = count || 0;
+
+    await sb.from('room_players').insert({
+      room_id:     roomId,
+      player_name: playerName,
+      slot:        mySlot,
+    });
+  }
+
+  // Compute clues deterministically — no DB read needed
+  const { data: room } = await sb
+    .from('rooms')
+    .select('player_count')
+    .eq('id', roomId)
+    .single();
+
+  const numPlayers = room?.player_count || 2;
+  const totalClues = CLUES.length;
+
+  myClueIndices = [];
+  for (let i = mySlot; i < totalClues; i += numPlayers) {
+    myClueIndices.push(i);
+  }
+
+  renderMyClues();
+}
+
+function renderMyClues() {
+  if (myClueIndices.length === 0) return;
+  myCurrentCluePos = Math.max(0, Math.min(myCurrentCluePos, myClueIndices.length - 1));
+
+  const globalIdx = myClueIndices[myCurrentCluePos];
+  const clue      = CLUES[globalIdx];
+
+  document.getElementById('clueNum').textContent      = myCurrentCluePos + 1;
+  document.getElementById('clueProgress').textContent = myCurrentCluePos + 1;
+  document.getElementById('clueTotal').textContent    = myClueIndices.length;
+  document.getElementById('clueTag').textContent      = `CLUE ${globalIdx + 1} OF ${CLUES.length}`;
+  document.getElementById('clueText').textContent     = clue.text;
+}
+
+function prevMyClue() {
+  if (myCurrentCluePos > 0) { myCurrentCluePos--; renderMyClues(); }
+}
+
+function nextMyClue() {
+  if (myCurrentCluePos < myClueIndices.length - 1) { myCurrentCluePos++; renderMyClues(); }
+}
+
 
 // ===== TABS =====
 function switchJournalTab(btn, paneId) {
