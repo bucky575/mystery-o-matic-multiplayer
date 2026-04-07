@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mystery Matic — Multiplayer</title>
+<style>
+:root {
+  --font: 'Courier New', monospace;
+  --serif: 'Georgia', serif;
+  --bg: #f5f5f0; --surface: #ffffff; --surface2: #f9f9f7;
+  --border: #d4d1ca; --divider: #e0ddd8;
+  --text: #1a1a18; --muted: #6a6a68; --faint: #aaa;
+  --red: #d32f2f; --red2: #b71c1c;
+  --teal: #00747a; --teal2: #005a5f; --teal-bg: #e0f0f0;
+  --pill-bg: #e8e8e4;
+  --r-sm: 4px; --r-md: 8px; --r-full: 999px;
+  --xs: .75rem; --sm: .875rem; --base: 1rem; --xl: 2.25rem;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);font-size:var(--base);color:var(--text);background:var(--bg);min-height:100dvh;line-height:1.6}
+button{cursor:pointer;font-family:inherit}
+input,textarea,select{font-family:inherit}
+a{color:var(--text)}
+
+.page-wrapper{max-width:900px;margin:0 auto;padding:2rem 1rem}
+
+/* HEADER */
+.site-header{text-align:center;margin-bottom:1.5rem;position:relative}
+.site-title{font-family:var(--serif);font-size:var(--xl);font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+.site-tagline{font-style:italic;font-size:var(--sm);color:var(--muted);margin-top:.25rem}
+.go-back-btn{position:absolute;right:0;top:0;padding:.25rem .75rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);font-size:var(--sm);display:none}
+.go-back-btn:hover{background:var(--divider)}
+
+/* TOGGLE */
+.mode-toggle-wrapper{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin-bottom:1.25rem}
+.mode-toggle{display:inline-flex;background:var(--pill-bg);border-radius:var(--r-full);padding:3px;gap:2px;align-items:center}
+.mode-toggle button{border:none;background:transparent;padding:6px 18px;border-radius:var(--r-full);font-size:var(--sm);font-family:var(--font);color:var(--muted);transition:all 180ms;font-weight:500}
+.mode-toggle button.active{background:var(--red);color:#fff;font-weight:700}
+.new-badge{background:#5a9e6a;color:#fff;font-size:var(--xs);font-weight:700;padding:2px 7px;border-radius:var(--r-full);letter-spacing:.05em}
+.toggle-hint{font-size:var(--xs);color:var(--muted);background:#f0ede8;padding:3px 12px;border-radius:var(--r-full)}
+
+/* MP SETUP */
+.mp-setup-card{background:var(--teal-bg);border:1px solid #b0d4d4;border-radius:var(--r-md);padding:1.25rem;margin-bottom:1.5rem;display:none}
+.mp-setup-card.visible{display:block}
+.mp-section-title{font-size:var(--base);font-weight:700;margin-bottom:.25rem;display:flex;align-items:center;gap:.5rem}
+.mp-section-subtitle{font-size:var(--sm);color:var(--muted);margin-bottom:1rem}
+.mp-form-row{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:.75rem}
+.mp-field{display:flex;flex-direction:column;gap:.25rem;flex:1;min-width:180px}
+.mp-field label{font-size:var(--sm);font-weight:600}
+.mp-field input{padding:.5rem .75rem;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);font-size:var(--sm);outline:none;transition:border-color 150ms}
+.mp-field input:focus{border-color:var(--teal)}
+.mp-field input::placeholder{color:var(--faint)}
+.player-count-picker{display:flex;gap:.5rem;margin-top:.25rem}
+.count-btn{width:38px;height:38px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);font-size:var(--sm);font-weight:600;transition:all 150ms}
+.count-btn.active,.count-btn:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+.mp-actions{display:flex;align-items:center;gap:.75rem;margin-top:.75rem;flex-wrap:wrap}
+.btn-teal{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:var(--teal);color:#fff;border:none;border-radius:var(--r-sm);font-size:var(--sm);font-weight:700;font-family:var(--font);transition:background 150ms}
+.btn-teal:hover{background:var(--teal2)}
+.btn-ghost{padding:.5rem .75rem;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);font-size:var(--sm);font-family:var(--font);color:var(--muted);transition:all 150ms}
+.btn-ghost:hover{background:var(--divider);color:var(--text)}
+.room-code-display{font-size:var(--sm);color:var(--teal);font-weight:700;letter-spacing:.08em;margin-left:.5rem;display:none}
+.mp-divider{border:none;border-top:1px dashed #b0c8c8;margin:1.25rem 0}
+
+/* PLAYERS PANEL */
+.players-panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:.75rem 1rem;margin-bottom:1.25rem;align-items:center;gap:1rem;flex-wrap:wrap}
+.players-panel.visible{display:flex}
+.players-panel-label{font-size:var(--xs);font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.player-chips{display:flex;gap:.5rem;flex-wrap:wrap;flex:1}
+.player-chip{display:flex;align-items:center;gap:.25rem;padding:3px 10px;background:var(--teal-bg);border:1px solid #b0d4d4;border-radius:var(--r-full);font-size:var(--xs);font-weight:600}
+.player-chip .dot{width:7px;height:7px;border-radius:50%;background:#5a9e6a}
+.player-chip.you{background:var(--teal);color:#fff;border-color:var(--teal)}
+.room-code-badge{font-size:var(--xs);font-weight:700;background:#f0ede8;padding:3px 10px;border-radius:var(--r-full);border:1px solid var(--border);letter-spacing:.06em;margin-left:auto}
+
+/* SECTION HEADER */
+.section-header{background:#e8e8e4;padding:.5rem .75rem;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem;font-size:var(--sm);font-weight:600}
+.section-header .sq{width:14px;height:14px;background:#333;flex-shrink:0}
+
+/* STORY */
+.story-intro{font-size:var(--sm);text-align:center;margin-bottom:1rem;line-height:1.7;color:var(--muted)}
+.action-bar{display:flex;align-items:center;gap:.75rem;justify-content:center;margin-bottom:1rem}
+.btn-red{padding:.5rem 1.25rem;background:var(--red);color:#fff;border:none;border-radius:var(--r-sm);font-size:var(--sm);font-weight:700;font-family:var(--font);transition:background 150ms}
+.btn-red:hover{background:var(--red2)}
+.btn-outline{padding:.5rem 1rem;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);font-size:var(--sm);font-family:var(--font);transition:all 150ms}
+.btn-outline:hover{background:var(--divider)}
+.announcement{background:#e8e8e4;padding:.5rem .75rem;font-size:var(--sm);display:flex;align-items:center;gap:.5rem;margin-bottom:1rem}
+.announcement .dot{width:12px;height:12px;background:#333;flex-shrink:0}
+.puzzle-date{font-size:var(--sm);font-weight:700;margin-bottom:.75rem}
+.puzzle-text{font-size:var(--sm);line-height:1.8;margin-bottom:.75rem}
+.puzzle-text p{margin-bottom:.5rem}
+.puzzle-text ul{padding-left:1.25rem}
+.puzzle-text ul ul{padding-left:1rem}
+.puzzle-text li{margin-bottom:.25rem}
+.icon-sq{display:inline-block;width:13px;height:13px;background:#444;vertical-align:middle;margin:0 2px}
+
+/* GAME SECTIONS */
+.game-sections{display:none}
+.game-sections.visible{display:block}
+
+/* LIE TOGGLE */
+.lie-toggle-card{border:1px solid var(--border);border-radius:var(--r-sm);padding:1.25rem;text-align:center;font-size:var(--sm);background:var(--surface)}
+.lie-toggle-card p{margin-bottom:.75rem;color:var(--muted)}
+.lie-toggle-btns{display:flex;justify-content:center;gap:.75rem}
+.lie-btn{padding:6px 20px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);font-size:var(--sm);font-family:var(--font);transition:all 150ms}
+.lie-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
+.lie-btn:hover:not(.active){background:var(--divider)}
+
+/* CLUE NAVIGATOR */
+.clues-section{margin-bottom:1.5rem}
+.clues-subtitle{font-size:var(--sm);color:var(--muted);margin-bottom:.75rem}
+.clue-navigator{border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface)}
+.clue-nav-header{padding:.75rem 1rem;border-bottom:1px solid var(--divider);font-weight:700;font-size:var(--sm);display:flex;align-items:center;justify-content:space-between}
+.clue-counter{font-size:var(--xs);color:var(--muted)}
+.clue-body{padding:1rem;font-size:var(--sm);min-height:80px;line-height:1.7;border-bottom:1px solid var(--divider)}
+.clue-tag{display:inline-block;background:var(--teal-bg);color:var(--teal);border:1px solid #b0d4d4;border-radius:var(--r-full);font-size:var(--xs);font-weight:700;padding:1px 10px;margin-bottom:.5rem;letter-spacing:.04em}
+.clue-footer{padding:.75rem 1rem;display:flex;gap:.75rem}
+
+/* ===== DEDUCTION JOURNAL TABLE ===== */
+.journal-section{margin-bottom:1.5rem}
+.journal-subtitle{font-size:var(--sm);color:var(--muted);margin-bottom:.75rem}
+
+/* The outer wrapper for the whole journal (groups + icon strip) */
+.journal-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden}
+
+/* Group block = one location section */
+.journal-group{display:flex;border-bottom:1px solid var(--border)}
+.journal-group:last-of-type{border-bottom:none}
+
+/* Left icon cell spanning all person rows */
+.group-icon-cell{
+  width:48px;min-width:48px;
+  display:flex;align-items:center;justify-content:center;
+  background:#f5f4f0;
+  border-right:1px solid var(--border);
+  font-size:1.4rem;
+  cursor:pointer;
+  user-select:none;
+  transition:background 150ms;
+  position:relative;
+}
+.group-icon-cell:hover{background:#ede9e2}
+.group-icon-cell.struck .icon-emoji{opacity:.35;text-decoration:line-through}
+.group-icon-cell .strike-line{
+  display:none;position:absolute;
+  left:50%;top:50%;transform:translate(-50%,-50%) rotate(-20deg);
+  width:70%;height:2px;background:var(--red);border-radius:2px;
+}
+.group-icon-cell.struck .strike-line{display:block}
+
+/* Person rows inside group */
+.group-rows{flex:1;display:flex;flex-direction:column}
+.person-row{display:flex;align-items:stretch;border-bottom:1px solid var(--divider)}
+.person-row:last-child{border-bottom:none}
+.person-name{
+  width:60px;min-width:60px;padding:.35rem .5rem;
+  font-size:var(--xs);font-weight:600;
+  background:#f9f9f7;border-right:1px solid var(--divider);
+  display:flex;align-items:center;
+}
+
+/* Time cells */
+.time-cols{display:flex;flex:1}
+.time-cell{
+  flex:1;min-width:32px;
+  border-right:1px solid var(--divider);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  font-size:.9rem;
+  height:36px;
+  transition:background 150ms;
+  user-select:none;
+  position:relative;
+}
+.time-cell:last-child{border-right:none}
+.time-cell:hover{background:#f0ede8}
+.time-cell.s-blank{color:var(--faint)}
+.time-cell.s-check{color:#2d6a4f;background:#edf7f0}
+.time-cell.s-cross{color:var(--red);background:#fef0f0}
+.time-cell.s-q{color:#b07d00;background:#fffbe6}
+
+/* Header row */
+.journal-header{display:flex;background:#eceae5;border-bottom:2px solid var(--border)}
+.journal-header .th-icon{width:48px;min-width:48px;border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:.35rem 0;font-size:var(--xs);font-weight:700}
+.journal-header .th-name{width:60px;min-width:60px;border-right:1px solid var(--divider);padding:.35rem .5rem;font-size:var(--xs);font-weight:700;display:flex;align-items:center}
+.journal-header .th-times{display:flex;flex:1}
+.journal-header .th-time{flex:1;min-width:32px;border-right:1px solid var(--divider);text-align:center;padding:.35rem .1rem;font-size:var(--xs);font-weight:700;white-space:nowrap}
+.journal-header .th-time:last-child{border-right:none}
+
+/* Weapon/icon strip at bottom */
+.icon-strip{
+  display:flex;flex-wrap:wrap;gap:.5rem;
+  padding:.75rem 1rem;
+  background:#f0ede8;
+  border-top:2px solid var(--border);
+}
+.strip-icon{
+  display:flex;align-items:center;justify-content:center;
+  width:44px;height:44px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  font-size:1.3rem;
+  cursor:pointer;
+  transition:all 150ms;
+  user-select:none;
+  position:relative;
+}
+.strip-icon:hover{background:#f5f3ef}
+.strip-icon.struck{background:#fef0f0;border-color:#e0a0a0}
+.strip-icon.struck::after{
+  content:'';position:absolute;left:10%;top:50%;
+  width:80%;height:2px;background:var(--red);
+  transform:rotate(-15deg);border-radius:2px;
+}
+
+/* MP journal tabs */
+.journal-mp{display:none}
+.journal-mp.visible{display:block}
+.journal-tabs-bar{display:flex;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.journal-tab{padding:.5rem .75rem;background:transparent;border:none;border-bottom:2px solid transparent;font-size:var(--sm);font-family:var(--font);color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:.25rem;transition:all 150ms;white-space:nowrap}
+.journal-tab:hover{color:var(--text)}
+.journal-tab.active{color:var(--text);border-bottom-color:var(--teal);font-weight:700}
+.journal-pane-wrapper{border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r-sm) var(--r-sm);background:var(--surface)}
+.journal-pane{display:none}
+.journal-pane.active{display:block}
+.journal-actions{padding:.5rem .75rem;border-top:1px solid var(--divider);display:flex;justify-content:flex-end;gap:.5rem;align-items:center}
+.shared-badge{font-size:var(--xs);color:var(--muted);font-style:italic;margin-right:auto}
+
+/* readonly overlay */
+.pane-readonly{position:relative;pointer-events:none;opacity:.7}
+
+/* NOTES */
+.notes-section{margin-bottom:1.5rem}
+.notes-textarea{width:100%;min-height:150px;padding:.75rem;border:1px solid var(--border);border-radius:var(--r-sm);font-family:var(--font);font-size:var(--sm);color:var(--text);background:var(--surface);resize:vertical;line-height:1.7;outline:none;transition:border-color 150ms}
+.notes-textarea:focus{border-color:var(--teal)}
+.notes-mp{display:none}
+.notes-mp.visible{display:block}
+.notes-mp .journal-pane textarea{width:100%;min-height:130px;padding:.75rem;border:none;font-family:var(--font);font-size:var(--sm);color:var(--text);background:transparent;resize:vertical;line-height:1.7;outline:none}
+.notes-mp .journal-pane textarea[readonly]{background:var(--surface2);color:var(--muted);cursor:not-allowed}
+
+/* ACCUSATION */
+.accuse-section{margin-bottom:3rem}
+.accuse-intro{font-size:var(--sm);margin-bottom:1rem;line-height:1.7}
+.accuse-selectors{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.accuse-field{flex:1;min-width:160px;display:flex;flex-direction:column;gap:.25rem}
+.accuse-field label{font-size:var(--sm);font-weight:700}
+.accuse-field select{padding:.5rem .75rem;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);font-size:var(--sm);font-family:var(--font);outline:none}
+.accuse-bar{background:var(--red);border-radius:var(--r-sm);overflow:hidden}
+.accuse-bar button{width:100%;padding:.75rem;background:transparent;border:none;color:#fff;font-size:var(--base);font-weight:700;font-family:var(--font);letter-spacing:.05em;transition:background 150ms}
+.accuse-bar button:hover{background:rgba(0,0,0,.1)}
+
+/* FOOTER */
+.site-footer{text-align:center;border-top:1px solid var(--divider);padding-top:1.25rem;margin-top:2rem}
+.footer-nav{display:flex;gap:1.25rem;justify-content:center;margin-bottom:.75rem;flex-wrap:wrap}
+.footer-nav a{font-size:var(--sm);text-decoration:none}
+.footer-nav a:hover{text-decoration:underline}
+.footer-copy{font-size:var(--xs);color:var(--muted)}
+
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+<!-- HEADER -->
+<header class="site-header">
+  <h1 class="site-title">Mystery Matic</h1>
+  <p class="site-tagline">A mystery a day, keeps a coroner away!</p>
+  <button class="go-back-btn" id="goBackBtn" onclick="goBack()">Go Back</button>
+</header>
+
+<!-- MODE TOGGLE -->
+<div class="mode-toggle-wrapper" id="modeToggleWrapper">
+  <div class="mode-toggle">
+    <button id="btnSolo" class="active" onclick="switchMode('solo')">Solo</button>
+    <button id="btnMulti" onclick="switchMode('multi')">Multiplayer</button>
+    <span class="new-badge">NEW</span>
+  </div>
+  <span class="toggle-hint">Toggle switches between Solo (existing game) and Multiplayer mode</span>
+</div>
+
+<!-- F2: MULTIPLAYER SETUP CARD -->
+<div class="mp-setup-card" id="mpSetupCard">
+  <div class="mp-section-title"><span>👥</span> Setup your multiplayer room</div>
+  <p class="mp-section-subtitle">Set up today's mystery for your group. Each player gets a unique clue shard</p>
+  <div class="mp-form-row">
+    <div class="mp-field">
+      <label for="createName">Your Display Name</label>
+      <input type="text" id="createName" placeholder="Eg. Sherlock">
+    </div>
+    <div class="mp-field">
+      <label>Number of Players</label>
+      <div class="player-count-picker">
+        <button class="count-btn active" onclick="selectCount(this,2)">2</button>
+        <button class="count-btn" onclick="selectCount(this,3)">3</button>
+        <button class="count-btn" onclick="selectCount(this,4)">4</button>
+      </div>
+    </div>
+  </div>
+  <div class="mp-actions">
+    <button class="btn-teal" onclick="generateRoom()">Generate Room Code →</button>
+    <button class="btn-ghost" onclick="refreshRoom()">Refresh</button>
+    <span class="room-code-display" id="roomCodeDisplay"></span>
+  </div>
+  <hr class="mp-divider">
+  <div class="mp-section-title"><span>🖥️</span> or join an existing room</div>
+  <div class="mp-form-row">
+    <div class="mp-field">
+      <label for="joinName">Your Display Name</label>
+      <input type="text" id="joinName" placeholder="Eg. Sherlock">
+    </div>
+    <div class="mp-field">
+      <label for="joinCode">Enter the Room Code</label>
+      <input type="text" id="joinCode" placeholder="Eg. AJPW34L" style="text-transform:uppercase;letter-spacing:.08em">
+    </div>
+  </div>
+  <div class="mp-actions">
+    <button class="btn-teal" onclick="joinRoom()">Join Room →</button>
+    <button class="btn-ghost">Refresh</button>
+  </div>
+</div>
+
+<!-- STORY (all modes) -->
+<p class="story-intro">A group of friends stumbles upon an eerie abandoned mansion. Now confined within its sinister grasp, they find themselves thrust into a chilling series of murders. Each day brings a fresh enigma.</p>
+<div class="action-bar">
+  <button class="btn-red">No Time To Explain</button>
+  <button class="btn-outline">First Time?</button>
+</div>
+
+<!-- PUZZLE (all modes; F2 stops here) -->
+<div id="puzzleBlock">
+  <div class="announcement"><div class="dot"></div><span>beep boop, a new mystery is up</span></div>
+  <div class="puzzle-date">Sunday, April 5, 2026</div>
+  <div class="puzzle-text">
+    <p>Get ready to solve a fresh murder mystery! Your goal is to figure out who did it, when it happened, and what weapon was used.</p>
+    <p>Eddie, Frida and Alice are transported into an abandoned zoo at night!</p>
+    <p>Help them solve this mystery checking out these initial clues:</p>
+    <ul>
+      <li><a href="#">Frida</a> was murdered in the monkey island (<span class="icon-sq"></span>) at some time between 4:00 and 6:15</li>
+      <li>The murderer was alone with their victim, and the body remained unmoved</li>
+      <li>The murderer wasn't caught with the body</li>
+      <li>The killer retrieved the murder weapon from one of these places:
+        <ul>
+          <li>The pistol (<span class="icon-sq"></span>) from the monkey island (<span class="icon-sq"></span>)</li>
+          <li>The poison (<span class="icon-sq"></span>) from the aviary (<span class="icon-sq"></span>)</li>
+          <li>The wire extension (<span class="icon-sq"></span>) from the lion enclosure (<span class="icon-sq"></span>)</li>
+          <li>The hammer (<span class="icon-sq"></span>) from the reptile house (<span class="icon-sq"></span>)</li>
+        </ul>
+      </li>
+      <li>No one saw the killer retrieving the murder weapon</li>
+      <li>We know where everyone was at 6:15:
+        <ul>
+          <li><a href="#">Eddie</a> was in the aviary (<span class="icon-sq"></span>)</li>
+          <li><a href="#">Frida</a>'s body was in the monkey island (<span class="icon-sq"></span>)</li>
+          <li><a href="#">Alice</a> was in the lion enclosure (<span class="icon-sq"></span>)</li>
+        </ul>
+      </li>
+      <li>No one else was present in the location.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- LIE TOGGLE WRAPPER (solo only, before game starts) -->
+<div id="lieToggleWrapper">
+  <div class="section-header"><span class="sq"></span><span>Detective's Journal &amp; Clues</span></div>
+  <p class="clues-subtitle" style="font-size:var(--sm);color:var(--muted);margin-bottom:.75rem">Use this table to keep track of your facts, clues and deductions. You can check the <a href="#">how to play section</a> if you need it.</p>
+  <div class="lie-toggle-card">
+    <p>Start choosing whether the killer never lies (easier) or is allowed to lie (harder).</p>
+    <div class="lie-toggle-btns">
+      <button class="lie-btn" id="btnNoLies" onclick="chooseLie(this)">No Lies</button>
+      <button class="lie-btn" id="btnLie" onclick="chooseLie(this)">Lie to me</button>
+    </div>
+  </div>
+</div>
+
+<!-- PLAYERS PANEL (lobby only) -->
+<div class="players-panel" id="playersPanel">
+  <span class="players-panel-label">In Room</span>
+  <div class="player-chips" id="playerChips"></div>
+  <span class="room-code-badge" id="roomCodeBadge"></span>
+</div>
+
+<!-- GAME SECTIONS (revealed after lie choice in solo, or on lobby entry) -->
+<div class="game-sections" id="gameSections">
+
+  <div class="announcement" style="margin-bottom:1rem"><div class="dot"></div><span>Let the game begin!</span></div>
+  <div class="puzzle-text" style="margin-bottom:1.25rem">
+    <p>Get ready to solve this puzzle! You'll get clues that slowly uncover the truth behind the murder. In easy mode everyone tells the truth; optionally the killer can lie for a harder challenge.</p>
+    <p style="margin-top:.5rem">Each clue you read will affect your score. When you crack it, you'll get a rank from the wonderful <a href="#">sleuth-o-meter™</a>.</p>
+  </div>
+
+  <!-- CLUES -->
+  <section class="clues-section">
+    <div class="section-header"><span class="sq"></span><span>Detective's Journal &amp; Clues</span></div>
+    <p class="clues-subtitle">Use this table to keep track of your facts, clues and deductions. You can check the <a href="#">how to play section</a> if you need it.</p>
+    <div class="clue-navigator" id="clueNavigator">
+      <div class="clue-nav-header">
+        <span>Clue #<span id="clueNum">1</span></span>
+        <span class="clue-counter"><span id="clueProgress">1</span> of <span id="clueTotal">5</span> clues revealed</span>
+      </div>
+      <div class="clue-body">
+        <span class="clue-tag" id="clueTag">YOUR CLUE</span>
+        <p id="clueText">Eddie was not in the monkey island between 4:00 and 5:00. He can confirm this.</p>
+      </div>
+      <div class="clue-footer">
+        <button class="btn-ghost" onclick="prevClue()">← Previous Clue</button>
+        <button class="btn-teal" onclick="nextClue()">Next Clue →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOURNAL SECTION -->
+  <section class="journal-section">
+    <div class="section-header"><span class="sq"></span><span id="journalSectionTitle">Detective's Journal</span></div>
+    <p class="journal-subtitle">Click cells to cycle: blank → ✓ → ✗ → ? → blank. Click location/weapon icons to strike them out.</p>
+
+    <!-- SOLO journal -->
+    <div id="journalSolo">
+      <div id="soloJournalMount"></div>
+    </div>
+
+    <!-- MP journal tabs -->
+    <div class="journal-mp" id="journalMp">
+      <div class="journal-tabs-bar">
+        <button class="journal-tab active" onclick="switchJournalTab(this,'mine')" data-pane="mine">📓 My Journal</button>
+        <button class="journal-tab" onclick="switchJournalTab(this,'p2')" data-pane="p2">📓 <span class="p2name">Player 2</span></button>
+        <button class="journal-tab" onclick="switchJournalTab(this,'p3')" data-pane="p3" id="tab-p3">📓 <span class="p3name">Player 3</span></button>
+        <button class="journal-tab" onclick="switchJournalTab(this,'shared')" data-pane="shared">📘 Shared Journal</button>
+      </div>
+      <div class="journal-pane-wrapper">
+        <div class="journal-pane active" id="pane-mine">
+          <div id="mpJournalMount-mine"></div>
+          <div class="journal-actions">
+            <span class="shared-badge">Only visible to you</span>
+            <button class="btn-teal" onclick="pushToShared()">Push to Shared Journal →</button>
+          </div>
+        </div>
+        <div class="journal-pane" id="pane-p2">
+          <div id="mpJournalMount-p2" class="pane-readonly"></div>
+          <div class="journal-actions"><span class="shared-badge">Read only — Player 2's journal</span></div>
+        </div>
+        <div class="journal-pane" id="pane-p3">
+          <div id="mpJournalMount-p3" class="pane-readonly"></div>
+          <div class="journal-actions"><span class="shared-badge">Read only — Player 3's journal</span></div>
+        </div>
+        <div class="journal-pane" id="pane-shared">
+          <div id="mpJournalMount-shared" class="pane-readonly"></div>
+          <div class="journal-actions">
+            <span class="shared-badge">Visible to all players</span>
+            <button class="btn-teal" onclick="mergeShared()">Merge to Shared Journal →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTES SECTION -->
+  <section class="notes-section">
+    <div class="section-header"><span class="sq"></span><span>Notes</span></div>
+    <div id="notesSolo">
+      <textarea class="notes-textarea" placeholder="Write your deductions, observations and theories here...&#10;&#10;e.g. Alice was in the lion enclosure at 6:15. If the weapon came from there..."></textarea>
+    </div>
+    <div class="notes-mp" id="notesMp">
+      <div class="journal-tabs-bar">
+        <button class="journal-tab active" onclick="switchNotesTab(this,'notes-mine')" data-pane="notes-mine">📓 My Notes</button>
+        <button class="journal-tab" onclick="switchNotesTab(this,'notes-p2')" data-pane="notes-p2">📓 <span class="p2name">Player 2</span></button>
+        <button class="journal-tab" onclick="switchNotesTab(this,'notes-p3')" data-pane="notes-p3" id="notes-tab-p3">📓 <span class="p3name">Player 3</span></button>
+        <button class="journal-tab" onclick="switchNotesTab(this,'notes-shared')" data-pane="notes-shared">📘 Shared Notes</button>
+      </div>
+      <div class="journal-pane-wrapper">
+        <div class="journal-pane active" id="pane-notes-mine">
+          <textarea style="width:100%;min-height:130px;padding:.75rem;border:none;font-family:var(--font);font-size:var(--sm);resize:vertical;outline:none" placeholder="Your quick notes — suspects, timelines, contradictions..."></textarea>
+          <div class="journal-actions">
+            <span class="shared-badge">Only visible to you</span>
+            <button class="btn-teal" onclick="pushNotesToShared()">Push to Shared Notes →</button>
+          </div>
+        </div>
+        <div class="journal-pane" id="pane-notes-p2">
+          <textarea readonly style="width:100%;min-height:130px;padding:.75rem;border:none;font-family:var(--font);font-size:var(--sm);resize:vertical;outline:none;background:var(--surface2);color:var(--muted)" placeholder="Player 2 hasn't written any notes yet..."></textarea>
+          <div class="journal-actions"><span class="shared-badge">Read only — Player 2's notes</span></div>
+        </div>
+        <div class="journal-pane" id="pane-notes-p3">
+          <textarea readonly style="width:100%;min-height:130px;padding:.75rem;border:none;font-family:var(--font);font-size:var(--sm);resize:vertical;outline:none;background:var(--surface2);color:var(--muted)" placeholder="Player 3 hasn't written any notes yet..."></textarea>
+          <div class="journal-actions"><span class="shared-badge">Read only — Player 3's notes</span></div>
+        </div>
+        <div class="journal-pane" id="pane-notes-shared">
+          <textarea readonly style="width:100%;min-height:130px;padding:.75rem;border:none;font-family:var(--font);font-size:var(--sm);resize:vertical;outline:none;background:var(--surface2);color:var(--muted)" placeholder="Nothing shared yet..."></textarea>
+          <div class="journal-actions">
+            <span class="shared-badge">Visible to all players</span>
+            <button class="btn-teal" onclick="mergeSharedNotes()">Merge to Shared Notes →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCUSATION -->
+  <section class="accuse-section">
+    <div class="section-header"><span class="sq"></span><span>Time for accusations</span></div>
+    <p class="accuse-intro">After working overnight collecting evidence and analyzing clues, it's time to crack this case by choosing the suspect, the time of murder, and the weapon. A word of warning: if you select the wrong answer you can try again, but the loop will punish you lowering your final score.</p>
+    <div class="accuse-selectors">
+      <div class="accuse-field">
+        <label>Suspect</label>
+        <select id="suspectSelect">
+          <option value="">— Choose —</option>
+          <option>Eddie</option><option>Alice</option>
+        </select>
+      </div>
+      <div class="accuse-field">
+        <label>Time of Murder</label>
+        <select id="timeSelect">
+          <option value="">— Choose —</option>
+          <option>4:00</option><option>4:15</option><option>4:30</option><option>4:45</option>
+          <option>5:00</option><option>5:15</option><option>5:30</option><option>5:45</option>
+          <option>6:00</option><option>6:15</option>
+        </select>
+      </div>
+      <div class="accuse-field">
+        <label>Weapon</label>
+        <select id="weaponSelect">
+          <option value="">— Choose —</option>
+          <option>Pistol</option><option>Poison</option>
+          <option>Wire Extension</option><option>Hammer</option>
+        </select>
+      </div>
+    </div>
+    <div class="accuse-bar"><button onclick="accuse()">Accuse!</button></div>
+  </section>
+
+</div><!-- end #gameSections -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <nav class="footer-nav">
+    <a href="#">Daily Mystery</a><a href="#">Old Mysteries</a>
+    <a href="#">How to Play</a><a href="#">About</a><a href="#">Shop</a>
+  </nav>
+  <p class="footer-copy">© 2024 Gabbo Industries <span class="icon-sq" style="width:10px;height:10px;background:#333"></span> Inc.</p>
+</footer>
+
+</div><!-- end page-wrapper -->
+
+<script>
+// ===== PUZZLE DATA =====
+const LOCATIONS = [
+  { icon: '🐒', label: 'Monkey Island' },
+  { icon: '🦜', label: 'Aviary' },
+  { icon: '🦁', label: 'Lion Enclosure' },
+  { icon: '🦎', label: 'Reptile House' },
+];
+const PERSONS = ['alice', 'eddie', 'frida'];
+const TIMES   = ['4:00','4:15','4:30','4:45','5:00','5:15','5:30','5:45','6:00','6:15'];
+const WEAPONS = [
+  { icon: '🔫', label: 'Pistol' },
+  { icon: '🧪', label: 'Poison' },
+  { icon: '🔌', label: 'Wire Ext.' },
+  { icon: '🔨', label: 'Hammer' },
+];
+
+const CLUES = [
+  { tag:'YOUR CLUE',   text:'Eddie was not in the monkey island between 4:00 and 5:00. He can confirm this.' },
+  { tag:'YOUR CLUE',   text:'Alice heard unusual sounds near the reptile house around 4:30.' },
+  { tag:'SHARED CLUE', text:'The hammer was found untouched in the reptile house after the murder.' },
+  { tag:'SHARED CLUE', text:'The killer was seen near the aviary just before 5:15.' },
+  { tag:'YOUR CLUE',   text:'No one entered the monkey island between 5:00 and 6:00 except Frida.' },
+];
+
+// ===== STATE =====
+let mode = 'solo';
+let playerCount = 2;
+let currentClue = 0;
+let currentRoom = null;
+let currentPlayer = null;
+
+// Cell states: stateMap[tableId][locIdx][personIdx][timeIdx] = 0|1|2|3
+// 0=blank 1=check 2=cross 3=question
+const CYCLE = ['', '✓', '✗', '?'];
+const CYCLE_CLASS = ['s-blank','s-check','s-cross','s-q'];
+
+function makeStateMap() {
+  return LOCATIONS.map(() => PERSONS.map(() => TIMES.map(() => 0)));
+}
+// icon strip states: stateMap[tableId].icons[locIdx|weapIdx] = bool (struck)
+const states = {
+  solo:   { cells: makeStateMap(), locStruck: LOCATIONS.map(()=>false), weapStruck: WEAPONS.map(()=>false) },
+  mine:   { cells: makeStateMap(), locStruck: LOCATIONS.map(()=>false), weapStruck: WEAPONS.map(()=>false) },
+  p2:     { cells: makeStateMap(), locStruck: LOCATIONS.map(()=>false), weapStruck: WEAPONS.map(()=>false) },
+  p3:     { cells: makeStateMap(), locStruck: LOCATIONS.map(()=>false), weapStruck: WEAPONS.map(()=>false) },
+  shared: { cells: makeStateMap(), locStruck: LOCATIONS.map(()=>false), weapStruck: WEAPONS.map(()=>false) },
+};
+
+// ===== JOURNAL RENDERER =====
+function buildJournal(mountEl, tableId, readonly) {
+  mountEl.innerHTML = '';
+  const s = states[tableId];
+
+  const wrap = document.createElement('div');
+  wrap.className = 'journal-wrap';
+
+  // Header
+  const hdr = document.createElement('div');
+  hdr.className = 'journal-header';
+
+  const thIcon = document.createElement('div');
+  thIcon.className = 'th-icon';
+  thIcon.textContent = '📍';
+  hdr.appendChild(thIcon);
+
+  const thName = document.createElement('div');
+  thName.className = 'th-name';
+  thName.textContent = 'Person';
+  hdr.appendChild(thName);
+
+  const thTimes = document.createElement('div');
+  thTimes.className = 'th-times';
+  TIMES.forEach(t => {
+    const th = document.createElement('div');
+    th.className = 'th-time';
+    th.textContent = t;
+    thTimes.appendChild(th);
+  });
+  hdr.appendChild(thTimes);
+  wrap.appendChild(hdr);
+
+  // Groups
+  LOCATIONS.forEach((loc, li) => {
+    const group = document.createElement('div');
+    group.className = 'journal-group';
+
+    // Icon cell
+    const iconCell = document.createElement('div');
+    iconCell.className = 'journal-group' + (s.locStruck[li] ? ' struck' : '');
+    iconCell.className = 'group-icon-cell' + (s.locStruck[li] ? ' struck' : '');
+    iconCell.title = loc.label + ' — click to eliminate';
+
+    const emojiSpan = document.createElement('span');
+    emojiSpan.className = 'icon-emoji';
+    emojiSpan.textContent = loc.icon;
+    iconCell.appendChild(emojiSpan);
+
+    const strikeLine = document.createElement('span');
+    strikeLine.className = 'strike-line';
+    iconCell.appendChild(strikeLine);
+
+    if (!readonly) {
+      iconCell.addEventListener('click', () => {
+        s.locStruck[li] = !s.locStruck[li];
+        iconCell.classList.toggle('struck', s.locStruck[li]);
+      });
+    }
+    group.appendChild(iconCell);
+
+    // Person rows
+    const rows = document.createElement('div');
+    rows.className = 'group-rows';
+
+    PERSONS.forEach((person, pi) => {
+      const row = document.createElement('div');
+      row.className = 'person-row';
+
+      const nameCell = document.createElement('div');
+      nameCell.className = 'person-name';
+      nameCell.textContent = person;
+      row.appendChild(nameCell);
+
+      const timeCols = document.createElement('div');
+      timeCols.className = 'time-cols';
+
+      TIMES.forEach((_, ti) => {
+        const cell = document.createElement('div');
+        const st = s.cells[li][pi][ti];
+        cell.className = 'time-cell ' + CYCLE_CLASS[st];
+        cell.textContent = CYCLE[st];
+        cell.title = TIMES[ti];
+
+        if (!readonly) {
+          cell.addEventListener('click', () => {
+            s.cells[li][pi][ti] = (s.cells[li][pi][ti] + 1) % 4;
+            const ns = s.cells[li][pi][ti];
+            cell.className = 'time-cell ' + CYCLE_CLASS[ns];
+            cell.textContent = CYCLE[ns];
+          });
+        }
+        timeCols.appendChild(cell);
+      });
+
+      row.appendChild(timeCols);
+      rows.appendChild(row);
+    });
+    group.appendChild(rows);
+    wrap.appendChild(group);
+  });
+
+  // Weapon/location icon strip
+  const strip = document.createElement('div');
+  strip.className = 'icon-strip';
+
+  // Weapons
+  WEAPONS.forEach((w, wi) => {
+    const btn = document.createElement('div');
+    btn.className = 'strip-icon' + (s.weapStruck[wi] ? ' struck' : '');
+    btn.title = w.label;
+    btn.textContent = w.icon;
+    if (!readonly) {
+      btn.addEventListener('click', () => {
+        s.weapStruck[wi] = !s.weapStruck[wi];
+        btn.classList.toggle('struck', s.weapStruck[wi]);
+      });
+    }
+    strip.appendChild(btn);
+  });
+
+  // Locations in strip too
+  LOCATIONS.forEach((loc, li) => {
+    const btn = document.createElement('div');
+    btn.className = 'strip-icon' + (s.locStruck[li] ? ' struck' : '');
+    btn.title = loc.label;
+    btn.textContent = loc.icon;
+    if (!readonly) {
+      btn.addEventListener('click', () => {
+        s.locStruck[li] = !s.locStruck[li];
+        btn.classList.toggle('struck', s.locStruck[li]);
+        // Sync with group icon cell
+        buildJournal(mountEl, tableId, readonly);
+      });
+    }
+    strip.appendChild(btn);
+  });
+
+  wrap.appendChild(strip);
+  mountEl.appendChild(wrap);
+}
+
+// ===== MODE SWITCH =====
+function switchMode(m) {
+  mode = m;
+  document.getElementById('btnSolo').classList.toggle('active', m === 'solo');
+  document.getElementById('btnMulti').classList.toggle('active', m === 'multi');
+  document.getElementById('mpSetupCard').classList.toggle('visible', m === 'multi');
+
+  if (m === 'multi') {
+    document.getElementById('gameSections').classList.remove('visible');
+    document.getElementById('lieToggleWrapper').classList.add('hidden');
+  } else {
+    document.getElementById('lieToggleWrapper').classList.remove('hidden');
+    document.getElementById('gameSections').classList.remove('visible');
+  }
+  document.getElementById('journalSolo').style.display = 'block';
+  document.getElementById('journalMp').classList.remove('visible');
+  document.getElementById('notesSolo').style.display = 'block';
+  document.getElementById('notesMp').classList.remove('visible');
+  document.getElementById('playersPanel').classList.remove('visible');
+  document.getElementById('journalSectionTitle').textContent = "Detective's Journal";
+}
+
+// ===== LIE CHOICE =====
+function chooseLie(btn) {
+  document.querySelectorAll('.lie-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('lieToggleWrapper').classList.add('hidden');
+  document.getElementById('gameSections').classList.add('visible');
+  buildJournal(document.getElementById('soloJournalMount'), 'solo', false);
+}
+
+// ===== ROOM =====
+function randomCode(len=7) {
+  return Array.from({length:len}, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
+}
+function generateRoom() {
+  const name = document.getElementById('createName').value.trim();
+  if (!name) { document.getElementById('createName').focus(); return; }
+  const code = randomCode();
+  currentRoom = code; currentPlayer = name;
+  const el = document.getElementById('roomCodeDisplay');
+  el.style.display = 'inline'; el.textContent = 'Room: ' + code;
+  setTimeout(() => enterLobby([name], code), 500);
+}
+function refreshRoom() {
+  document.getElementById('roomCodeDisplay').style.display = 'none';
+  document.getElementById('createName').value = '';
+}
+function joinRoom() {
+  const name = document.getElementById('joinName').value.trim();
+  const code = document.getElementById('joinCode').value.trim().toUpperCase();
+  if (!name || !code) return;
+  currentRoom = code; currentPlayer = name;
+  enterLobby([name, 'Player 2'], code);
+}
+function selectCount(btn, count) {
+  document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  playerCount = count;
+}
+
+// ===== ENTER LOBBY =====
+function enterLobby(players, roomCode) {
+  mode = 'lobby';
+  document.getElementById('modeToggleWrapper').style.display = 'none';
+  document.getElementById('mpSetupCard').classList.remove('visible');
+  document.getElementById('goBackBtn').style.display = 'inline-block';
+  document.getElementById('lieToggleWrapper').classList.add('hidden');
+
+  const panel = document.getElementById('playersPanel');
+  panel.classList.add('visible');
+  const chips = document.getElementById('playerChips');
+  chips.innerHTML = '';
+  const allPlayers = players.length < playerCount
+    ? [...players, ...Array(playerCount - players.length).fill(0).map((_,i) => 'Player '+(players.length+i+1))]
+    : players;
+  allPlayers.forEach((p, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'player-chip' + (i===0?' you':'');
+    chip.innerHTML = `<span class="dot"></span>${p}${i===0?' (you)':''}`;
+    chips.appendChild(chip);
+  });
+  document.getElementById('roomCodeBadge').textContent = 'Room: ' + roomCode;
+
+  document.getElementById('gameSections').classList.add('visible');
+  document.getElementById('journalSolo').style.display = 'none';
+  const jmp = document.getElementById('journalMp');
+  jmp.classList.add('visible');
+  document.getElementById('journalSectionTitle').textContent = "Detective's Journals";
+
+  document.getElementById('notesSolo').style.display = 'none';
+  document.getElementById('notesMp').classList.add('visible');
+
+  const show3 = playerCount >= 3;
+  document.getElementById('tab-p3').style.display = show3 ? '' : 'none';
+  document.getElementById('notes-tab-p3').style.display = show3 ? '' : 'none';
+
+  buildJournal(document.getElementById('mpJournalMount-mine'),   'mine',   false);
+  buildJournal(document.getElementById('mpJournalMount-p2'),     'p2',     true);
+  buildJournal(document.getElementById('mpJournalMount-p3'),     'p3',     true);
+  buildJournal(document.getElementById('mpJournalMount-shared'), 'shared', true);
+}
+
+// ===== GO BACK =====
+function goBack() {
+  mode = 'solo';
+  document.getElementById('modeToggleWrapper').style.display = '';
+  document.getElementById('goBackBtn').style.display = 'none';
+  document.getElementById('gameSections').classList.remove('visible');
+  document.getElementById('lieToggleWrapper').classList.remove('hidden');
+  document.getElementById('journalSolo').style.display = 'block';
+  document.getElementById('journalMp').classList.remove('visible');
+  document.getElementById('notesSolo').style.display = 'block';
+  document.getElementById('notesMp').classList.remove('visible');
+  document.getElementById('playersPanel').classList.remove('visible');
+  document.getElementById('mpSetupCard').classList.remove('visible');
+  document.getElementById('btnSolo').classList.add('active');
+  document.getElementById('btnMulti').classList.remove('active');
+  document.getElementById('journalSectionTitle').textContent = "Detective's Journal";
+  document.querySelectorAll('.lie-btn').forEach(b => b.classList.remove('active'));
+  currentClue = 0; renderClue();
+}
+
+// ===== CLUE NAV =====
+function renderClue() {
+  const c = CLUES[currentClue];
+  document.getElementById('clueNum').textContent = currentClue + 1;
+  document.getElementById('clueProgress').textContent = currentClue + 1;
+  document.getElementById('clueTotal').textContent = CLUES.length;
+  document.getElementById('clueTag').textContent = c.tag;
+  document.getElementById('clueText').textContent = c.text;
+}
+function prevClue() { if (currentClue > 0) { currentClue--; renderClue(); } }
+function nextClue() { if (currentClue < CLUES.length-1) { currentClue++; renderClue(); } }
+
+// ===== TABS =====
+function switchJournalTab(btn, paneId) {
+  document.querySelectorAll('#journalMp .journal-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#journalMp .journal-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-'+paneId).classList.add('active');
+}
+function switchNotesTab(btn, paneId) {
+  document.querySelectorAll('#notesMp .journal-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#notesMp .journal-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-'+paneId).classList.add('active');
+}
+
+// ===== PUSH / MERGE =====
+function pushToShared() {
+  // Deep copy mine state to shared
+  states['shared'].cells = states['mine'].cells.map(l => l.map(p => [...p]));
+  states['shared'].locStruck = [...states['mine'].locStruck];
+  states['shared'].weapStruck = [...states['mine'].weapStruck];
+  buildJournal(document.getElementById('mpJournalMount-shared'), 'shared', true);
+  const sharedBtn = document.querySelector('#journalMp .journal-tab[data-pane="shared"]');
+  switchJournalTab(sharedBtn, 'shared');
+}
+function mergeShared() {
+  alert('In the live version this syncs all player journals to the shared board via Supabase Realtime.');
+}
+function pushNotesToShared() {
+  const myText = document.querySelector('#pane-notes-mine textarea').value;
+  const sharedTA = document.querySelector('#pane-notes-shared textarea');
+  sharedTA.value = (sharedTA.value ? sharedTA.value + '\n\n--- ' + (currentPlayer||'You') + ' ---\n' : '') + myText;
+  const sharedBtn = document.querySelector('#notesMp .journal-tab[data-pane="notes-shared"]');
+  switchNotesTab(sharedBtn, 'notes-shared');
+}
+function mergeSharedNotes() {
+  alert('In the live version this syncs all player notes to the shared notes via Supabase Realtime.');
+}
+
+// ===== ACCUSE =====
+function accuse() {
+  const s = document.getElementById('suspectSelect').value;
+  const t = document.getElementById('timeSelect').value;
+  const w = document.getElementById('weaponSelect').value;
+  if (!s || !t || !w) { alert('Please choose a suspect, time, and weapon before accusing!'); return; }
+  alert('🔍 Accusation submitted!\n\nSuspect: ' + s + '\nTime: ' + t + '\nWeapon: ' + w + '\n\nIn the live version your score will be calculated by the sleuth-o-meter™.');
+}
+
+// ===== INIT =====
+renderClue();
+</script>
+</body>
+</html>
