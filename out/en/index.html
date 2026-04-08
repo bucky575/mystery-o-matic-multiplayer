@@ -1442,19 +1442,19 @@
 
 				<p>Get ready to solve a fresh murder mystery! Your goal is to figure out <b>who</b> did it, <b>when</b>
 					it happened, and <b>what</b> weapon was used.</p>
-				Frida, Carol and Dave are transported back in time to <b>a castle in the Middle Ages</b>!
+				Carol, Frida and Alice are transported back in time to <b>a pyramid in Ancient Egypt</b>!
 				<p>Help them solve this mystery checking out these initial clues:</p>
 				<div class="row align-items-center">
 					<div class="col">
 						<ul id="">
-  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'dave')">Dave</a> was murdered in the great hall (🍷) at some time between 5:00 and 7:15</li>
+  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'frida')">Frida</a> was murdered in the throne room (👑) at some time between 6:00 and 7:45</li>
   <li>The murderer was alone with their victim, and the body remained unmoved</li>
   <li>The murderer wasn't caught with the body</li>
   <li>The killer retrieved the murder weapon from one of these places:
-<ul id="en"><li>The trident (🔱) from the great hall (🍷)</li><li>The rope (🪢) from the armory (🛡️)</li><li>The archery bow (🏹) from the bed chamber (🛏️)</li><li>The poison (⚗️) from the dungeon (🔒)</li></ul></li>
+<ul id="en"><li>The archery bow (🏹) from the throne room (👑)</li><li>The rock (🪨) from the burial chamber (⚱️)</li><li>The dagger (🗡️) from the desert (🏜️)</li><li>The poison (⚗️) from the temple (📿)</li></ul></li>
   <li>No one saw the killer retrieving the murder weapon</li>
-  <li>We know where everyone was at 7:15:
-<ul id=""><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'frida')">Frida</a> was in the dungeon (🔒)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'carol')">Carol</a> was in the bed chamber (🛏️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'dave')">Dave</a>'s body was in the great hall (🍷)</li></ul></li>
+  <li>We know where everyone was at 7:45:
+<ul id=""><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'carol')">Carol</a> was in the burial chamber (⚱️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'frida')">Frida</a>'s body was in the throne room (👑)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'alice')">Alice</a> was in the temple (📿)</li></ul></li>
   <li>No one else was present in the location.</li>
 </ul>
 					</div>
@@ -1539,12 +1539,12 @@
 				</div>
     
 				<div class="col-12 text-center">
-					<canvas id="clues-table-room1" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room2" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
 				<div class="col-12 text-center">
-					<canvas id="clues-table-room2" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room1" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
@@ -1575,8 +1575,8 @@
 							<h6 class="sticky-notes">The murderer was…</h6>
 							<select class="form-select sticky-notes" id="who-selector">
 								<option value="" disabled selected>...</option>
-								<option value="frida">frida</option>
-<option value="carol">carol</option>
+								<option value="carol">carol</option>
+<option value="alice">alice</option>
 							</select>
 						</a>
 					</li>
@@ -1586,9 +1586,9 @@
 							<h6 class="sticky-notes">The weapon was…</h6>
 							<select class="form-select sticky-notes" id="how-selector">
 								<option value="" disabled selected>...</option>
-								<option value="trident">trident</option>
-<option value="rope">rope</option>
-<option value="archery bow">archery bow</option>
+								<option value="archery bow">archery bow</option>
+<option value="rock">rock</option>
+<option value="dagger">dagger</option>
 <option value="poison">poison</option>
 							</select>
 						</a>
@@ -1599,16 +1599,14 @@
 							<h6 class="sticky-notes">Time of murder was…</h6>
 							<select class="form-select sticky-notes" id="when-selector">
 								<option value="" disabled selected>...</option>
-								<option value="5:00">5:00</option>
-<option value="5:15">5:15</option>
-<option value="5:30">5:30</option>
-<option value="5:45">5:45</option>
-<option value="6:00">6:00</option>
+								<option value="6:00">6:00</option>
 <option value="6:15">6:15</option>
 <option value="6:30">6:30</option>
 <option value="6:45">6:45</option>
 <option value="7:00">7:00</option>
 <option value="7:15">7:15</option>
+<option value="7:30">7:30</option>
+<option value="7:45">7:45</option>
 							</select>
 						</a>
 					</li>

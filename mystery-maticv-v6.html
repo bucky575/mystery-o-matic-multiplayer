@@ -700,14 +700,12 @@ a{color:var(--text)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-// ===== SUPABASE INIT =====
-const { createClient } = window.supabase;
-const sb = createClient('https://atjnnkqzwynurhfxtswq.supabase.co', 'sb_publishable_KHrysbPNgaYneARmgznUXw_bCNSjAZT');
+// ===== SUPABASE INIT (inside DOMContentLoaded to avoid CDN timing issues) =====
+let sb;
 
 // ===== PUZZLE DATA =====
 const DATA_JS_URL = 'https://bucky575.github.io/mystery-o-matic-multiplayer/out/data.js';
 
-// These will be populated by loadPuzzle() before anything renders
 let LOCATIONS = [];
 let PERSONS   = [];
 let TIMES     = [];
@@ -715,25 +713,52 @@ let WEAPONS   = [];
 let CLUES     = [];
 let CORRECT_ANSWER_HASH = '';
 let VICTIM    = '';
+
+// ===== STATE GLOBALS =====
+let mode = 'solo';
+let playerCount = 2;
+let currentClue = 0;
+let currentRoom  = null;
+let currentPlayer = null;
 let mySlot = 0;
+window.p2Name = 'Player 2';
+window.p3Name = 'Player 3';
+window.p4Name = 'Player 4';
+
+// TODO (Job 4b): generateRoom() should also insert a row into Supabase rooms table
+// so other players can fetch player_count when joining. Currently only localStorage is used.
+
+const CYCLE       = ['', '✓', '✗', '?'];
+const CYCLE_CLASS = ['s-blank','s-check','s-cross','s-q'];
+
+// Clue assignment state
+let myClueIndices    = [];
+let myCurrentCluePos = 0;
+
+// States — initialised empty, rebuildStateMaps() fills after puzzle loads
+const states = {
+  solo:   { cells: [], locStruck: [], weapStruck: [] },
+  mine:   { cells: [], locStruck: [], weapStruck: [] },
+  p2:     { cells: [], locStruck: [], weapStruck: [] },
+  p3:     { cells: [], locStruck: [], weapStruck: [] },
+  p4:     { cells: [], locStruck: [], weapStruck: [] },
+  shared: { cells: [], locStruck: [], weapStruck: [] },
+};
+
+// ===== PUZZLE LOADER =====
 async function loadPuzzle() {
   try {
     const res  = await fetch(DATA_JS_URL);
     const text = await res.text();
-
-    // data.js is a JS file starting with "data = {...}"
-    // Strip the variable assignment to get pure JSON
     const jsonStr = text.replace(/^\s*data\s*=\s*/, '').replace(/;?\s*$/, '');
     const d = JSON.parse(jsonStr);
 
-    // ── LOCATIONS ──────────────────────────────────────────────────────
     LOCATIONS = d.locationOrder.map(([, name]) => ({
       icon:  d.locationIcons[name] || '📍',
       label: name.charAt(0).toUpperCase() + name.slice(1),
       key:   name,
     }));
 
-    // ── WEAPONS ────────────────────────────────────────────────────────
     WEAPONS = Object.keys(d.weaponMap).map(key => ({
       icon:  d.weaponIcons[key] || '🔪',
       label: key.replace('$', '').replace(/_/g, ' ')
@@ -741,11 +766,9 @@ async function loadPuzzle() {
       key:   key,
     }));
 
-    // ── PERSONS (suspects only — exclude victim) ───────────────────────
     PERSONS = d.characterNames.filter(name => name !== d.victim);
     VICTIM  = d.victim;
 
-    // ── TIMES (derived from timeOffset + numIntervals × 15 min) ────────
     TIMES = [];
     for (let i = 0; i <= d.numIntervals; i++) {
       const totalSec = d.timeOffset + i * 15 * 60;
@@ -754,36 +777,25 @@ async function loadPuzzle() {
       TIMES.push(`${h}:${m.toString().padStart(2, '0')}`);
     }
 
-    // ── CLUES ──────────────────────────────────────────────────────────
-    // Easy mode = additionalClues.en
-    // Hard mode = additionalCluesWithLies.en
-    // Each clue is already an HTML string — strip tags to get plain text
     const rawClues = d.additionalClues?.en || [];
     CLUES = rawClues.map((html, i) => ({
       tag:  'CLUE ' + (i + 1),
-      text: html.replace(/<[^>]+>/g, ''),  // strip HTML tags for plain display
-      html: html,                           // keep original for rich display later
+      text: html.replace(/<[^>]+>/g, ''),
+      html: html,
     }));
 
-    // ── ANSWER HASH ────────────────────────────────────────────────────
     CORRECT_ANSWER_HASH = d.correctAnswer;
 
-    // ── REBUILD STATE MAPS now that dimensions are known ───────────────
-    rebuildStateMaps()
+    rebuildStateMaps();
     populateAccuseDropdowns();
 
   } catch (err) {
     console.error('Failed to load puzzle:', err);
-    document.body.innerHTML = `
-      <div style="padding:2rem;font-family:monospace;color:#c00">
-        <strong>Failed to load today's puzzle.</strong><br>
-        ${err.message}
-      </div>`;
+    document.body.innerHTML = `<div style="padding:2rem;font-family:monospace;color:#c00"><strong>Failed to load today's puzzle.</strong><br>${err.message}</div>`;
   }
 }
 
 function rebuildStateMaps() {
-  // Re-initialise state maps with correct dimensions from real data
   const fresh = () => LOCATIONS.map(() => PERSONS.map(() => TIMES.map(() => 0)));
   ['solo','mine','p2','p3','p4','shared'].forEach(key => {
     states[key] = {
@@ -794,28 +806,11 @@ function rebuildStateMaps() {
   });
 }
 
-// ===== STATE =====
-let mode = 'solo';
-let playerCount = 2;
-let currentClue = 0;
-let currentRoom = null;
-let currentPlayer = null;
-
-// Cell states: stateMap[tableId][locIdx][personIdx][timeIdx] = 0|1|2|3
-// 0=blank 1=check 2=cross 3=question
-const CYCLE = ['', '✓', '✗', '?'];
-const CYCLE_CLASS = ['s-blank','s-check','s-cross','s-q'];
-
-function makeStateMap() {
-  return LOCATIONS.map(() => PERSONS.map(() => TIMES.map(() => 0)));
-}
-// icon strip states: stateMap[tableId].icons[locIdx|weapIdx] = bool (struck)
-
-
 // ===== JOURNAL RENDERER =====
 function buildJournal(mountEl, tableId, readonly) {
   mountEl.innerHTML = '';
   const s = states[tableId];
+  if (!s || !s.cells || s.cells.length === 0) return;
 
   const wrap = document.createElement('div');
   wrap.className = 'journal-wrap';
@@ -823,17 +818,14 @@ function buildJournal(mountEl, tableId, readonly) {
   // Header
   const hdr = document.createElement('div');
   hdr.className = 'journal-header';
-
   const thIcon = document.createElement('div');
   thIcon.className = 'th-icon';
   thIcon.textContent = '📍';
   hdr.appendChild(thIcon);
-
   const thName = document.createElement('div');
   thName.className = 'th-name';
   thName.textContent = 'Person';
   hdr.appendChild(thName);
-
   const thTimes = document.createElement('div');
   thTimes.className = 'th-times';
   TIMES.forEach(t => {
@@ -850,17 +842,13 @@ function buildJournal(mountEl, tableId, readonly) {
     const group = document.createElement('div');
     group.className = 'journal-group';
 
-    // Icon cell
     const iconCell = document.createElement('div');
-    iconCell.className = 'journal-group' + (s.locStruck[li] ? ' struck' : '');
     iconCell.className = 'group-icon-cell' + (s.locStruck[li] ? ' struck' : '');
     iconCell.title = loc.label + ' — click to eliminate';
-
     const emojiSpan = document.createElement('span');
     emojiSpan.className = 'icon-emoji';
     emojiSpan.textContent = loc.icon;
     iconCell.appendChild(emojiSpan);
-
     const strikeLine = document.createElement('span');
     strikeLine.className = 'strike-line';
     iconCell.appendChild(strikeLine);
@@ -873,19 +861,16 @@ function buildJournal(mountEl, tableId, readonly) {
     }
     group.appendChild(iconCell);
 
-    // Person rows
     const rows = document.createElement('div');
     rows.className = 'group-rows';
 
     PERSONS.forEach((person, pi) => {
       const row = document.createElement('div');
       row.className = 'person-row';
-
       const nameCell = document.createElement('div');
       nameCell.className = 'person-name';
       nameCell.textContent = person;
       row.appendChild(nameCell);
-
       const timeCols = document.createElement('div');
       timeCols.className = 'time-cols';
 
@@ -895,7 +880,6 @@ function buildJournal(mountEl, tableId, readonly) {
         cell.className = 'time-cell ' + CYCLE_CLASS[st];
         cell.textContent = CYCLE[st];
         cell.title = TIMES[ti];
-
         if (!readonly) {
           cell.addEventListener('click', () => {
             s.cells[li][pi][ti] = (s.cells[li][pi][ti] + 1) % 4;
@@ -918,7 +902,6 @@ function buildJournal(mountEl, tableId, readonly) {
   const strip = document.createElement('div');
   strip.className = 'icon-strip';
 
-  // Weapons
   WEAPONS.forEach((w, wi) => {
     const btn = document.createElement('div');
     btn.className = 'strip-icon' + (s.weapStruck[wi] ? ' struck' : '');
@@ -933,7 +916,6 @@ function buildJournal(mountEl, tableId, readonly) {
     strip.appendChild(btn);
   });
 
-  // Locations in strip too
   LOCATIONS.forEach((loc, li) => {
     const btn = document.createElement('div');
     btn.className = 'strip-icon' + (s.locStruck[li] ? ' struck' : '');
@@ -943,7 +925,6 @@ function buildJournal(mountEl, tableId, readonly) {
       btn.addEventListener('click', () => {
         s.locStruck[li] = !s.locStruck[li];
         btn.classList.toggle('struck', s.locStruck[li]);
-        // Sync with group icon cell
         buildJournal(mountEl, tableId, readonly);
       });
     }
@@ -985,20 +966,31 @@ function chooseLie(btn) {
   buildJournal(document.getElementById('soloJournalMount'), 'solo', false);
 }
 
-// ===== ROOM =====
-function randomCode(len=7) {
-  return Array.from({length:len}, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
+// ===== ROOM SETUP =====
+function randomCode() {
+  // Use crypto.randomUUID() so room id is a valid UUID for Supabase
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // Fallback UUID v4
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+function shortCode(uuid) {
+  // Show last 8 chars (uppercase) as the display code
+  return uuid.replace(/-/g,'').slice(-8).toUpperCase();
 }
 
 function generateRoom() {
   const name = document.getElementById('createName').value.trim();
   if (!name) { document.getElementById('createName').focus(); return; }
   const code = randomCode();
-  currentRoom = code;
+  currentRoom   = code;
   currentPlayer = name;
-  mySlot = 0;
+  mySlot        = 0;
 
-  // Save with correct key names
   const today = new Date().toISOString().split('T')[0];
   localStorage.setItem('mp_room_id',      code);
   localStorage.setItem('mp_player_name',  name);
@@ -1006,39 +998,75 @@ function generateRoom() {
   localStorage.setItem('mp_slot',         '0');
   localStorage.setItem('mp_player_count', String(playerCount));
 
+  // Write registry entry for slot 0
+  const registry = {};
+  registry[0] = name;
+  localStorage.setItem('room_registry_' + code, JSON.stringify(registry));
+
   const el = document.getElementById('roomCodeDisplay');
-  el.style.display = 'inline'; el.textContent = 'Room: ' + code;
+  el.style.display = 'inline';
+  el.textContent = 'Code: ' + shortCode(code) + ' (share this)';
+  el.title = 'Full room ID: ' + code;
+
+  // Insert into Supabase rooms table so joiners can fetch player_count
+  sb.from('rooms').insert({
+    id:           code,
+    puzzle_date:  today,
+    player_count: playerCount,
+    created_by:   name,
+  }).then(({ error }) => {
+    if (error) console.warn('Supabase rooms insert error:', error.message);
+  });
+
   setTimeout(() => enterLobby(code), 500);
 }
 
 function joinRoom() {
-  const name = document.getElementById('joinName').value.trim();
-  const code = document.getElementById('joinCode').value.trim().toUpperCase();
-  if (!name || !code) return;
-  currentRoom = code;
-  currentPlayer = name;
+  const nameVal = document.getElementById('joinName').value.trim();
+  const codeVal = document.getElementById('joinCode').value.trim().toUpperCase();
+  if (!nameVal || !codeVal) return;
+  currentPlayer = nameVal;
 
-  // Assign next slot based on registry
-  const registry = JSON.parse(localStorage.getItem('room_registry_' + code) || '{}');
-  const usedSlots = Object.keys(registry).map(Number);
-  mySlot = usedSlots.length > 0 ? Math.max(...usedSlots) + 1 : 1;
+  // Support both full UUID (pasted) and 8-char short code
+  const isShortCode = codeVal.length <= 8 && !codeVal.includes('-');
+  const roomQuery = isShortCode
+    ? sb.from('rooms').select('id, player_count').ilike('id', '%' + codeVal.toLowerCase())
+    : sb.from('rooms').select('id, player_count').eq('id', codeVal.toLowerCase()).limit(1);
 
-  const today = new Date().toISOString().split('T')[0];
-  localStorage.setItem('mp_room_id',      code);
-  localStorage.setItem('mp_player_name',  name);
-  localStorage.setItem('mp_puzzle_date',  today);
-  localStorage.setItem('mp_slot',         String(mySlot));
-  // Don't overwrite player_count — creator already set it
-  // Read it from Supabase instead
-  sb.from('rooms')
-    .select('player_count')
-    .eq('id', code)
-    .single()
-    .then(({ data }) => {
-      playerCount = data?.player_count || 2;
-      localStorage.setItem('mp_player_count', String(playerCount));
-      enterLobby(code);
-    });
+  roomQuery.then(({ data: roomRows, error }) => {
+    const roomRow = roomRows?.[0];
+    if (error || !roomRow) {
+      showMpError('Room not found. Check the room code and try again.');
+      return;
+    }
+    // Use canonical UUID from DB
+    currentRoom  = roomRow.id;
+    playerCount  = roomRow.player_count || 2;
+    localStorage.setItem('mp_player_count', String(playerCount));
+
+    // Get next available slot from room_players
+    sb.from('room_players')
+      .select('slot')
+      .eq('room_id', currentRoom)
+      .then(({ data: players }) => {
+        const usedSlots = (players || []).map(p => p.slot);
+        let slot = 1;
+        while (usedSlots.includes(slot)) slot++;
+        mySlot = slot;
+
+        const today = new Date().toISOString().split('T')[0];
+        localStorage.setItem('mp_room_id',      currentRoom);
+        localStorage.setItem('mp_player_name',  nameVal);
+        localStorage.setItem('mp_puzzle_date',  today);
+        localStorage.setItem('mp_slot',         String(slot));
+
+        const registry = JSON.parse(localStorage.getItem('room_registry_' + currentRoom) || '{}');
+        registry[slot] = nameVal;
+        localStorage.setItem('room_registry_' + currentRoom, JSON.stringify(registry));
+
+        enterLobby(currentRoom);
+      });
+  });
 }
 
 function refreshRoom() {
@@ -1060,30 +1088,65 @@ async function enterLobby(roomCode) {
   document.getElementById('goBackBtn').style.display = 'inline-block';
   document.getElementById('lieToggleWrapper').classList.add('hidden');
 
-  // Fetch room player_count
-  // (In mock mode without Supabase, use localStorage fallback)
   const storedCount = parseInt(localStorage.getItem('mp_player_count') || '2');
   playerCount = storedCount;
-  mySlot = parseInt(localStorage.getItem('mp_slot') || '0');
+  mySlot      = parseInt(localStorage.getItem('mp_slot') || '0');
+  currentRoom   = currentRoom   || roomCode;
+  currentPlayer = currentPlayer || localStorage.getItem('mp_player_name') || '';
 
-  // Build allPlayers array — slot-aware
-  // For now, use localStorage peer registry; Supabase replaces this
-  const storedRegistry = JSON.parse(localStorage.getItem('room_registry_' + roomCode) || '{}');
-  storedRegistry[mySlot] = currentPlayer;
-  localStorage.setItem('room_registry_' + roomCode, JSON.stringify(storedRegistry));
+  // Fetch real player names from Supabase room_players
+  let allPlayers = Array.from({ length: playerCount }, (_, i) => `Player ${i + 1}`);
+  try {
+    const { data: rpRows } = await sb.from('room_players')
+      .select('slot, player_name')
+      .eq('room_id', roomCode)
+      .order('slot');
 
-  const allPlayers = Array.from({ length: playerCount }, (_, i) =>
-    storedRegistry[i] || `Player ${i + 1}`
-  );
+    if (rpRows && rpRows.length > 0) {
+      // Build registry from Supabase data
+      const registry = {};
+      rpRows.forEach(r => { registry[r.slot] = r.player_name; });
+      // Merge with local registry so we see ourselves even before insert completes
+      const localReg = JSON.parse(localStorage.getItem('room_registry_' + roomCode) || '{}');
+      Object.assign(registry, localReg);
+      localStorage.setItem('room_registry_' + roomCode, JSON.stringify(registry));
+      allPlayers = Array.from({ length: playerCount }, (_, i) => registry[i] || `Player ${i + 1}`);
+    } else {
+      // Fall back to local registry
+      const registry = JSON.parse(localStorage.getItem('room_registry_' + roomCode) || '{}');
+      registry[mySlot] = currentPlayer;
+      localStorage.setItem('room_registry_' + roomCode, JSON.stringify(registry));
+      allPlayers = Array.from({ length: playerCount }, (_, i) => registry[i] || `Player ${i + 1}`);
+    }
+  } catch(e) {
+    console.warn('Could not fetch room_players from Supabase:', e);
+    const registry = JSON.parse(localStorage.getItem('room_registry_' + roomCode) || '{}');
+    registry[mySlot] = currentPlayer;
+    allPlayers = Array.from({ length: playerCount }, (_, i) => registry[i] || `Player ${i + 1}`);
+  }
 
-  // "Other players" are everyone except me
-  // Tab labels: p2, p3, p4 = the OTHER players in slot order
+  // Insert self into room_players if not already there
+  try {
+    const { data: existing } = await sb.from('room_players')
+      .select('id')
+      .eq('room_id', roomCode)
+      .eq('player_name', currentPlayer)
+      .maybeSingle();
+    if (!existing) {
+      await sb.from('room_players').insert({
+        room_id:     roomCode,
+        player_name: currentPlayer,
+        slot:        mySlot,
+      });
+    }
+  } catch(e) { console.warn('room_players insert error:', e); }
+
+  // "Other players" tabs — everyone except me, in slot order
   const otherPlayers = allPlayers.filter((_, i) => i !== mySlot);
   window.p2Name = otherPlayers[0] || 'Player 2';
   window.p3Name = otherPlayers[1] || 'Player 3';
   window.p4Name = otherPlayers[2] || 'Player 4';
 
-  // Update tab name labels
   document.querySelectorAll('.p2name').forEach(el => el.textContent = window.p2Name);
   document.querySelectorAll('.p3name').forEach(el => el.textContent = window.p3Name);
   document.querySelectorAll('.p4name').forEach(el => el.textContent = window.p4Name);
@@ -1098,7 +1161,15 @@ async function enterLobby(roomCode) {
     chips.appendChild(chip);
   });
 
-  document.getElementById('roomCodeBadge').textContent = 'Room: ' + roomCode;
+  document.getElementById('roomCodeBadge').textContent = 'Room: ' + shortCode(roomCode);
+  // Store full UUID in a copy-able span for sharing
+  const badge = document.getElementById('roomCodeBadge');
+  badge.title = 'Click to copy full room ID';
+  badge.style.cursor = 'pointer';
+  badge.onclick = () => {
+    navigator.clipboard.writeText(roomCode).then(() => showToast('Room code copied! Share with teammates ✓'));
+  };
+  document.getElementById('playersPanel').classList.add('visible');
   document.getElementById('gameSections').classList.add('visible');
   document.getElementById('journalSolo').style.display = 'none';
   document.getElementById('journalMp').classList.add('visible');
@@ -1107,14 +1178,19 @@ async function enterLobby(roomCode) {
   document.getElementById('notesMp').classList.add('visible');
 
   // Show/hide P3 and P4 tabs
-  document.getElementById('tab-p3').style.display = playerCount >= 3 ? '' : 'none';
+  document.getElementById('tab-p3').style.display       = playerCount >= 3 ? '' : 'none';
   document.getElementById('notes-tab-p3').style.display = playerCount >= 3 ? '' : 'none';
-  document.getElementById('tab-p4').style.display = playerCount >= 4 ? '' : 'none';
+  document.getElementById('tab-p4').style.display       = playerCount >= 4 ? '' : 'none';
   document.getElementById('notes-tab-p4').style.display = playerCount >= 4 ? '' : 'none';
 
+  // Assign clues for multiplayer — each player gets every Nth clue
+  assignCluesForPlayer(mySlot, playerCount);
+
   // Restore my grid from localStorage
-  const savedGrid = localStorage.getItem('my_grid_state_' + roomCode);
-  if (savedGrid) { try { states['mine'] = JSON.parse(savedGrid); } catch(e) {} }
+  const savedGrid = localStorage.getItem('my_grid_' + roomCode);
+  if (savedGrid) {
+    try { states['mine'] = JSON.parse(savedGrid); } catch(e) {}
+  }
   const savedNote = localStorage.getItem('my_note_' + roomCode);
   if (savedNote) {
     const ta = document.getElementById('myNoteTextarea');
@@ -1128,9 +1204,41 @@ async function enterLobby(roomCode) {
   buildJournal(document.getElementById('mpJournalMount-shared'), 'shared', true);
 }
 
+// ===== CLUE ASSIGNMENT (multiplayer) =====
+function assignCluesForPlayer(slot, numPlayers) {
+  myClueIndices    = [];
+  myCurrentCluePos = 0;
+  const total = CLUES.length;
+  for (let i = slot; i < total; i += numPlayers) {
+    myClueIndices.push(i);
+  }
+  renderMyClues();
+}
+
+function renderMyClues() {
+  if (myClueIndices.length === 0) { renderClue(); return; }
+  myCurrentCluePos = Math.max(0, Math.min(myCurrentCluePos, myClueIndices.length - 1));
+  const globalIdx = myClueIndices[myCurrentCluePos];
+  const clue      = CLUES[globalIdx];
+  document.getElementById('clueNum').textContent      = myCurrentCluePos + 1;
+  document.getElementById('clueProgress').textContent = myCurrentCluePos + 1;
+  document.getElementById('clueTotal').textContent    = myClueIndices.length;
+  document.getElementById('clueTag').textContent      = `CLUE ${globalIdx + 1} OF ${CLUES.length}`;
+  document.getElementById('clueText').textContent     = clue.text;
+}
+
+function prevMyClue() {
+  if (myCurrentCluePos > 0) { myCurrentCluePos--; renderMyClues(); }
+}
+function nextMyClue() {
+  if (myCurrentCluePos < myClueIndices.length - 1) { myCurrentCluePos++; renderMyClues(); }
+}
+
 // ===== GO BACK =====
 function goBack() {
   mode = 'solo';
+  myClueIndices    = [];
+  myCurrentCluePos = 0;
   document.getElementById('modeToggleWrapper').style.display = '';
   document.getElementById('goBackBtn').style.display = 'none';
   document.getElementById('gameSections').classList.remove('visible');
@@ -1145,153 +1253,85 @@ function goBack() {
   document.getElementById('btnMulti').classList.remove('active');
   document.getElementById('journalSectionTitle').textContent = "Detective's Journal";
   document.querySelectorAll('.lie-btn').forEach(b => b.classList.remove('active'));
-  currentClue = 0; renderClue();
+  currentClue = 0;
+  renderClue();
 }
-function showMpError(msg) {
-  let el = document.getElementById('mp-error');
+
+// ===== TOAST / FEEDBACK =====
+function showToast(msg, isError) {
+  let el = document.getElementById('toast-msg');
   if (!el) {
     el = document.createElement('div');
-    el.id = 'mp-error';
-    el.style.cssText = 'color:#c00;font-size:.85rem;margin-top:.5rem;padding:.4rem .75rem;background:#fff0f0;border:1px solid #f0c0c0;border-radius:4px;';
-    document.getElementById('mpSetupCard').appendChild(el);
+    el.id = 'toast-msg';
+    el.style.cssText = 'position:fixed;bottom:1.25rem;right:1.25rem;padding:.6rem 1.1rem;border-radius:6px;font-size:.85rem;z-index:9999;transition:opacity .3s;pointer-events:none;';
+    document.body.appendChild(el);
   }
   el.textContent = msg;
+  el.style.background = isError ? '#b71c1c' : '#2d6a4f';
+  el.style.color = '#fff';
+  el.style.opacity = '1';
   el.style.display = 'block';
-  setTimeout(() => { el.style.display = 'none'; }, 5000);
+  setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.style.display = 'none', 300); }, 2800);
 }
-// ===== CLUE NAV =====
+
+function showMpError(msg)   { showToast(msg, true); }
+function showMpSuccess(msg) { showToast(msg, false); }
+
+// ===== CLUE NAV (solo mode) =====
 function renderClue() {
+  if (!CLUES.length) return;
   const c = CLUES[currentClue];
-  document.getElementById('clueNum').textContent = currentClue + 1;
+  document.getElementById('clueNum').textContent      = currentClue + 1;
   document.getElementById('clueProgress').textContent = currentClue + 1;
-  document.getElementById('clueTotal').textContent = CLUES.length;
-  document.getElementById('clueTag').textContent = c.tag;
-  document.getElementById('clueText').textContent = c.text;
+  document.getElementById('clueTotal').textContent    = CLUES.length;
+  document.getElementById('clueTag').textContent      = c.tag;
+  document.getElementById('clueText').textContent     = c.text;
 }
-function prevClue() { if (currentClue > 0) { currentClue--; renderClue(); } }
-function nextClue() { if (currentClue < CLUES.length-1) { currentClue++; renderClue(); } }
-
-// ===== CLUE ASSIGNMENT =====
-const CLUES_PER_PLAYER = 4;
-let myClueIndices = [];
-let myCurrentCluePos = 0;
-
-async function assignAndLoadClues(roomId, playerName) {
-  // Check if slot already assigned (reconnect)
-  let { data: existing } = await sb
-    .from('room_players')
-    .select('slot')
-    .eq('room_id', roomId)
-    .eq('player_name', playerName)
-    .maybeSingle();
-
-  let mySlot;
-
-  if (existing) {
-    mySlot = existing.slot;
-  } else {
-    // Count existing players to get next slot
-    const { count } = await sb
-      .from('room_players')
-      .select('*', { count: 'exact', head: true })
-      .eq('room_id', roomId);
-
-    mySlot = count || 0;
-
-    await sb.from('room_players').insert({
-      room_id:     roomId,
-      player_name: playerName,
-      slot:        mySlot,
-    });
-  }
-
-  // Compute clues deterministically — no DB read needed
-  const { data: room } = await sb
-    .from('rooms')
-    .select('player_count')
-    .eq('id', roomId)
-    .single();
-
-  const numPlayers = room?.player_count || 2;
-  const totalClues = CLUES.length;
-
-  myClueIndices = [];
-  for (let i = mySlot; i < totalClues; i += numPlayers) {
-    myClueIndices.push(i);
-  }
-
-  renderMyClues();
+function prevClue() {
+  if (mode === 'lobby') { prevMyClue(); return; }
+  if (currentClue > 0) { currentClue--; renderClue(); }
 }
-
-function renderMyClues() {
-  if (myClueIndices.length === 0) return;
-  myCurrentCluePos = Math.max(0, Math.min(myCurrentCluePos, myClueIndices.length - 1));
-
-  const globalIdx = myClueIndices[myCurrentCluePos];
-  const clue      = CLUES[globalIdx];
-
-  document.getElementById('clueNum').textContent      = myCurrentCluePos + 1;
-  document.getElementById('clueProgress').textContent = myCurrentCluePos + 1;
-  document.getElementById('clueTotal').textContent    = myClueIndices.length;
-  document.getElementById('clueTag').textContent      = `CLUE ${globalIdx + 1} OF ${CLUES.length}`;
-  document.getElementById('clueText').textContent     = clue.text;
+function nextClue() {
+  if (mode === 'lobby') { nextMyClue(); return; }
+  if (currentClue < CLUES.length - 1) { currentClue++; renderClue(); }
 }
-
-function prevMyClue() {
-  if (myCurrentCluePos > 0) { myCurrentCluePos--; renderMyClues(); }
-}
-
-function nextMyClue() {
-  if (myCurrentCluePos < myClueIndices.length - 1) { myCurrentCluePos++; renderMyClues(); }
-}
-
 
 // ===== TABS =====
 function switchJournalTab(btn, paneId) {
   document.querySelectorAll('#journalMp .journal-tab').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('#journalMp .journal-pane').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('pane-'+paneId).classList.add('active');
+  document.getElementById('pane-' + paneId).classList.add('active');
 }
 function switchNotesTab(btn, paneId) {
   document.querySelectorAll('#notesMp .journal-tab').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('#notesMp .journal-pane').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('pane-'+paneId).classList.add('active');
-}
-function saveMyStateLocally() {
-  localStorage.setItem('my_grid_state', JSON.stringify(states['mine']));
+  document.getElementById('pane-' + paneId).classList.add('active');
 }
 
+// ===== SAVE LOCALLY =====
 function saveLocalOnly() {
-  localStorage.setItem('my_grid_state_' + currentRoom, JSON.stringify(states['mine']));
+  if (!currentRoom) return;
+  localStorage.setItem('my_grid_' + currentRoom, JSON.stringify(states['mine']));
   showToast('Grid saved locally ✓');
 }
 function saveNoteLocalOnly() {
+  if (!currentRoom) return;
   const val = document.getElementById('myNoteTextarea').value;
   localStorage.setItem('my_note_' + currentRoom, val);
   showToast('Note saved locally ✓');
 }
 
-function restoreMyStateLocally() {
-  const saved = localStorage.getItem('my_grid_state');
-  if (saved) {
-    try {
-      states['mine'] = JSON.parse(saved);
-    } catch(e) {}
-  }
-  const savedNote = localStorage.getItem('my_note_text');
-  if (savedNote) {
-    const ta = document.querySelector('#pane-notes-mine textarea');
-    if (ta) ta.value = savedNote;
-  }
-}
-// ===== PUSH / MERGE =====
+// ===== SAVE & SHARE GRID =====
 async function saveAndShareGrid() {
+  if (!currentRoom || !currentPlayer) { showMpError('Not in a room.'); return; }
+
+  // Save locally first
+  localStorage.setItem('my_grid_' + currentRoom, JSON.stringify(states['mine']));
+
   const s = states['mine'];
   const marksToInsert = [];
-  saveMyStateLocally()
-  saveLocalOnly();
 
   LOCATIONS.forEach((loc, li) => {
     if (s.locStruck[li]) {
@@ -1330,7 +1370,6 @@ async function saveAndShareGrid() {
     return;
   }
 
-  // Delete my previous marks to avoid duplicates, then re-insert
   await sb.from('shared_grid_marks')
     .delete()
     .eq('room_id', currentRoom)
@@ -1338,16 +1377,21 @@ async function saveAndShareGrid() {
 
   const { error } = await sb.from('shared_grid_marks').insert(marksToInsert);
   if (error) { showMpError('Save failed: ' + error.message); return; }
-
   showMpSuccess('Grid saved & shared ✓');
 }
-function mergeShared() {
-  alert('In the live version this syncs all player journals to the shared board via Supabase Realtime.');
-}
+
+// ===== SAVE & SHARE NOTE =====
 async function saveAndShareNote() {
-  const myText = document.querySelector('#pane-notes-mine textarea').value.trim();
-  localStorage.setItem('my_note_text', myText); // ← ADD THIS
+  if (!currentRoom || !currentPlayer) { showMpError('Not in a room.'); return; }
+  const myText = document.getElementById('myNoteTextarea').value.trim();
   if (!myText) { showMpError('Write a note first.'); return; }
+
+  localStorage.setItem('my_note_' + currentRoom, myText);
+
+  await sb.from('shared_notes')
+    .delete()
+    .eq('room_id', currentRoom)
+    .eq('player_name', currentPlayer);
 
   const { error } = await sb.from('shared_notes').insert({
     room_id:     currentRoom,
@@ -1357,25 +1401,24 @@ async function saveAndShareNote() {
 
   if (error) { showMpError('Save failed: ' + error.message); return; }
   showMpSuccess('Note saved & shared ✓');
-  saveNoteLocalOnly();
-}
-function mergeSharedNotes() {
-  alert('In the live version this syncs all player notes to the shared notes via Supabase Realtime.');
 }
 
+// ===== LOAD PLAYER GRID (readonly, for P2/P3/P4 tabs) =====
 async function loadPlayerGrid(playerName, mountId, readonly) {
-  const { data, error } = await sb
-    .from('shared_grid_marks')
+  if (!currentRoom || !playerName) { showMpError('Room or player not set.'); return; }
+
+  const { data, error } = await sb.from('shared_grid_marks')
     .select('*')
     .eq('room_id', currentRoom)
     .eq('player_name', playerName);
 
   if (error) { showMpError('Load failed: ' + error.message); return; }
+  if (!data || data.length === 0) { showMpError(playerName + " hasn't shared their grid yet."); return; }
 
-  // Determine which state key to populate
-  const stateKey = mountId.includes('shared') ? 'shared'
-                 : mountId.includes('p2')     ? 'p2'
-                 : mountId.includes('p3')     ? 'p3'
+  // Determine stateKey from mountId
+  const stateKey = mountId.includes('p4') ? 'p4'
+                 : mountId.includes('p3') ? 'p3'
+                 : mountId.includes('p2') ? 'p2'
                  : 'shared';
 
   const s = states[stateKey];
@@ -1383,7 +1426,7 @@ async function loadPlayerGrid(playerName, mountId, readonly) {
   s.locStruck  = LOCATIONS.map(() => false);
   s.weapStruck = WEAPONS.map(() => false);
 
-  (data || []).forEach(row => {
+  data.forEach(row => {
     if (row.section_name === 'loc_struck') {
       const li = LOCATIONS.findIndex(l => l.key === row.character_name);
       if (li !== -1) s.locStruck[li] = true;
@@ -1401,49 +1444,52 @@ async function loadPlayerGrid(playerName, mountId, readonly) {
   });
 
   buildJournal(document.getElementById(mountId), stateKey, readonly);
-  showMpSuccess(`${playerName}'s grid loaded ✓`);
+  showMpSuccess(playerName + "'s grid loaded ✓");
 }
 
+// ===== LOAD PLAYER NOTES (readonly, for P2/P3/P4 tabs) =====
 async function loadPlayerNotes(playerName, targetId) {
-  if (!playerName || !currentRoom) return;
-  const { data } = await sb
-    .from('shared_notes')
-    .select('note_text, updated_at')
+  if (!currentRoom || !playerName) return;
+
+  const { data, error } = await sb.from('shared_notes')
+    .select('note_text, posted_at')
     .eq('room_id', currentRoom)
     .eq('player_name', playerName)
-    .order('updated_at', { ascending: false })
+    .order('posted_at', { ascending: false })
     .limit(1);
+
+  if (error) { showMpError('Load failed: ' + error.message); return; }
 
   const el = document.getElementById(targetId);
   if (!el) return;
-  const text = data?.[0]?.note_text || `${playerName} hasn't written any notes yet...`;
+  const text = data?.[0]?.note_text || (playerName + " hasn't shared any notes yet.");
   if (el.tagName === 'TEXTAREA') {
     el.value = text;
   } else {
     el.textContent = text;
   }
+  showMpSuccess(playerName + "'s notes loaded ✓");
 }
 
-async function loadSharedGrid() {
-  // Load ALL players' marks merged into shared state
-  await loadPlayerGrid(null, 'mpJournalMount-shared', true);
-}
+// ===== REFRESH SHARED GRID (merges ALL players) =====
+async function refreshSharedGrid() {
+  if (!currentRoom) { showMpError('Not in a room.'); return; }
 
-// Override loadPlayerGrid to handle null = all players
-async function loadSharedGrid() {
-  const { data, error } = await sb
-    .from('shared_grid_marks')
+  const { data, error } = await sb.from('shared_grid_marks')
     .select('*')
     .eq('room_id', currentRoom);
 
   if (error) { showMpError('Load failed: ' + error.message); return; }
+  if (!data || data.length === 0) { showMpError('No shared grids yet — players need to share first.'); return; }
 
   const s = states['shared'];
   s.cells      = LOCATIONS.map(() => PERSONS.map(() => TIMES.map(() => 0)));
   s.locStruck  = LOCATIONS.map(() => false);
   s.weapStruck = WEAPONS.map(() => false);
 
-  (data || []).forEach(row => {
+  // Merge priority: check/cross (1,2) > question (3) > blank (0)
+  const PRIORITY = [0, 3, 3, 1]; // blank=0 priority, check=3, cross=3, question=1
+  data.forEach(row => {
     if (row.section_name === 'loc_struck') {
       const li = LOCATIONS.findIndex(l => l.key === row.character_name);
       if (li !== -1) s.locStruck[li] = true;
@@ -1455,7 +1501,11 @@ async function loadSharedGrid() {
       const pi = PERSONS.indexOf(row.character_name);
       const ti = TIMES.indexOf(row.time_slot);
       if (li !== -1 && pi !== -1 && ti !== -1) {
-        s.cells[li][pi][ti] = CYCLE.indexOf(row.mark);
+        const incoming = CYCLE.indexOf(row.mark);
+        const existing = s.cells[li][pi][ti];
+        if (PRIORITY[incoming] >= PRIORITY[existing]) {
+          s.cells[li][pi][ti] = incoming;
+        }
       }
     }
   });
@@ -1464,49 +1514,25 @@ async function loadSharedGrid() {
   showMpSuccess('Shared grid refreshed ✓');
 }
 
-async function loadSharedNotes() {
-  await loadPlayerNotes(null, 'shared-notes-feed');
-}
+// ===== REFRESH SHARED NOTES (all players concatenated) =====
+async function refreshSharedNotes() {
+  if (!currentRoom) { showMpError('Not in a room.'); return; }
 
-// Override to handle null = all players
-async function loadSharedNotes() {
-  const { data, error } = await sb
-    .from('shared_notes')
-    .select('*')
+  const { data, error } = await sb.from('shared_notes')
+    .select('player_name, note_text, posted_at')
     .eq('room_id', currentRoom)
-    .order('posted_at');
+    .order('posted_at', { ascending: true });
 
   if (error) { showMpError('Load failed: ' + error.message); return; }
+  if (!data || data.length === 0) { showMpError('No shared notes yet.'); return; }
 
-  const container = document.getElementById('shared-notes-feed');
-  if (!container) return;
-
-  container.innerHTML = '';
-  (data || []).forEach(row => {
-    const el = document.createElement('div');
-    el.style.cssText = 'padding:.5rem 0;border-bottom:1px solid var(--divider);font-size:.875rem;';
-    el.innerHTML = `<strong>${row.player_name}</strong>: ${row.note_text}
-      <span style="color:var(--muted);font-size:.75rem;margin-left:.5rem;">
-        ${new Date(row.posted_at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
-      </span>`;
-    container.appendChild(el);
-  });
+  const ta = document.getElementById('sharedNoteTextarea');
+  if (!ta) return;
+  ta.value = data.map(row =>
+    '--- ' + row.player_name + ' ---\n' + row.note_text
+  ).join('\n\n');
 
   showMpSuccess('Shared notes refreshed ✓');
-}
-
-function showMpSuccess(msg) {
-  let el = document.getElementById('mp-success');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'mp-success';
-    el.style.cssText = 'position:fixed;bottom:1rem;right:1rem;padding:.5rem 1rem;background:#2d6a4f;color:#fff;border-radius:6px;font-size:.85rem;z-index:999;transition:opacity .3s;';
-    document.body.appendChild(el);
-  }
-  el.textContent = msg;
-  el.style.display = 'block';
-  el.style.opacity = '1';
-  setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.style.display = 'none', 300); }, 2500);
 }
 
 // ===== ACCUSE =====
@@ -1534,43 +1560,39 @@ function populateAccuseDropdowns() {
 }
 
 // ===== INIT =====
-// ===== INIT =====
-// State maps start empty — rebuildStateMaps() fills them after puzzle loads
-const states = {
-  solo:   { cells: [], locStruck: [], weapStruck: [] },
-  mine:   { cells: [], locStruck: [], weapStruck: [] },
-  p2:     { cells: [], locStruck: [], weapStruck: [] },
-  p3:     { cells: [], locStruck: [], weapStruck: [] },
-  p4:     { cells: [], locStruck: [], weapStruck: [] },
-  shared: { cells: [], locStruck: [], weapStruck: [] },
-};
+const states_ref = states; // keep reference
 
-// Boot sequence — load puzzle data, then render first clue
-loadPuzzle().then(() => {
-  renderClue();
-// Reconnect returning multiplayer player
-const today        = new Date().toISOString().split('T')[0];
-const storedDate   = localStorage.getItem('mp_puzzle_date');
-const storedRoom   = localStorage.getItem('mp_room_id');
-const storedPlayer = localStorage.getItem('mp_player_name');
-const storedSlot   = localStorage.getItem('mp_slot');
-const storedCount  = localStorage.getItem('mp_player_count');
+document.addEventListener('DOMContentLoaded', function() {
+  const { createClient } = window.supabase;
+  sb = createClient('https://atjnnkqzwynurhfxtswq.supabase.co', 'sb_publishable_KHrysbPNgaYneARmgznUXw_bCNSjAZT');
 
-if (storedRoom && storedPlayer && storedDate === today) {
-  currentRoom   = storedRoom;
-  currentPlayer = storedPlayer;
-  mySlot        = parseInt(storedSlot  || '0');
-  playerCount   = parseInt(storedCount || '2');
-  switchMode('multi');
+  loadPuzzle().then(() => {
+    renderClue();
 
-  // Update count buttons visually
-  document.querySelectorAll('.count-btn').forEach(btn => {
-    btn.classList.toggle('active', parseInt(btn.textContent) === playerCount);
+    // Reconnect returning multiplayer player (only if today's puzzle)
+    const today        = new Date().toISOString().split('T')[0];
+    const storedDate   = localStorage.getItem('mp_puzzle_date');
+    const storedRoom   = localStorage.getItem('mp_room_id');
+    const storedPlayer = localStorage.getItem('mp_player_name');
+    const storedSlot   = localStorage.getItem('mp_slot');
+    const storedCount  = localStorage.getItem('mp_player_count');
+
+    if (storedRoom && storedPlayer && storedDate === today) {
+      currentRoom   = storedRoom;
+      currentPlayer = storedPlayer;
+      mySlot        = parseInt(storedSlot  || '0');
+      playerCount   = parseInt(storedCount || '2');
+
+      document.querySelectorAll('.count-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.textContent) === playerCount);
+      });
+
+      switchMode('multi');
+      enterLobby(storedRoom);
+    }
   });
-
-  enterLobby(storedRoom);
-}
 });
 </script>
+
 </body>
 </html>
