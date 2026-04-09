@@ -1431,19 +1431,19 @@
 
 				<p>¡Prepárate para resolver un nuevo asesinato misterioso! Tu objetivo es averiguar <b>quién</b> lo
 					hizo, <b>cuándo</b> sucedió y <b>qué</b> arma se utilizó.</p>
-				Carol, Frida y Alice han sido transportados en el tiempo a <b>una pirámide en el Antiguo Egipto</b>!
+				Eddie, Bob, Alice y Carol han sido transportados en el tiempo a <b>un castillo en la Edad Media</b>!
 				<p>Ayúdales a resolver este misterio revisando estas pistas iniciales:</p>
 				<div class="row align-items-center">
 					<div class="col">
 						<ul id="">
-  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'frida')">Frida</a> fue asesinado en el cuarto del trono (👑) en algún momento entre las 6:00 y las 7:45</li>
+  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'eddie')">Eddie</a> fue asesinado en el gran salón (🍷) en algún momento entre las 6:00 y las 8:00</li>
   <li>El asesino estaba a solas con la víctima y el cuerpo no se movió</li>
   <li>El asesino no fue encontrado con el cuerpo</li>
   <li>El asesino consiguió el arma homicida de uno de los siguientes lugares:
-<ul id="es"><li>El arco (🏹) — el cuarto del trono (👑)</li><li>La roca (🪨) — la cámara funeraria (⚱️)</li><li>La daga (🗡️) — el desierto (🏜️)</li><li>El veneno (⚗️) — el templo (📿)</li></ul></li>
+<ul id="es"><li>El candelabro (🕯️) — el gran salón (🍷)</li><li>El veneno (⚗️) — el dormitorio principal (🛏️)</li><li>El arco (🏹) — la armería (🛡️)</li><li>La daga (🗡️) — la mazmorra (🔒)</li></ul></li>
   <li>Nadie vió al asesino tomar el arma homicida</li>
-  <li>Sabemos donde estaban todos a las 7:45:
-<ul id=""><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'carol')">Carol</a> estaba en la cámara funeraria (⚱️)</li><li>El cuerpo de <a href="#/" class="link-dark" onClick="openModalChar(event, 'frida')">Frida</a> estaba en el cuarto del trono (👑)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'alice')">Alice</a> estaba en el templo (📿)</li></ul></li>
+  <li>Sabemos donde estaban todos a las 8:00:
+<ul id=""><li>El cuerpo de <a href="#/" class="link-dark" onClick="openModalChar(event, 'eddie')">Eddie</a> estaba en el gran salón (🍷)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'bob')">Bob</a> estaba en la armería (🛡️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'alice')">Alice</a> estaba en el dormitorio principal (🛏️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'carol')">Carol</a> estaba en el dormitorio principal (🛏️)</li></ul></li>
   <li>No había nadie más en el lugar</li>
 </ul>
 					</div>
@@ -1529,12 +1529,12 @@
 				</div>
     
 				<div class="col-12 text-center">
-					<canvas id="clues-table-room2" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room1" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
 				<div class="col-12 text-center">
-					<canvas id="clues-table-room1" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room2" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
@@ -1566,8 +1566,9 @@
 							<h6 class="sticky-notes">El asesino fue…</h6>
 							<select class="form-select sticky-notes" id="who-selector">
 								<option value="" disabled selected>...</option>
-								<option value="carol">carol</option>
+								<option value="bob">bob</option>
 <option value="alice">alice</option>
+<option value="carol">carol</option>
 							</select>
 						</a>
 					</li>
@@ -1577,10 +1578,10 @@
 							<h6 class="sticky-notes">El arma fue…</h6>
 							<select class="form-select sticky-notes" id="how-selector">
 								<option value="" disabled selected>...</option>
-								<option value="archery bow">el arco</option>
-<option value="rock">la roca</option>
-<option value="dagger">la daga</option>
+								<option value="candlestick">el candelabro</option>
 <option value="poison">el veneno</option>
+<option value="archery bow">el arco</option>
+<option value="dagger">la daga</option>
 							</select>
 						</a>
 					</li>
@@ -1598,6 +1599,7 @@
 <option value="7:15">7:15</option>
 <option value="7:30">7:30</option>
 <option value="7:45">7:45</option>
+<option value="8:00">8:00</option>
 							</select>
 						</a>
 					</li>

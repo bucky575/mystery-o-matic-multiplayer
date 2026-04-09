@@ -3,7 +3,7 @@ pragma solidity ^0.8.1;
 
 contract StoryModel {
     enum Char {
-        NOBODY ,CHAR1, CHAR2, CHAR3
+        NOBODY ,CHAR1, CHAR2, CHAR3, CHAR4
     }
     uint8 numChars = uint8(type(Char).max) + 1;
     enum Place {
@@ -44,15 +44,17 @@ contract StoryModel {
     constructor() {
         // Places connections
         connection[Place.ROOM0][Place.ROOM1] = true;
-	connection[Place.ROOM0][Place.ROOM3] = true;
+	connection[Place.ROOM0][Place.ROOM2] = true;
+	connection[Place.ROOM1][Place.ROOM2] = true;
 	connection[Place.ROOM2][Place.ROOM3] = true;
 
         // This should be randomly generated
-        currentLocation[Char.CHAR1] = Place.ROOM1;
+        currentLocation[Char.CHAR1] = Place.ROOM2;
 	currentLocation[Char.CHAR2] = Place.ROOM3;
-	currentLocation[Char.CHAR3] = Place.ROOM2;
+	currentLocation[Char.CHAR3] = Place.ROOM1;
+	currentLocation[Char.CHAR4] = Place.ROOM0;
 
-        locationWeapon = Place.ROOM0;
+        locationWeapon = Place.ROOM1;
         minNumberOfMoves = 1;
         // End of generated code
     }

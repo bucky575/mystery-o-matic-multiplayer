@@ -1348,19 +1348,19 @@
 
 				<p>Приготовьтесь раскрыть новое дело об убийстве! Ваша задача — выяснить, <b>кто</b> это сделал, <b>когда</b>
 					это произошло и <b>каким</b> оружием.</p>
-				Carol, Frida и Alice перенеслись в прошлое в <b>пирамиду Древнего Египта</b>!
+				Eddie, Bob, Alice и Carol перенеслись в прошлое в <b>замок Средневековья</b>!
 				<p>Помогите им разгадать тайну, изучив начальные улики:</p>
 				<div class="row align-items-center">
 					<div class="col">
 						<ul id="">
-  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'frida')">Frida</a> был(а) убит(а) в тронном зале (👑) в промежуток между 6:00 и 7:45</li>
+  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'eddie')">Eddie</a> был(а) убит(а) в большом зале (🍷) в промежуток между 6:00 и 8:00</li>
   <li>Убийца был(а) наедине с жертвой, и тело осталось на месте</li>
   <li>Убийцу не застали рядом с телом</li>
   <li>Убийца взял(а) орудие убийства из одного из следующих мест:
-<ul id="ru"><li>лук со стрелами (🏹) — тронный зал (👑)</li><li>камень (🪨) — погребальная камера (⚱️)</li><li>кинжал (🗡️) — пустыня (🏜️)</li><li>яд (⚗️) — храм (📿)</li></ul></li>
+<ul id="ru"><li>канделябр (🕯️) — большой зал (🍷)</li><li>яд (⚗️) — опочивальня (🛏️)</li><li>лук со стрелами (🏹) — оружейная (🛡️)</li><li>кинжал (🗡️) — темница (🔒)</li></ul></li>
   <li>Никто не видел, как убийца брал(а) орудие убийства</li>
-  <li>Нам известно, где находился(ась) каждый(ая) в 7:45:
-<ul id=""><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'carol')">Carol</a> находился(ась) в погребальной камере (⚱️)</li><li>Тело <a href="#/" class="link-dark" onClick="openModalChar(event, 'frida')">Frida</a> находилось в тронном зале (👑)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'alice')">Alice</a> находился(ась) в храме (📿)</li></ul></li>
+  <li>Нам известно, где находился(ась) каждый(ая) в 8:00:
+<ul id=""><li>Тело <a href="#/" class="link-dark" onClick="openModalChar(event, 'eddie')">Eddie</a> находилось в большом зале (🍷)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'bob')">Bob</a> находился(ась) в оружейной (🛡️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'alice')">Alice</a> находился(ась) в опочивальне (🛏️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'carol')">Carol</a> находился(ась) в опочивальне (🛏️)</li></ul></li>
   <li>В этом месте больше никого не было.</li>
 </ul>
 					</div>
@@ -1444,12 +1444,12 @@
 				</div>
     
 				<div class="col-12 text-center">
-					<canvas id="clues-table-room2" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room1" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
 				<div class="col-12 text-center">
-					<canvas id="clues-table-room1" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room2" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
@@ -1480,8 +1480,9 @@
 							<h6 class="sticky-notes">Убийца —</h6>
 							<select class="form-select sticky-notes" id="who-selector">
 								<option value="" disabled selected>...</option>
-								<option value="carol">carol</option>
+								<option value="bob">bob</option>
 <option value="alice">alice</option>
+<option value="carol">carol</option>
 							</select>
 						</a>
 					</li>
@@ -1491,10 +1492,10 @@
 							<h6 class="sticky-notes">Орудие убийства —</h6>
 							<select class="form-select sticky-notes" id="how-selector">
 								<option value="" disabled selected>...</option>
-								<option value="archery bow">лук со стрелами</option>
-<option value="rock">камень</option>
-<option value="dagger">кинжал</option>
+								<option value="candlestick">канделябр</option>
 <option value="poison">яд</option>
+<option value="archery bow">лук со стрелами</option>
+<option value="dagger">кинжал</option>
 							</select>
 						</a>
 					</li>
@@ -1512,6 +1513,7 @@
 <option value="7:15">7:15</option>
 <option value="7:30">7:30</option>
 <option value="7:45">7:45</option>
+<option value="8:00">8:00</option>
 							</select>
 						</a>
 					</li>
