@@ -1442,19 +1442,19 @@
 
 				<p>Get ready to solve a fresh murder mystery! Your goal is to figure out <b>who</b> did it, <b>when</b>
 					it happened, and <b>what</b> weapon was used.</p>
-				Eddie, Bob, Alice and Carol are transported back in time to <b>a castle in the Middle Ages</b>!
+				Bob, Eddie, Alice and Carol are stranded in <b>an abandoned arctic military base</b> during a blizzard!
 				<p>Help them solve this mystery checking out these initial clues:</p>
 				<div class="row align-items-center">
 					<div class="col">
 						<ul id="">
-  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'eddie')">Eddie</a> was murdered in the great hall (🍷) at some time between 6:00 and 8:00</li>
+  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'bob')">Bob</a> was murdered in the armory (🔒) at some time between 4:00 and 6:15</li>
   <li>The murderer was alone with their victim, and the body remained unmoved</li>
   <li>The murderer wasn't caught with the body</li>
   <li>The killer retrieved the murder weapon from one of these places:
-<ul id="en"><li>The candlestick (🕯️) from the great hall (🍷)</li><li>The poison (⚗️) from the bed chamber (🛏️)</li><li>The archery bow (🏹) from the armory (🛡️)</li><li>The dagger (🗡️) from the dungeon (🔒)</li></ul></li>
+<ul id="en"><li>The chain (⛓️) from the armory (🔒)</li><li>The axe (🪓) from the radio room (📡)</li><li>The pistol (🔫) from the command center (🖥️)</li><li>The poison (⚗️) from the barracks (🛏️)</li></ul></li>
   <li>No one saw the killer retrieving the murder weapon</li>
-  <li>We know where everyone was at 8:00:
-<ul id=""><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'eddie')">Eddie</a>'s body was in the great hall (🍷)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'bob')">Bob</a> was in the armory (🛡️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'alice')">Alice</a> was in the bed chamber (🛏️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'carol')">Carol</a> was in the bed chamber (🛏️)</li></ul></li>
+  <li>We know where everyone was at 6:15:
+<ul id=""><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'bob')">Bob</a>'s body was in the armory (🔒)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'eddie')">Eddie</a> was in the command center (🖥️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'alice')">Alice</a> was in the command center (🖥️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'carol')">Carol</a> was in the command center (🖥️)</li></ul></li>
   <li>No one else was present in the location.</li>
 </ul>
 					</div>
@@ -1534,12 +1534,12 @@
 				</div>
 				<p></p>
 								<div class="col-12 text-center">
-					<canvas id="clues-table-room0" oncontextmenu="return false" height="115" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room1" oncontextmenu="return false" height="115" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
 				<div class="col-12 text-center">
-					<canvas id="clues-table-room1" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room0" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
@@ -1575,7 +1575,7 @@
 							<h6 class="sticky-notes">The murderer was…</h6>
 							<select class="form-select sticky-notes" id="who-selector">
 								<option value="" disabled selected>...</option>
-								<option value="bob">bob</option>
+								<option value="eddie">eddie</option>
 <option value="alice">alice</option>
 <option value="carol">carol</option>
 							</select>
@@ -1587,10 +1587,10 @@
 							<h6 class="sticky-notes">The weapon was…</h6>
 							<select class="form-select sticky-notes" id="how-selector">
 								<option value="" disabled selected>...</option>
-								<option value="candlestick">candlestick</option>
+								<option value="chain">chain</option>
+<option value="axe">axe</option>
+<option value="pistol">pistol</option>
 <option value="poison">poison</option>
-<option value="archery bow">archery bow</option>
-<option value="dagger">dagger</option>
 							</select>
 						</a>
 					</li>
@@ -1600,15 +1600,16 @@
 							<h6 class="sticky-notes">Time of murder was…</h6>
 							<select class="form-select sticky-notes" id="when-selector">
 								<option value="" disabled selected>...</option>
-								<option value="6:00">6:00</option>
+								<option value="4:00">4:00</option>
+<option value="4:15">4:15</option>
+<option value="4:30">4:30</option>
+<option value="4:45">4:45</option>
+<option value="5:00">5:00</option>
+<option value="5:15">5:15</option>
+<option value="5:30">5:30</option>
+<option value="5:45">5:45</option>
+<option value="6:00">6:00</option>
 <option value="6:15">6:15</option>
-<option value="6:30">6:30</option>
-<option value="6:45">6:45</option>
-<option value="7:00">7:00</option>
-<option value="7:15">7:15</option>
-<option value="7:30">7:30</option>
-<option value="7:45">7:45</option>
-<option value="8:00">8:00</option>
 							</select>
 						</a>
 					</li>

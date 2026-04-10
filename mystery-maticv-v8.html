@@ -848,7 +848,7 @@ function buildPuzzleText(d) {
   }
 }
 
-function renderLocationMap(svgText) {
+function renderLocationMap(svgText, puzzleData) {
   const container = document.getElementById('location-map');
   if (!container) return;
   container.innerHTML = '';
@@ -856,66 +856,96 @@ function renderLocationMap(svgText) {
   const parser = new DOMParser();
   const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
 
+  // Extract edges from SVG g.edge titles (format: "iconA--iconB")
   const edges = [];
   svgDoc.querySelectorAll('g.edge').forEach(e => {
-    const title = e.querySelector('title').textContent.trim();
-    const parts = title.split('--');
-    if (parts.length === 2) edges.push([parts[0].trim(), parts[1].trim()]);
+    const titleEl = e.querySelector('title');
+    if (!titleEl) return;
+// GitHub serves SVG with '--' encoded as '&#45;&#45;'
+  const raw = titleEl.innerHTML !== undefined ? titleEl.innerHTML : titleEl.textContent;
+  const decoded = raw
+    .replace(/&#45;/g, '-')
+    .replace(/&#x2d;/gi, '-')
+    .replace(/&amp;/g, '&')
+    .trim();
+  const parts = decoded.split('--');
+  if (parts.length === 2) edges.push([parts[0].trim(), parts[1].trim()]);
   });
+  if (edges.length === 0) {
+    for (let i = 0; i < LOCATIONS.length - 1; i++) {
+      edges.push([LOCATIONS[i].icon, LOCATIONS[i + 1].icon]);
+    }
+  }
 
-  const nodeW = 160, nodeH = 44, nodeR = 22;
-  const gapY = 36;
-  const cx = 100;
-  const svgW = 200;
+  // Layout constants
+  const nodeW = 180, nodeH = 44, nodeR = 22;
+  const gapY = 40;
+  // Extra horizontal space on right side for curved bypass edges
+  const curveMargin = 50;
+  const cx = nodeW / 2 + 8;             // centre x of nodes (left-aligned with small padding)
+  const svgW = nodeW + 16 + curveMargin; // node width + left pad + right curve space
   const n = LOCATIONS.length;
   const svgH = n * nodeH + (n - 1) * gapY + 8;
 
+  // yCenter[i] = vertical centre of node i
   const yCenter = LOCATIONS.map((_, i) => 4 + i * (nodeH + gapY) + nodeH / 2);
 
+  // Map emoji icon -> location index for fast edge lookup
   const iconIndex = {};
-  LOCATIONS.forEach((loc, i) => iconIndex[loc.icon] = i);
+  LOCATIONS.forEach((loc, i) => { iconIndex[loc.icon] = i; });
 
   const svgNS = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(svgNS, 'svg');
   svg.setAttribute('width', svgW);
   svg.setAttribute('height', svgH);
+  svg.setAttribute('overflow', 'visible');
   svg.style.display = 'block';
 
-  // Draw edges first (behind nodes)
+  // Draw edges FIRST (rendered behind nodes)
   edges.forEach(([a, b]) => {
     const iA = iconIndex[a];
     const iB = iconIndex[b];
     if (iA === undefined || iB === undefined) return;
-    const y1 = yCenter[iA];
-    const y2 = yCenter[iB];
-    const diff = Math.abs(iA - iB);
+
+    // Ensure top is always the smaller index
+    const top = Math.min(iA, iB);
+    const bot = Math.max(iA, iB);
+    const y1 = yCenter[top];   // centre of upper node
+    const y2 = yCenter[bot];   // centre of lower node
+    const diff = bot - top;
 
     if (diff === 1) {
+      // Adjacent nodes: straight vertical line between the two node edges
       const line = document.createElementNS(svgNS, 'line');
-      line.setAttribute('x1', cx); line.setAttribute('y1', y1 + nodeH/2);
-      line.setAttribute('x2', cx); line.setAttribute('y2', y2 - nodeH/2);
+      line.setAttribute('x1', cx);
+      line.setAttribute('y1', y1 + nodeH / 2);   // bottom edge of upper node
+      line.setAttribute('x2', cx);
+      line.setAttribute('y2', y2 - nodeH / 2);   // top edge of lower node
       line.setAttribute('stroke', '#7aacaa');
-      line.setAttribute('stroke-width', '2');
+      line.setAttribute('stroke-width', '2.5');
       svg.appendChild(line);
     } else {
-      const offset = cx + nodeW/2 - 10;
+      // Non-adjacent nodes: cubic bezier bypass curve on the right side
+      const x0 = cx + nodeW / 2;            // right edge of nodes
+      const bulge = 28 + diff * 16;         // curve bow-out scales with distance
+      const xCtrl = x0 + bulge;
       const path = document.createElementNS(svgNS, 'path');
       path.setAttribute('d',
-        `M${offset},${y1} C${offset+30},${y1} ${offset+30},${y2} ${offset},${y2}`
+        `M${x0},${y1} C${xCtrl},${y1} ${xCtrl},${y2} ${x0},${y2}`
       );
       path.setAttribute('fill', 'none');
       path.setAttribute('stroke', '#7aacaa');
-      path.setAttribute('stroke-width', '2');
+      path.setAttribute('stroke-width', '2.5');
       svg.appendChild(path);
     }
   });
 
-  // Draw nodes on top
+  // Draw nodes ON TOP of edges
   LOCATIONS.forEach((loc, i) => {
     const y = 4 + i * (nodeH + gapY);
 
     const rect = document.createElementNS(svgNS, 'rect');
-    rect.setAttribute('x', cx - nodeW/2);
+    rect.setAttribute('x', cx - nodeW / 2);
     rect.setAttribute('y', y);
     rect.setAttribute('width', nodeW);
     rect.setAttribute('height', nodeH);
@@ -926,7 +956,7 @@ function renderLocationMap(svgText) {
 
     const text = document.createElementNS(svgNS, 'text');
     text.setAttribute('x', cx);
-    text.setAttribute('y', y + nodeH/2 + 5);
+    text.setAttribute('y', y + nodeH / 2 + 5);
     text.setAttribute('text-anchor', 'middle');
     text.setAttribute('font-family', 'inherit');
     text.setAttribute('font-size', '14');
@@ -983,9 +1013,21 @@ async function loadPuzzle() {
     populateAccuseDropdowns();
     buildPuzzleText(d);
     buildPuzzleText(d);
-  const svgRes = await fetch('https://bucky575.github.io/mystery-o-matic-multiplayer/out/en/location_small.svg');
-  const svgText = await svgRes.text();
-  renderLocationMap(svgText);
+  let svgText = '';
+  const svgBase = DATA_JS_URL.replace('/data.js', '');
+  const svgUrls = [
+    svgBase + '/en/locations_small.svg',
+    svgBase + '/locations_small.svg',
+    svgBase + '/en/locationsmall.svg',
+    svgBase + '/en/location_small.svg',
+  ];
+  for (const url of svgUrls) {
+    try {
+      const r = await fetch(url);
+      if (r.ok) { svgText = await r.text(); break; }
+    } catch(e) { /* try next */ }
+  }
+  renderLocationMap(svgText, d);
   } catch (err) {
     console.error('Failed to load puzzle:', err);
     document.body.innerHTML = `<div style="padding:2rem;font-family:monospace;color:#c00"><strong>Failed to load today's puzzle.</strong><br>${err.message}</div>`;
