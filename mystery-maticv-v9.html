@@ -140,20 +140,6 @@ a{color:var(--text)}
   box-shadow: 0 1px 4px rgba(0,0,0,0.10);
 }
 
-#location-map {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-width: 220px;
-  flex-shrink: 0;
-}
-
-#location-map img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
 /* ===== DEDUCTION JOURNAL TABLE ===== */
 .journal-section{margin-bottom:1.5rem}
 .journal-subtitle{font-size:var(--sm);color:var(--muted);margin-bottom:.75rem}
@@ -862,20 +848,144 @@ function buildPuzzleText(d) {
   }
 }
 
-function renderLocationMap(imgUrl) {
+function renderLocationMap(svgText, puzzleData) {
   const container = document.getElementById('location-map');
   if (!container) return;
-
   container.innerHTML = '';
 
-  const img = document.createElement('img');
-  img.src = imgUrl;
-  img.alt = 'Location map';
-  img.style.maxWidth = '100%';
-  img.style.height = 'auto';
-  img.style.display = 'block';
+  const parser = new DOMParser();
+  const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
 
-  container.appendChild(img);
+  // Extract edges from SVG g.edge titles (format: "iconA--iconB")
+  const edges = [];
+  svgDoc.querySelectorAll('g.edge').forEach(e => {
+    const titleEl = e.querySelector('title');
+    if (!titleEl) return;
+// GitHub serves SVG with '--' encoded as '&#45;&#45;'
+  const raw = titleEl.innerHTML !== undefined ? titleEl.innerHTML : titleEl.textContent;
+  const decoded = raw
+    .replace(/&#45;/g, '-')
+    .replace(/&#x2d;/gi, '-')
+    .replace(/&amp;/g, '&')
+    .trim();
+  const parts = decoded.split('--');
+  if (parts.length === 2) edges.push([parts[0].trim(), parts[1].trim()]);
+  });
+  if (edges.length === 0) {
+    for (let i = 0; i < LOCATIONS.length - 1; i++) {
+      edges.push([LOCATIONS[i].icon, LOCATIONS[i + 1].icon]);
+    }
+  }
+
+  // Layout constants
+  const nodeW = 180, nodeH = 44, nodeR = 22;
+  const gapY = 40;
+  // Extra horizontal space on right side for curved bypass edges
+  const curveMargin = 50;
+  const cx = nodeW / 2 + 8;             // centre x of nodes (left-aligned with small padding)
+  const svgW = nodeW + 16 + curveMargin; // node width + left pad + right curve space
+  const n = LOCATIONS.length;
+  const svgH = n * nodeH + (n - 1) * gapY + 8;
+
+  // yCenter[i] = vertical centre of node i
+  const yCenter = LOCATIONS.map((_, i) => 4 + i * (nodeH + gapY) + nodeH / 2);
+
+  // Map multiple keys -> location index for robust edge lookup
+  const iconIndex = {};
+  LOCATIONS.forEach((loc, i) => {
+    iconIndex[loc.icon] = i;                                      // emoji only e.g. "🔒"
+    iconIndex[loc.label] = i;                                     // capitalized name e.g. "Armory"
+    iconIndex[loc.key] = i;                                       // raw key e.g. "armory"
+    iconIndex[loc.label + ' ' + loc.icon] = i;                   // "Armory 🔒"
+    iconIndex[loc.key + ' ' + loc.icon] = i;                     // "armory 🔒"
+    // Also lowercase variants
+    iconIndex[loc.label.toLowerCase()] = i;
+    iconIndex[(loc.label + ' ' + loc.icon).toLowerCase()] = i;
+    iconIndex[(loc.key + ' ' + loc.icon).toLowerCase()] = i;
+  });
+
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('width', svgW);
+  svg.setAttribute('height', svgH);
+  svg.setAttribute('overflow', 'visible');
+  svg.style.display = 'block';
+
+  // Draw edges FIRST (rendered behind nodes)
+  edges.forEach(([a, b]) => {
+    // Normalize: try exact, then lowercase, then trimmed lowercase
+    const lookupFn = key => {
+      if (iconIndex[key] !== undefined) return iconIndex[key];
+      if (iconIndex[key.toLowerCase()] !== undefined) return iconIndex[key.toLowerCase()];
+      // Try matching by any trailing emoji character
+      for (const k of Object.keys(iconIndex)) {
+        if (k.toLowerCase() === key.toLowerCase()) return iconIndex[k];
+      }
+      return undefined;
+    };
+    const iA = lookupFn(a);
+    const iB = lookupFn(b);
+    if (iA === undefined || iB === undefined) return;
+
+    // Ensure top is always the smaller index
+    const top = Math.min(iA, iB);
+    const bot = Math.max(iA, iB);
+    const y1 = yCenter[top];   // centre of upper node
+    const y2 = yCenter[bot];   // centre of lower node
+    const diff = bot - top;
+
+    if (diff === 1) {
+      // Adjacent nodes: straight vertical line between the two node edges
+      const line = document.createElementNS(svgNS, 'line');
+      line.setAttribute('x1', cx);
+      line.setAttribute('y1', y1 + nodeH / 2);   // bottom edge of upper node
+      line.setAttribute('x2', cx);
+      line.setAttribute('y2', y2 - nodeH / 2);   // top edge of lower node
+      line.setAttribute('stroke', '#7aacaa');
+      line.setAttribute('stroke-width', '2.5');
+      svg.appendChild(line);
+    } else {
+      // Non-adjacent nodes: cubic bezier bypass curve on the right side
+      const x0 = cx + nodeW / 2;            // right edge of nodes
+      const bulge = 28 + diff * 16;         // curve bow-out scales with distance
+      const xCtrl = x0 + bulge;
+      const path = document.createElementNS(svgNS, 'path');
+      path.setAttribute('d',
+        `M${x0},${y1} C${xCtrl},${y1} ${xCtrl},${y2} ${x0},${y2}`
+      );
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', '#7aacaa');
+      path.setAttribute('stroke-width', '2.5');
+      svg.appendChild(path);
+    }
+  });
+
+  // Draw nodes ON TOP of edges
+  LOCATIONS.forEach((loc, i) => {
+    const y = 4 + i * (nodeH + gapY);
+
+    const rect = document.createElementNS(svgNS, 'rect');
+    rect.setAttribute('x', cx - nodeW / 2);
+    rect.setAttribute('y', y);
+    rect.setAttribute('width', nodeW);
+    rect.setAttribute('height', nodeH);
+    rect.setAttribute('rx', nodeR);
+    rect.setAttribute('ry', nodeR);
+    rect.setAttribute('fill', '#8ec8c8');
+    svg.appendChild(rect);
+
+    const text = document.createElementNS(svgNS, 'text');
+    text.setAttribute('x', cx);
+    text.setAttribute('y', y + nodeH / 2 + 5);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('font-family', 'inherit');
+    text.setAttribute('font-size', '14');
+    text.setAttribute('fill', '#1a1a1a');
+    text.textContent = `${loc.label} ${loc.icon}`;
+    svg.appendChild(text);
+  });
+
+  container.appendChild(svg);
 }
 
 // ===== PUZZLE LOADER =====
@@ -923,27 +1033,21 @@ async function loadPuzzle() {
     populateAccuseDropdowns();
     buildPuzzleText(d);
     buildPuzzleText(d);
+  let svgText = '';
   const svgBase = DATA_JS_URL.replace('/data.js', '');
   const svgUrls = [
-    svgBase + '/en/locations_big.svg',
-    svgBase + '/locations_big.svg',
     svgBase + '/en/locations_small.svg',
     svgBase + '/locations_small.svg',
+    svgBase + '/en/locationsmall.svg',
+    svgBase + '/en/location_small.svg',
   ];
-
-  let mapUrl = svgUrls[0];
-
   for (const url of svgUrls) {
     try {
       const r = await fetch(url);
-      if (r.ok) {
-        mapUrl = url;
-        break;
-      }
-    } catch (e) { /* try next */ }
+      if (r.ok) { svgText = await r.text(); break; }
+    } catch(e) { /* try next */ }
   }
-
-  renderLocationMap(mapUrl);
+  renderLocationMap(svgText, d);
   } catch (err) {
     console.error('Failed to load puzzle:', err);
     document.body.innerHTML = `<div style="padding:2rem;font-family:monospace;color:#c00"><strong>Failed to load today's puzzle.</strong><br>${err.message}</div>`;
@@ -1321,7 +1425,7 @@ async function enterLobby(roomCode) {
     chips.appendChild(chip);
   });
 
-  document.getElementById('roomCodeBadge').textContent = 'Room: ' + roomCode;
+  document.getElementById('roomCodeBadge').textContent = 'Room: ' + shortCode(roomCode);
   // Store full UUID in a copy-able span for sharing
   const badge = document.getElementById('roomCodeBadge');
   badge.title = 'Click to copy full room ID';
