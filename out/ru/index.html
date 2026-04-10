@@ -1348,19 +1348,19 @@
 
 				<p>Приготовьтесь раскрыть новое дело об убийстве! Ваша задача — выяснить, <b>кто</b> это сделал, <b>когда</b>
 					это произошло и <b>каким</b> оружием.</p>
-				Bob, Eddie, Alice и Carol оказались в <b>заброшенной арктической военной базе</b> во время метели!
+				Eddie, Dave, Alice и Bob перенеслись в <b>заброшенный зоопарк</b> ночью!
 				<p>Помогите им разгадать тайну, изучив начальные улики:</p>
 				<div class="row align-items-center">
 					<div class="col">
 						<ul id="">
-  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'bob')">Bob</a> был(а) убит(а) в оружейной (🔒) в промежуток между 4:00 и 6:15</li>
+  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'dave')">Dave</a> был(а) убит(а) в вольере львов (🦁) в промежуток между 5:00 и 7:00</li>
   <li>Убийца был(а) наедине с жертвой, и тело осталось на месте</li>
   <li>Убийцу не застали рядом с телом</li>
   <li>Убийца взял(а) орудие убийства из одного из следующих мест:
-<ul id="ru"><li>цепь (⛓️) — оружейная (🔒)</li><li>топор (🪓) — радиорубка (📡)</li><li>пистолет (🔫) — командный центр (🖥️)</li><li>яд (⚗️) — казарма (🛏️)</li></ul></li>
+<ul id="ru"><li>топор (🪓) — вольер львов (🦁)</li><li>яд (⚗️) — террариум (🦎)</li><li>пистолет (🔫) — вольер птиц (🦜)</li><li>верёвка (🪢) — остров обезьян (🐒)</li></ul></li>
   <li>Никто не видел, как убийца брал(а) орудие убийства</li>
-  <li>Нам известно, где находился(ась) каждый(ая) в 6:15:
-<ul id=""><li>Тело <a href="#/" class="link-dark" onClick="openModalChar(event, 'bob')">Bob</a> находилось в оружейной (🔒)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'eddie')">Eddie</a> находился(ась) в командном центре (🖥️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'alice')">Alice</a> находился(ась) в командном центре (🖥️)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'carol')">Carol</a> находился(ась) в командном центре (🖥️)</li></ul></li>
+  <li>Нам известно, где находился(ась) каждый(ая) в 7:00:
+<ul id=""><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'eddie')">Eddie</a> находился(ась) в террариуме (🦎)</li><li>Тело <a href="#/" class="link-dark" onClick="openModalChar(event, 'dave')">Dave</a> находилось в вольере львов (🦁)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'alice')">Alice</a> находился(ась) в террариуме (🦎)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'bob')">Bob</a> находился(ась) в вольере львов (🦁)</li></ul></li>
   <li>В этом месте больше никого не было.</li>
 </ul>
 					</div>
@@ -1439,12 +1439,12 @@
 				</div>
 				<p></p>
 								<div class="col-12 text-center">
-					<canvas id="clues-table-room1" oncontextmenu="return false" height="115" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room0" oncontextmenu="return false" height="115" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
 				<div class="col-12 text-center">
-					<canvas id="clues-table-room0" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room1" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
@@ -1482,7 +1482,7 @@
 								<option value="" disabled selected>...</option>
 								<option value="eddie">eddie</option>
 <option value="alice">alice</option>
-<option value="carol">carol</option>
+<option value="bob">bob</option>
 							</select>
 						</a>
 					</li>
@@ -1492,10 +1492,10 @@
 							<h6 class="sticky-notes">Орудие убийства —</h6>
 							<select class="form-select sticky-notes" id="how-selector">
 								<option value="" disabled selected>...</option>
-								<option value="chain">цепь</option>
-<option value="axe">топор</option>
-<option value="pistol">пистолет</option>
+								<option value="axe">топор</option>
 <option value="poison">яд</option>
+<option value="pistol">пистолет</option>
+<option value="rope">верёвка</option>
 							</select>
 						</a>
 					</li>
@@ -1505,16 +1505,15 @@
 							<h6 class="sticky-notes">Время убийства —</h6>
 							<select class="form-select sticky-notes" id="when-selector">
 								<option value="" disabled selected>...</option>
-								<option value="4:00">4:00</option>
-<option value="4:15">4:15</option>
-<option value="4:30">4:30</option>
-<option value="4:45">4:45</option>
-<option value="5:00">5:00</option>
+								<option value="5:00">5:00</option>
 <option value="5:15">5:15</option>
 <option value="5:30">5:30</option>
 <option value="5:45">5:45</option>
 <option value="6:00">6:00</option>
 <option value="6:15">6:15</option>
+<option value="6:30">6:30</option>
+<option value="6:45">6:45</option>
+<option value="7:00">7:00</option>
 							</select>
 						</a>
 					</li>
