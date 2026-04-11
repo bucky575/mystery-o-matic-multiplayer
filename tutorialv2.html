@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mystery-o-Matic — How to Play</title>
+<style>
+:root {
+  --font: 'Courier New', monospace;
+  --serif: 'Georgia', serif;
+  --bg: #f5f5f0; --surface: #ffffff; --surface2: #f9f9f7;
+  --border: #d4d1ca; --divider: #e0ddd8;
+  --text: #1a1a18; --muted: #6a6a68; --faint: #aaa;
+  --red: #d32f2f; --red2: #b71c1c;
+  --teal: #00747a; --teal2: #005a5f; --teal-bg: #e0f0f0;
+  --pill-bg: #e8e8e4;
+  --r-sm: 4px; --r-md: 8px; --r-full: 999px;
+  --xs: .75rem; --sm: .875rem; --base: 1rem; --xl: 2.25rem;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);font-size:var(--base);color:var(--text);background:var(--bg);min-height:100dvh;line-height:1.6}
+button{cursor:pointer;font-family:inherit}
+a{color:var(--text)}
+
+/* PAGE */
+.page-wrapper{max-width:960px;margin:0 auto;padding:2rem 1rem}
+
+/* HEADER */
+.site-header{text-align:center;margin-bottom:1.5rem;position:relative}
+.site-title{font-family:var(--serif);font-size:var(--xl);font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+.site-tagline{font-style:italic;font-size:var(--sm);color:var(--muted);margin-top:.25rem}
+.back-btn{position:absolute;right:0;top:0;padding:.25rem .75rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);font-size:var(--sm);cursor:pointer}
+.back-btn:hover{background:var(--divider)}
+
+/* LAYOUT */
+.tut-layout{display:flex;gap:1.5rem;align-items:flex-start}
+
+/* SIDEBAR */
+.tut-sidebar{
+  width:200px;min-width:200px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  overflow:hidden;
+  position:sticky;top:1.5rem;
+}
+.sidebar-toggle{
+  width:100%;padding:.4rem .6rem;background:#eceae5;border:none;border-bottom:1px solid var(--border);
+  font-size:var(--xs);font-family:var(--font);text-align:right;cursor:pointer;color:var(--muted)
+}
+.sidebar-toggle:hover{background:var(--divider)}
+.sidebar-items{}
+.sidebar-item{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.5rem .75rem;cursor:pointer;
+  font-size:var(--xs);color:var(--text);
+  border-left:3px solid transparent;
+  border-bottom:1px solid var(--divider);
+  line-height:1.35;transition:all .12s;
+}
+.sidebar-item:last-child{border-bottom:none}
+.sidebar-item:hover{background:#f5f3ef}
+.sidebar-item.active{background:#edf7f7;border-left-color:var(--teal);color:var(--teal);font-weight:700}
+.sidebar-item .s-icon{font-size:.95rem;flex-shrink:0}
+
+/* MAIN */
+.tut-main{flex:1;min-width:0}
+.tut-page{display:none}
+.tut-page.active{display:block}
+
+/* SECTION HEADER BAR */
+.tut-section-bar{
+  background:#f5f0eb;border:1px solid #ddd6cc;border-radius:var(--r-sm);
+  padding:.5rem .9rem;margin-bottom:1.25rem;
+  display:flex;align-items:center;gap:.6rem;
+  font-size:var(--sm);font-weight:700;color:var(--red)
+}
+
+/* TEXT */
+.tut-page p{font-size:var(--sm);margin-bottom:.9rem;line-height:1.75}
+.tut-page ul,.tut-page ol{font-size:var(--sm);margin:0 0 .9rem 1.25rem}
+.tut-page li{margin-bottom:.35rem;line-height:1.7}
+.tut-page strong{font-weight:700}
+
+/* CLUE BOX */
+.clue-box{
+  border:1px solid var(--border);border-radius:var(--r-sm);
+  background:var(--surface);
+  padding:.75rem 1rem;margin-bottom:.9rem;
+  font-size:var(--sm);text-align:center;line-height:1.6
+}
+.clue-box .clue-speaker{font-weight:700}
+
+/* DEDUCTION / FINDING BOX */
+.finding-box{
+  border:1px solid var(--border);border-radius:var(--r-sm);
+  background:var(--surface);
+  padding:.5rem .9rem;margin-bottom:.5rem;
+  font-size:var(--sm);display:flex;align-items:flex-start;gap:.5rem;
+  cursor:pointer;transition:background .12s;user-select:none;
+}
+.finding-box:hover{background:#f9f7f4}
+.finding-box.struck{text-decoration:line-through;color:var(--faint)}
+.finding-icon{font-size:.85rem;flex-shrink:0;margin-top:.1rem}
+
+/* TIP BOX */
+.tip-box{
+  background:#f5f0eb;border:1px solid #ddd0c5;border-radius:var(--r-sm);
+  padding:.6rem .9rem;margin-bottom:.9rem;font-size:var(--sm);line-height:1.65
+}
+
+/* REVEAL (details) */
+details.reveal{
+  border:1px solid var(--border);border-radius:var(--r-sm);
+  background:var(--surface);padding:.6rem .9rem;margin-bottom:.5rem;font-size:var(--sm)
+}
+details.reveal summary{cursor:pointer;font-weight:700;list-style:none;display:flex;align-items:center;gap:.5rem}
+details.reveal summary::before{content:"▸ ";color:var(--muted)}
+details.reveal[open] summary::before{content:"▾ "}
+details.reveal p{margin-top:.5rem;margin-bottom:0;line-height:1.7}
+
+/* ROOM MAP SVG */
+.room-map-wrap{display:flex;justify-content:center;margin-bottom:1rem}
+.room-map-wrap svg{max-width:280px;width:100%}
+
+/* ===== JOURNAL TABLE (same as v9) ===== */
+.journal-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;margin-bottom:1rem}
+.journal-header{display:flex;background:#eceae5;border-bottom:2px solid var(--border)}
+.journal-header .th-icon{width:44px;min-width:44px;border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:.3rem 0;font-size:var(--xs);font-weight:700}
+.journal-header .th-name{width:54px;min-width:54px;border-right:1px solid var(--divider);padding:.3rem .4rem;font-size:var(--xs);font-weight:700;display:flex;align-items:center}
+.journal-header .th-times{display:flex;flex:1}
+.journal-header .th-time{flex:1;min-width:28px;border-right:1px solid var(--divider);text-align:center;padding:.3rem .1rem;font-size:var(--xs);font-weight:700;white-space:nowrap}
+.journal-header .th-time:last-child{border-right:none}
+
+.journal-group{display:flex;border-bottom:1px solid var(--border)}
+.journal-group:last-of-type{border-bottom:none}
+.group-icon-cell{
+  width:44px;min-width:44px;
+  display:flex;align-items:center;justify-content:center;
+  background:#f5f4f0;border-right:1px solid var(--border);
+  font-size:1.25rem;cursor:pointer;user-select:none;
+  transition:background 150ms;position:relative;
+}
+.group-icon-cell:hover{background:#ede9e2}
+.group-icon-cell.struck .icon-emoji{opacity:.35}
+.group-icon-cell .strike-line{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-20deg);width:70%;height:2px;background:var(--red);border-radius:2px}
+.group-icon-cell.struck .strike-line{display:block}
+
+.group-rows{flex:1;display:flex;flex-direction:column}
+.person-row{display:flex;align-items:stretch;border-bottom:1px solid var(--divider)}
+.person-row:last-child{border-bottom:none}
+.person-name{width:54px;min-width:54px;padding:.3rem .4rem;font-size:var(--xs);font-weight:600;background:#f9f9f7;border-right:1px solid var(--divider);display:flex;align-items:center}
+.time-cols{display:flex;flex:1}
+.time-cell{
+  flex:1;min-width:28px;border-right:1px solid var(--divider);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:.85rem;height:34px;
+  transition:background 150ms;user-select:none;
+}
+.time-cell:last-child{border-right:none}
+.time-cell:hover{background:#f0ede8}
+.time-cell.s-blank{color:var(--faint)}
+.time-cell.s-check{color:#2d6a4f;background:#edf7f0}
+.time-cell.s-cross{color:var(--red);background:#fef0f0}
+.time-cell.s-q{color:#b07d00;background:#fffbe6}
+
+/* locked cells (pre-filled, non-interactive) */
+.time-cell.locked{cursor:default;pointer-events:none}
+.time-cell.locked.s-check{background:#d4edd9}
+.time-cell.locked.s-cross{background:#fde8e8}
+
+/* icon strip */
+.icon-strip{display:flex;flex-wrap:wrap;gap:.4rem;padding:.6rem .75rem;background:#f0ede8;border-top:2px solid var(--border)}
+.strip-icon{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);font-size:1.2rem;cursor:pointer;transition:all 150ms;user-select:none;position:relative}
+.strip-icon:hover{background:#f5f3ef}
+.strip-icon.struck{background:#fef0f0;border-color:#e0a0a0}
+.strip-icon.struck::after{content:'';position:absolute;left:10%;top:50%;width:80%;height:2px;background:var(--red);transform:rotate(-15deg);border-radius:2px}
+
+/* table actions */
+.tbl-actions{display:flex;gap:.5rem;justify-content:center;margin-bottom:1rem}
+.btn-clear{padding:.35rem 1rem;background:var(--red);color:#fff;border:none;border-radius:var(--r-sm);font-size:var(--xs);font-weight:700;font-family:var(--font)}
+.btn-clear:hover{background:var(--red2)}
+.btn-check{padding:.35rem 1rem;background:var(--teal);color:#fff;border:none;border-radius:var(--r-sm);font-size:var(--xs);font-weight:700;font-family:var(--font)}
+.btn-check:hover{background:var(--teal2)}
+
+/* NAV */
+.tut-nav{display:flex;align-items:center;justify-content:space-between;margin-top:2rem;padding-top:1rem;border-top:1px solid var(--divider)}
+.nav-btn{padding:.45rem 1.1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);font-size:var(--sm);font-family:var(--font);transition:all .12s}
+.nav-btn:hover{background:var(--divider)}
+.nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.page-indicator{font-size:var(--xs);color:var(--muted)}
+
+/* FOOTER */
+.site-footer{text-align:center;border-top:1px solid var(--divider);padding-top:1.25rem;margin-top:2rem}
+.footer-nav{display:flex;gap:1.25rem;justify-content:center;margin-bottom:.75rem;flex-wrap:wrap}
+.footer-nav a{font-size:var(--sm);text-decoration:none}
+.footer-nav a:hover{text-decoration:underline}
+.footer-copy{font-size:var(--xs);color:var(--muted)}
+
+@media(max-width:650px){
+  .tut-sidebar{display:none}
+  .tut-layout{display:block}
+  .back-btn{position:static;margin-top:.5rem;display:inline-block}
+}
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="site-title">Mystery-o-Matic</div>
+  <div class="site-tagline">A mystery a day, keeps the coroner away!</div>
+  <button class="back-btn" onclick="history.back()">← Back to game</button>
+</header>
+
+<div class="tut-layout">
+
+<!-- SIDEBAR -->
+<nav class="tut-sidebar">
+  <button class="sidebar-toggle" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display==='none'?'block':'none'">◀</button>
+  <div class="sidebar-items" id="sidebar-items">
+    <div class="sidebar-item active" data-p="0"><span class="s-icon">🕵️</span>Welcome Detective!</div>
+    <div class="sidebar-item" data-p="1"><span class="s-icon">🕗</span>Using the Timeline Board</div>
+    <div class="sidebar-item" data-p="2"><span class="s-icon">🔎</span>Your First Clue</div>
+    <div class="sidebar-item" data-p="3"><span class="s-icon">🧠</span>Making Deductions</div>
+    <div class="sidebar-item" data-p="4"><span class="s-icon">🚶</span>Movement Rules</div>
+    <div class="sidebar-item" data-p="5"><span class="s-icon">↩️</span>Backtracking</div>
+    <div class="sidebar-item" data-p="6"><span class="s-icon">💬</span>Indirect Clues</div>
+    <div class="sidebar-item" data-p="7"><span class="s-icon">⌛</span>Time of Death</div>
+    <div class="sidebar-item" data-p="8"><span class="s-icon">🔪</span>The smoking gun</div>
+    <div class="sidebar-item" data-p="9"><span class="s-icon">🎓</span>Solving your first case</div>
+    <div class="sidebar-item" data-p="10"><span class="s-icon">🔫</span>Weapon identification</div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="tut-main">
+
+<!-- ══════════════════════════════════════════ PAGE 0 ══ -->
+<section class="tut-page active" id="page-0">
+  <div class="tut-section-bar">🕵️ Welcome Detective!</div>
+  <p><strong>Tip:</strong> to return to the game at any time, click the 🧩 icon in the bottom-right corner of the screen.</p>
+  <ul>
+    <li><strong>The suspects</strong>: you'll meet a colorful cast of characters including <strong>Alice, Bob, Carol, Dave, Frida and Eddie</strong>. One of them has met an unfortunate end while some of the others are our prime suspects. Spoiler alert: in this tutorial, poor Alice is our victim so we'll focus on Bob and Carol as suspects.</li>
+    <li><strong>The crime</strong>: a gruesome murder has taken place, and we need to determine how it happened. Once the fatal act occurs, <strong>the victim's body remains exactly where they fell</strong>–this is a crucial detail for your investigation.</li>
+    <li><strong>The location</strong>: each place can be connected with the others, allowing characters to move freely. For this tutorial, we'll explore a chilling mystery set in an eerie Victorian mansion, where people have been mysteriously disappearing from time to time. The layout changes from case to case, with three to five rooms to explore. Here's how the rooms connect:
+      <div class="room-map-wrap" style="margin-top:.75rem">
+        <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
+          <rect x="80" y="8" width="100" height="32" rx="14" fill="#c8e6e6" stroke="#888" stroke-width="1"/>
+          <text x="130" y="29" text-anchor="middle" font-family="Courier New" font-size="12">kitchen 🍲</text>
+          <rect x="5" y="84" width="110" height="32" rx="14" fill="#ddd9d3" stroke="#aaa" stroke-width="1"/>
+          <text x="60" y="105" text-anchor="middle" font-family="Courier New" font-size="11">dining room 🪑</text>
+          <rect x="145" y="84" width="100" height="32" rx="14" fill="#ddd9d3" stroke="#aaa" stroke-width="1"/>
+          <text x="195" y="105" text-anchor="middle" font-family="Courier New" font-size="12">bedroom 🛏️</text>
+          <rect x="145" y="158" width="100" height="32" rx="14" fill="#ddd9d3" stroke="#aaa" stroke-width="1"/>
+          <text x="195" y="179" text-anchor="middle" font-family="Courier New" font-size="11">bathroom 🚽</text>
+          <line x1="105" y1="40" x2="70" y2="84" stroke="#888" stroke-width="1.5"/>
+          <line x1="160" y1="40" x2="185" y2="84" stroke="#888" stroke-width="1.5"/>
+          <line x1="195" y1="116" x2="195" y2="158" stroke="#888" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </li>
+    <li><strong>The weapons</strong>: various weapons are scattered throughout the rooms and <strong>the killer will pick up one of the weapons before the crime</strong>, but don't expect them to be where they "should" be. That hammer? It might be in the bathroom instead of a workshop. Logic won't help you here!</li>
+    <li><strong>The timeline</strong>: the murder occurred within a specific time window (e.g., between 8:00 and 9:30). You'll need to reconstruct the movements of the suspects and identify when the fatal blow was struck. There is, however, one important detail that separates these puzzles from other logic whodunit games. Our puzzles try to mimic real life, where statements and clues are often chaotic, redundant or incomplete. In that sense, <strong>reconstructing the complete timeline is not necessary to solve the murder, and often it is impossible!</strong></li>
+    <li><strong>The statements</strong>: you'll get statements from suspects and evidence from the scene. <strong>Everyone will be telling the truth, but not necessarily the whole story.</strong> You will need to carefully deduce and combine facts in order to uncover the truth.</li>
+  </ul>
+</section>
+
+<!-- ══════════════════════════════════════════ PAGE 1 ══ -->
+<section class="tut-page" id="page-1">
+  <div class="tut-section-bar">🕗 Using the Timeline Board</div>
+  <p>In this tutorial, <strong>Alice has been murdered before 9:30 in the mansion, her body found in the kitchen (🍲).</strong> We'll use the <strong>Timeline Board</strong> to reconstruct this crime. Let's start with <strong>some basic facts we know for sure</strong>:</p>
+  <div class="clue-box">
+    We know where everyone was at <strong>9:30</strong>:<br><br>
+    <strong>Alice's body</strong> was in the kitchen (🍲)<br>
+    <strong>Bob</strong> was in the bathroom (🚽)<br>
+    <strong>Carol</strong> was in the dining room (🪑)
+  </div>
+  <p>The list of initial clues describe where each character was at 9:30, the end of the timeline. It is your job to deduce, using the suspect statements and other clues, who the killer is, which weapon was used, and when the crime occurred. We can mark the timeline with three simple symbols: <strong>✓</strong> means someone was there, <strong>✗</strong> means they weren't, and <strong>?</strong> means we're not sure.</p>
+
+  <!-- Interactive table page 1 -->
+  <div class="journal-wrap" id="tbl-p1">
+    <div class="journal-header">
+      <div class="th-icon">📍</div>
+      <div class="th-name">who</div>
+      <div class="th-times">
+        <div class="th-time">8:00</div><div class="th-time">8:15</div><div class="th-time">8:30</div>
+        <div class="th-time">8:45</div><div class="th-time">9:00</div><div class="th-time">9:15</div><div class="th-time">9:30</div>
+      </div>
+    </div>
+    <!-- kitchen -->
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🍲</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7"></div></div>
+      </div>
+    </div>
+    <!-- bedroom -->
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🛏️</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7"></div></div>
+      </div>
+    </div>
+    <!-- dining room -->
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🪑</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7"></div></div>
+      </div>
+    </div>
+    <!-- bathroom -->
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🚽</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7"></div></div>
+      </div>
+    </div>
+    <!-- weapon strip -->
+    <div class="icon-strip">
+      <div class="strip-icon" onclick="this.classList.toggle('struck')" title="hammer – dining room">🔨🪑</div>
+      <div class="strip-icon" onclick="this.classList.toggle('struck')" title="pistol – bedroom">🔫🛏️</div>
+      <div class="strip-icon" onclick="this.classList.toggle('struck')" title="scissors – kitchen">✂️🍲</div>
+      <div class="strip-icon" onclick="this.classList.toggle('struck')" title="rope – bathroom">🪢🚽</div>
+    </div>
+  </div>
+  <div class="tbl-actions">
+    <button class="btn-clear" onclick="clearTable('tbl-p1')">Clear 🌸</button>
+  </div>
+  <p>At the bottom of the timeline board lies the <strong>weapon section</strong>, which shows where each available weapon was located. For instance, the killer took the murder weapon from one of the following locations:</p>
+  <ul>
+    <li>The hammer (🔨) from the dining room (🪑)</li>
+    <li>The pistol (🔫) from the bedroom (🛏️)</li>
+    <li>The scissors (✂️) from the kitchen (🍲)</li>
+    <li>The rope (🪢) from the bathroom (🚽)</li>
+  </ul>
+</section>
+
+<!-- ══════════════════════════════════════════ PAGE 2 ══ -->
+<section class="tut-page" id="page-2">
+  <div class="tut-section-bar">🔎 Your First Clue</div>
+  <p>Here's where it gets fun! <strong>Our suspects may move between rooms every 15 minutes</strong> (they're suspiciously punctual), following the location's layout.<br>
+  They can only move to directly connected rooms during each 15-minute interval, no shortcuts allowed! Think of it like moving across a chessboard, you have to pass through the squares one at a time.<br>
+  For example, if Carol wants to go from the dining room (🪑) to the bedroom (🛏️), she must:</p>
+  <ol>
+    <li>Move from the dining room (🪑) to the kitchen (🍲) during one 15-minute interval.</li>
+    <li>Stay there for any number of 15-minutes intervals (even if other suspects are also there).</li>
+    <li>Move from the kitchen (🍲) to the bedroom (🛏️) during another 15-minute interval.</li>
+  </ol>
+  <p>She cannot teleport directly from the dining room (🪑) to the bedroom (🛏️), even though they might seem close. This rule is crucial for making deductions — if you know where and when someone started and ended up, you can often figure out where they must have been in between!<br>
+  Once the movement rules are clarified, let's start this case, with the following statement:</p>
+  <div class="clue-box"><span class="clue-speaker">☞ Bob</span>: "I saw <strong>Alice</strong> when I arrived in the bedroom (🛏️) at 8:15"</div>
+  <p>What can we deduce? Quite a lot actually:</p>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Alice was in the bedroom at 8:15</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Bob was also in the bedroom at 8:15</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Bob was NOT in the bedroom at 8:00</div>
+  <p>Click on each deduction to strikethrough the text, which will help you focus on other clues (try it with the clues shown above next to the magnifying glass!).<br>
+  Using these deductions we can start completing the timeline board:</p>
+
+  <div class="journal-wrap" id="tbl-p2">
+    <div class="journal-header">
+      <div class="th-icon">📍</div><div class="th-name">who</div>
+      <div class="th-times">
+        <div class="th-time">8:00</div><div class="th-time">8:15</div><div class="th-time">8:30</div>
+        <div class="th-time">8:45</div><div class="th-time">9:00</div><div class="th-time">9:15</div><div class="th-time">9:30</div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🛏️</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tbl-actions"><button class="btn-clear" onclick="clearTable('tbl-p2')">Clear 🌸</button></div>
+</section>
+
+<!-- ══════════════════════════════════════════ PAGE 3 ══ -->
+<section class="tut-page" id="page-3">
+  <div class="tut-section-bar">🧠 Making Deductions</div>
+  <p>The second we finish adding these into the timetable, other deductions start popping up! Since our suspects haven't mastered the art of being in two places at once, we can also figure out where they weren't:</p>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Alice was not in the bathroom, kitchen, or dining room at 8:15</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Bob was not in the bathroom, kitchen, or dining room at 8:15</div>
+  <p>Let's add the missing deductions:</p>
+
+  <div class="journal-wrap" id="tbl-p3">
+    <div class="journal-header">
+      <div class="th-icon">📍</div><div class="th-name">who</div>
+      <div class="th-times">
+        <div class="th-time">8:00</div><div class="th-time">8:15</div><div class="th-time">8:30</div>
+        <div class="th-time">8:45</div><div class="th-time">9:00</div><div class="th-time">9:15</div><div class="th-time">9:30</div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🍲</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",,,,,,✓"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🛏️</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🪑</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,,,✓"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🚽</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",,,,,,✓"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tbl-actions"><button class="btn-clear" onclick="clearTable('tbl-p3')">Clear 🌸</button></div>
+  <p>But where was Bob at 8:00? This is where our room layout comes in handy:</p>
+  <div class="room-map-wrap">
+    <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="80" y="8" width="100" height="32" rx="14" fill="#c8e6e6" stroke="#888" stroke-width="1"/>
+      <text x="130" y="29" text-anchor="middle" font-family="Courier New" font-size="12">kitchen 🍲</text>
+      <rect x="5" y="84" width="110" height="32" rx="14" fill="#ddd9d3" stroke="#aaa" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="60" y="105" text-anchor="middle" font-family="Courier New" font-size="11">dining room 🪑</text>
+      <rect x="145" y="84" width="100" height="32" rx="14" fill="#c8e6e6" stroke="#888" stroke-width="1"/>
+      <text x="195" y="105" text-anchor="middle" font-family="Courier New" font-size="12">bedroom 🛏️</text>
+      <rect x="145" y="158" width="100" height="32" rx="14" fill="#ddd9d3" stroke="#aaa" stroke-width="1"/>
+      <text x="195" y="179" text-anchor="middle" font-family="Courier New" font-size="11">bathroom 🚽</text>
+      <line x1="105" y1="40" x2="70" y2="84" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <line x1="160" y1="40" x2="185" y2="84" stroke="#888" stroke-width="1.5"/>
+      <line x1="195" y1="116" x2="195" y2="158" stroke="#888" stroke-width="1.5"/>
+    </svg>
+  </div>
+  <p>In this map, the bedroom has solid lines connecting it to the kitchen and bathroom. These solid lines represent direct connections — rooms that characters can move between in one 15-minute interval. The dotted line to the dining room shows an indirect connection — characters need to go through another room first to get there. Since the bedroom connects to both the kitchen and bathroom, Bob could have come from either one. But here's a solid deduction — <strong>Bob couldn't have been in the dining room at 8:00 because it doesn't connect to the bedroom!</strong></p>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Bob was not in the dining room at 8:00</div>
+  <p>Using this information, we can add another deduction into the timeline board:</p>
+
+  <div class="journal-wrap" id="tbl-p3b">
+    <div class="journal-header">
+      <div class="th-icon">📍</div><div class="th-name">who</div>
+      <div class="th-times">
+        <div class="th-time">8:00</div><div class="th-time">8:15</div><div class="th-time">8:30</div>
+        <div class="th-time">8:45</div><div class="th-time">9:00</div><div class="th-time">9:15</div><div class="th-time">9:30</div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🪑</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,,,✓"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tbl-actions"><button class="btn-clear" onclick="clearTable('tbl-p3b')">Clear 🌸</button></div>
+</section>
+
+<!-- ══════════════════════════════════════════ PAGE 4 ══ -->
+<section class="tut-page" id="page-4">
+  <div class="tut-section-bar">🚶 Movement Rules</div>
+  <p>Other types of clues describe where the suspects spent some time. For instance:</p>
+  <div class="clue-box"><span class="clue-speaker">☞ Carol</span>: "I was in the dining room (🪑) from 8:00 to 8:45"</div>
+  <p>This tells us:</p>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Carol was in the dining room from 8:00 to 8:45</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Carol was NOT in any of the other rooms from 8:00 to 8:45</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Carol was NOT in the dining room at 9:00</div>
+  <p>Where was Carol at 9:00? Let's go back to the mansion map to figure it out:</p>
+  <div class="room-map-wrap">
+    <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="80" y="8" width="100" height="32" rx="14" fill="#c8e6e6" stroke="#888" stroke-width="1"/>
+      <text x="130" y="29" text-anchor="middle" font-family="Courier New" font-size="12">kitchen 🍲</text>
+      <rect x="5" y="84" width="110" height="32" rx="14" fill="#c8e6e6" stroke="#888" stroke-width="1"/>
+      <text x="60" y="105" text-anchor="middle" font-family="Courier New" font-size="11">dining room 🪑</text>
+      <rect x="145" y="84" width="100" height="32" rx="14" fill="#ddd9d3" stroke="#aaa" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="195" y="105" text-anchor="middle" font-family="Courier New" font-size="12">bedroom 🛏️</text>
+      <rect x="145" y="158" width="100" height="32" rx="14" fill="#ddd9d3" stroke="#aaa" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="195" y="179" text-anchor="middle" font-family="Courier New" font-size="11">bathroom 🚽</text>
+      <line x1="105" y1="40" x2="70" y2="84" stroke="#888" stroke-width="1.5"/>
+      <line x1="160" y1="40" x2="185" y2="84" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <line x1="195" y1="116" x2="195" y2="158" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,3"/>
+    </svg>
+  </div>
+  <p>Looking at our room layout, <strong>Carol must have headed to the kitchen at 9:00 (and therefore, she is not somewhere else!) – it's the only place she could reach from the dining room!</strong></p>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Carol was in the kitchen at 9:00</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Carol was NOT in bedroom, dining room or bathroom at 9:00</div>
+  <p>Let's complete the timeline board with all these deductions:</p>
+
+  <div class="journal-wrap" id="tbl-p4">
+    <div class="journal-header">
+      <div class="th-icon">📍</div><div class="th-name">who</div>
+      <div class="th-times">
+        <div class="th-time">8:00</div><div class="th-time">8:15</div><div class="th-time">8:30</div>
+        <div class="th-time">8:45</div><div class="th-time">9:00</div><div class="th-time">9:15</div><div class="th-time">9:30</div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🍲</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",,,,,,✓"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",,X,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🛏️</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",✓,,,,, X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset="X,✓,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🪑</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset="X,X,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset="✓,✓,✓,✓,,,✓"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🚽</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,,,,✓"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tbl-actions"><button class="btn-clear" onclick="clearTable('tbl-p4')">Clear 🌸</button><button class="btn-check" onclick="alert('Keep going!')">Check 🔍</button></div>
+</section>
+
+<!-- ══════════════════════════════════════════ PAGE 5 ══ -->
+<section class="tut-page" id="page-5">
+  <div class="tut-section-bar">↩️ Backtracking</div>
+  <p>Here's another juicy clue type:</p>
+  <div class="clue-box"><span class="clue-speaker">☞ Bob</span>: "Saw nobody when I arrived to the bathroom (🚽) at 9:00"</div>
+  <p>Let's break it down:</p>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Bob was in the bathroom at 9:00</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Bob was NOT in the kitchen, bedroom or dining room at 9:00</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Neither Alice or Carol were in the bathroom at 9:00</div>
+  <p>What else can we get from this clue? Let's take another look to the location graph:</p>
+  <div class="room-map-wrap">
+    <svg viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="80" y="8" width="100" height="32" rx="14" fill="#c8e6e6" stroke="#888" stroke-width="1"/>
+      <text x="130" y="29" text-anchor="middle" font-family="Courier New" font-size="12">kitchen 🍲</text>
+      <rect x="5" y="84" width="110" height="32" rx="14" fill="#ddd9d3" stroke="#aaa" stroke-width="1" stroke-dasharray="5,3"/>
+      <text x="60" y="105" text-anchor="middle" font-family="Courier New" font-size="11">dining room 🪑</text>
+      <rect x="145" y="84" width="100" height="32" rx="14" fill="#c8e6e6" stroke="#888" stroke-width="1"/>
+      <text x="195" y="105" text-anchor="middle" font-family="Courier New" font-size="12">bedroom 🛏️</text>
+      <rect x="145" y="158" width="100" height="32" rx="14" fill="#c8e6e6" stroke="#888" stroke-width="1"/>
+      <text x="195" y="179" text-anchor="middle" font-family="Courier New" font-size="11">bathroom 🚽</text>
+      <line x1="105" y1="40" x2="70" y2="84" stroke="#aaa" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <line x1="160" y1="40" x2="185" y2="84" stroke="#888" stroke-width="1.5"/>
+      <line x1="195" y1="116" x2="195" y2="158" stroke="#888" stroke-width="1.5"/>
+    </svg>
+  </div>
+  <p>Not only does this clue place Bob in the bathroom at 9:00, but we can backtrack — <strong>he must have been in the bedroom at 8:45 since it's the only way to reach the bathroom!</strong> In other words:</p>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Bob was in the bedroom at 8:45</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Bob was NOT in the kitchen, dining room or bathroom at 8:45</div>
+  <p>Time to add our shiny new deductions to the timeline board:</p>
+
+  <div class="journal-wrap" id="tbl-p5">
+    <div class="journal-header">
+      <div class="th-icon">📍</div><div class="th-name">who</div>
+      <div class="th-times">
+        <div class="th-time">8:00</div><div class="th-time">8:15</div><div class="th-time">8:30</div>
+        <div class="th-time">8:45</div><div class="th-time">9:00</div><div class="th-time">9:15</div><div class="th-time">9:30</div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🍲</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",,,,,,✓"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,,X,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,,,X"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🛏️</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",✓,,,,, X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset="X,✓,,✓,X,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset="X,X,X,X,X,,X"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🪑</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,,,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,X,X,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset="✓,✓,✓,✓,,,✓"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🚽</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,,X,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,X,✓,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset="X,X,X,X,X,,X"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tbl-actions"><button class="btn-clear" onclick="clearTable('tbl-p5')">Clear 🌸</button><button class="btn-check" onclick="alert('Keep going!')">Check 🔍</button></div>
+</section>
+
+<!-- ══════════════════════════════════════════ PAGE 6 ══ -->
+<section class="tut-page" id="page-6">
+  <div class="tut-section-bar">💬 Indirect Clues</div>
+  <p>Finally, sometimes we get vague clues from suspects:</p>
+  <div class="clue-box"><span class="clue-speaker">☞ Carol</span>: "I heard someone washing the dishes at 8:45"</div>
+  <p>This clue tells us that someone was in the kitchen. Wait a minute, can you wash dishes in the bathroom? Nope, absolutely ridiculous (looking at you The Sims™). Let's review what we deduced so far:</p>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Someone was (alive!) at the kitchen at 8:45</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Carol was NOT in the kitchen at 8:45</div>
+  <p>It can be tempting to try to guess where Carol was, but this is not possible. Characters sometimes can hear or see someone in other rooms, but their location cannot be inferred from this kind of clue. However, what we can deduce using our previous observations is who was in the kitchen. Clearly, it was not Carol (she was elsewhere at 8:45 actually!). Also, we know that Bob was in the bedroom, which means that <strong>Alice was in the kitchen at 8:45.</strong></p>
+  <p>Our first attempt to deduce facts was not great, so let's review our previous deduction and refine them:</p>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Alice was in the kitchen at 8:45</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Alice was NOT in the bedroom, dining room or bathroom at 8:45</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Carol was NOT in the kitchen at 8:45</div>
+  <p>Back to the timeline board...</p>
+
+  <div class="journal-wrap" id="tbl-p6">
+    <div class="journal-header">
+      <div class="th-icon">📍</div><div class="th-name">who</div>
+      <div class="th-times">
+        <div class="th-time">8:00</div><div class="th-time">8:15</div><div class="th-time">8:30</div>
+        <div class="th-time">8:45</div><div class="th-time">9:00</div><div class="th-time">9:15</div><div class="th-time">9:30</div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🍲</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,✓,,,✓"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,X,X,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,✓,,X"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🛏️</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",✓,,X,X,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset="X,✓,,✓,X,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset="X,X,X,X,X,,X"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🪑</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,X,X,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,X,X,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset="✓,✓,✓,✓,X,,✓"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🚽</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,X,X,,X"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,X,✓,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset="X,X,X,X,X,,X"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tbl-actions"><button class="btn-clear" onclick="clearTable('tbl-p6')">Clear 🌸</button><button class="btn-check" onclick="alert('Keep going!')">Check 🔍</button></div>
+</section>
+
+<!-- ══════════════════════════════════════════ PAGE 7 ══ -->
+<section class="tut-page" id="page-7">
+  <div class="tut-section-bar">⌛ Determining Time of Death</div>
+  <div class="clue-box">☞ A blood-curdling scream from the victim was heard between 8:45 and 9:00</div>
+  <p>Since our suspects move every 15 minutes like clockwork, the murder had to happen either at 8:45 or 9:00. However, we already know that Alice was alive at 8:45 (and happily washing the dishes). So the only option here is that murder happened at 9:00. Remember that once the killer strikes, the victim's body is never moved, so we can easily complete Alice's timeline until 9:30.</p>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Alice was killed at 9:00 in the kitchen</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Alice's body is in the kitchen from 9:15 to 9:30</div>
+  <p>Let's note our findings in the timeline board:</p>
+
+  <div class="journal-wrap" id="tbl-p7">
+    <div class="journal-header">
+      <div class="th-icon">📍</div><div class="th-name">who</div>
+      <div class="th-times">
+        <div class="th-time">8:00</div><div class="th-time">8:15</div><div class="th-time">8:30</div>
+        <div class="th-time">8:45</div><div class="th-time">9:00</div><div class="th-time">9:15</div><div class="th-time">9:30</div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell" onclick="toggleStrike(this)"><span class="icon-emoji">🍲</span><div class="strike-line"></div></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,✓,✓,✓,✓"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,X,X,,X"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset=",,,,✓,,X"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tbl-actions"><button class="btn-clear" onclick="clearTable('tbl-p7')">Clear 🌸</button><button class="btn-check" onclick="alert('Keep going!')">Check 🔍</button></div>
+</section>
+
+<!-- ══════════════════════════════════════════ PAGE 8 ══ -->
+<section class="tut-page" id="page-8">
+  <div class="tut-section-bar">🔪 Finding the smoking gun</div>
+  <div class="clue-box">☞ Inspecting the body reveals no signs of <u>stabbing</u></div>
+  <p>To discard a particular weapon we need to know what kind of wound they produce. Just click on the type of wound described in the clue (e.g. <u>stabbing</u>) and you will see a list of potential weapons.</p>
+  <p>Armed with this information, we can discard a weapon in the the bottom of the timeline board table, just clicking the corresponding weapon/location icon: ✂️🍲</p>
+  <div style="display:flex;justify-content:center;margin-bottom:1rem">
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center">
+      <div class="strip-icon" onclick="this.classList.toggle('struck')" title="hammer – dining room" style="width:auto;padding:0 .75rem;font-size:.8rem;gap:.3rem;display:flex;align-items:center">🔨 🪑</div>
+      <div class="strip-icon" onclick="this.classList.toggle('struck')" title="pistol – bedroom" style="width:auto;padding:0 .75rem;font-size:.8rem;gap:.3rem;display:flex;align-items:center">🔫 🛏️</div>
+      <div class="strip-icon" onclick="this.classList.toggle('struck')" title="scissors – kitchen" style="width:auto;padding:0 .75rem;font-size:.8rem;gap:.3rem;display:flex;align-items:center">✂️ 🍲</div>
+      <div class="strip-icon" onclick="this.classList.toggle('struck')" title="rope – bathroom" style="width:auto;padding:0 .75rem;font-size:.8rem;gap:.3rem;display:flex;align-items:center">🪢 🚽</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════ PAGE 9 ══ -->
+<section class="tut-page" id="page-9">
+  <div class="tut-section-bar">🎓 Solving your first case using elimination</div>
+  <p>Time to pull it all together and solve our very first murder! <strong>We include all our deductions in the following read-only timeline board:</strong></p>
+
+  <div class="journal-wrap" id="tbl-p9">
+    <div class="journal-header">
+      <div class="th-icon">📍</div><div class="th-name">who</div>
+      <div class="th-times">
+        <div class="th-time">8:00</div><div class="th-time">8:15</div><div class="th-time">8:30</div>
+        <div class="th-time">8:45</div><div class="th-time">9:00</div><div class="th-time">9:15</div><div class="th-time">9:30</div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell"><span class="icon-emoji">🍲</span></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,✓,✓,✓,✓" data-locked="true"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,X,X,,X" data-locked="true"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset="X,X,X,X,✓,,X" data-locked="true"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell"><span class="icon-emoji">🛏️</span></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",✓,,X,X,,X" data-locked="true"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset="X,✓,,✓,X,,X" data-locked="true"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset="X,X,X,X,X,,X" data-locked="true"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell"><span class="icon-emoji">🪑</span></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,X,X,,X" data-locked="true"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,X,X,,X" data-locked="true"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset="✓,✓,✓,✓,X,,✓" data-locked="true"></div></div>
+      </div>
+    </div>
+    <div class="journal-group">
+      <div class="group-icon-cell"><span class="icon-emoji">🚽</span></div>
+      <div class="group-rows">
+        <div class="person-row"><div class="person-name">alice</div><div class="time-cols" data-cols="7" data-preset=",X,,X,X,,X" data-locked="true"></div></div>
+        <div class="person-row"><div class="person-name">bob</div><div class="time-cols" data-cols="7" data-preset=",X,,X,✓,,X" data-locked="true"></div></div>
+        <div class="person-row"><div class="person-name">carol</div><div class="time-cols" data-cols="7" data-preset="X,X,X,X,X,,X" data-locked="true"></div></div>
+      </div>
+    </div>
+    <div class="icon-strip">
+      <div class="strip-icon" title="hammer – dining room">🔨🪑</div>
+      <div class="strip-icon struck" title="pistol – bedroom">🔫🛏️</div>
+      <div class="strip-icon struck" title="scissors – kitchen">✂️🍲</div>
+      <div class="strip-icon struck" title="rope – bathroom">🪢🚽</div>
+    </div>
+  </div>
+
+  <p>Notice that in each step we use a key technique: <strong>elimination</strong>. We deduce the answer not from a single clue that hands it to us, but by ruling out every other possibility. This is not guesswork, it is sound deductive reasoning. The puzzle guarantees a closed set of suspects, weapons, and rooms, so <strong>if we can rule out all options but one, the remaining one MUST be true.</strong></p>
+  <p>Think for a while and then click to reveal each solution:</p>
+  <details class="reveal"><summary>1 When was the murder committed?</summary><p><strong>9:00</strong> — Alice was alive and washing dishes at 8:45. The scream was between 8:45 and 9:00. Her body was found in the kitchen at 9:30, so she must have been killed at 9:00.</p></details>
+  <details class="reveal"><summary>2 Who was the killer?</summary><p><strong>Carol</strong> — She was the only suspect who could have been in the kitchen at 9:00 to commit the murder. Bob was in the bathroom at 9:00.</p></details>
+  <details class="reveal"><summary>3 Which weapon was used?</summary><p><strong>The hammer 🔨</strong> — Carol was alone in the dining room before the crime, giving her the opportunity to retrieve the hammer. The scissors, rope and pistol were all eliminated.</p></details>
+
+  <p>We actually used this same elimination technique earlier in the tutorial without calling it out. Remember when Carol said she heard someone washing dishes at 8:45? We knew Bob was in the bedroom and Carol wasn't in the kitchen. That left Alice as the only one who could have been there:</p>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Bob was in the bedroom at 8:45, not him</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Carol was NOT in the kitchen at 8:45, not her</div>
+  <div class="finding-box" onclick="this.classList.toggle('struck')"><span class="finding-icon">🔎</span> Alice was in the kitchen at 8:45, the only remaining possibility</div>
+
+  <p>In each of these cases, we started with a complete list of possibilities and eliminated options one by one using verified facts: statements from truthful characters, physical evidence, and movement constraints. The conclusion follows necessarily from the facts. <strong>It is not a guess, not an assumption, and not an inference from incomplete data.</strong> This technique is fundamental to solving cases, since often the puzzle will NOT give you a direct clue pointing to the answer. Instead, you must arrive at it by systematically ruling out what's impossible until only the truth remains.</p>
+  <p><strong>Case closed!</strong> That was not too hard, wasn't it? Well, if you want to be a super sleuth 🕵️, you need to learn a few additional tips and tricks. The next sections will help you deal with more complicated (and interesting!) cases.</p>
+</section>
+
+<!-- ══════════════════════════════════════════ PAGE 10 ══ -->
+<section class="tut-page" id="page-10">
+  <div class="tut-section-bar">🔫 Better identification of weapons</div>
+  <p>There's a powerful technique to either confirm or eliminate potential murder weapons quickly, based on this critical clue:</p>
+  <div class="clue-box">☞ The killer was alone when they retrieved the murder weapon.</div>
+  <p>By combining this insight with your suspicions about the killer and the timing of the crime, you can make decisive deductions. Let's examine how this works:</p>
+  <div class="clue-box"><span class="clue-speaker">☞ Alice</span>: "I was in the bedroom from 8:00 to 8:30"</div>
+  <p>Assuming that <strong>Alice is NOT the killer and the crime happened after 8:30</strong>, then we can arrive at the following deduction:</p>
+  <div class="finding-box"><span class="finding-icon">🔎</span> The killer didn't take the weapon from the bedroom.</div>
+  <p>On the contrary, if <strong>Alice IS the killer and the crime happened after 8:30</strong>, then we will need to check if she was alone at 8:00, 8:15 or 8:30 to deduce:</p>
+  <div class="finding-box"><span class="finding-icon">🔎</span> The killer did take the weapon from the bedroom.</div>
+  <p>Using this deductive technique, we can quickly identify the weapon used and solve the case!</p>
+</section>
+
+<!-- NAV -->
+<div class="tut-nav">
+  <button class="nav-btn" id="btn-prev" onclick="tutNav(-1)" disabled>← Previous</button>
+  <span class="page-indicator" id="page-indicator">1 / 11</span>
+  <button class="nav-btn" id="btn-next" onclick="tutNav(1)">Next →</button>
+</div>
+
+</main>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-nav">
+    <a href="#">Daily Mystery</a>
+    <a href="#">Old Mysteries ↗</a>
+    <a href="#">How to play</a>
+    <a href="#">About</a>
+  </div>
+  <div class="footer-copy">© mystery-o-matic</div>
+</footer>
+
+</div><!-- end page-wrapper -->
+
+<script>
+// ── STATE ──
+var TOTAL = 11;
+var cur = 0;
+var STATES = ['', '✓', '✗', '?'];
+var STATE_CLS = ['s-blank', 's-check', 's-cross', 's-q'];
+
+// ── BUILD TABLES ──
+function buildTables() {
+  document.querySelectorAll('.time-cols').forEach(function(tc) {
+    var n = parseInt(tc.getAttribute('data-cols') || 7);
+    var preset = (tc.getAttribute('data-preset') || '').split(',');
+    var locked = tc.closest('.person-row') ? tc.closest('[data-locked]') : null;
+    // check locked on parent journal-group data attr via nearest group-rows
+    var isLocked = tc.parentElement && tc.parentElement.parentElement &&
+                   tc.parentElement.parentElement.querySelector('[data-locked]');
+    // simpler: check data-locked on time-cols
+    var lockedDirect = tc.getAttribute('data-locked') === 'true';
+
+    tc.innerHTML = '';
+    for (var i = 0; i < n; i++) {
+      var cell = document.createElement('div');
+      cell.className = 'time-cell s-blank';
+      var p = (preset[i] || '').trim();
+      if (p === '✓' || p === 'check') { cell.className = 'time-cell s-check'; cell.textContent = '✓'; }
+      else if (p === '✗' || p === 'X') { cell.className = 'time-cell s-cross'; cell.textContent = '✗'; }
+      else if (p === '?') { cell.className = 'time-cell s-q'; cell.textContent = '?'; }
+
+      if (lockedDirect) { cell.classList.add('locked'); }
+      else { cell.addEventListener('click', cycleCell); }
+      tc.appendChild(cell);
+    }
+  });
+  // handle locked on group level (page 9)
+  document.querySelectorAll('.group-rows').forEach(function(gr) {
+    var locked = gr.closest('.journal-group');
+    // find time-cols with data-locked
+    gr.querySelectorAll('.time-cols[data-locked="true"] .time-cell').forEach(function(c) {
+      c.classList.add('locked');
+      c.removeEventListener('click', cycleCell);
+    });
+  });
+}
+
+function cycleCell() {
+  var states = ['', '✓', '✗', '?'];
+  var cls = ['s-blank','s-check','s-cross','s-q'];
+  var cur = 0;
+  for (var i = 0; i < cls.length; i++) {
+    if (this.classList.contains(cls[i])) { cur = i; break; }
+  }
+  var next = (cur + 1) % states.length;
+  for (var i = 0; i < cls.length; i++) this.classList.remove(cls[i]);
+  this.classList.add(cls[next]);
+  this.textContent = states[next];
+}
+
+function toggleStrike(el) { el.classList.toggle('struck'); }
+
+function clearTable(id) {
+  document.querySelectorAll('#' + id + ' .time-cell:not(.locked)').forEach(function(c) {
+    c.className = 'time-cell s-blank';
+    c.textContent = '';
+  });
+  document.querySelectorAll('#' + id + ' .group-icon-cell').forEach(function(c) {
+    c.classList.remove('struck');
+  });
+  document.querySelectorAll('#' + id + ' .strip-icon').forEach(function(c) {
+    c.classList.remove('struck');
+  });
+}
+
+// ── NAV ──
+function tutNav(dir) {
+  var next = cur + dir;
+  if (next < 0) return;
+  if (next >= TOTAL) { history.back(); return; }
+  showPage(next);
+}
+
+function showPage(n) {
+  document.getElementById('page-' + cur).classList.remove('active');
+  document.querySelectorAll('.sidebar-item')[cur].classList.remove('active');
+  cur = n;
+  document.getElementById('page-' + cur).classList.add('active');
+  document.querySelectorAll('.sidebar-item')[cur].classList.add('active');
+  document.getElementById('btn-prev').disabled = (cur === 0);
+  document.getElementById('btn-next').textContent = (cur === TOTAL - 1) ? 'Back to the puzzle →' : 'Next →';
+  document.getElementById('page-indicator').textContent = (cur + 1) + ' / ' + TOTAL;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// sidebar click
+document.querySelectorAll('.sidebar-item').forEach(function(item) {
+  item.addEventListener('click', function() { showPage(parseInt(this.getAttribute('data-p'))); });
+});
+
+// init
+document.addEventListener('DOMContentLoaded', function() {
+  buildTables();
+});
+</script>
+</body>
+</html>
