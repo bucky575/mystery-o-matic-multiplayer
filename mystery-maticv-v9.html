@@ -252,6 +252,43 @@ a{color:var(--text)}
   transform:rotate(-15deg);border-radius:2px;
 }
 
+.strip-pair {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 150ms;
+  user-select: none;
+  position: relative;
+}
+.strip-pair:hover {
+  background: #f5f3ef;
+}
+.strip-pair.struck {
+  background: #fef0f0;
+  border-color: #e0a0a0;
+  opacity: 0.5;
+}
+.strip-pair.struck::after {
+  content: '';
+  position: absolute;
+  left: 10%;
+  top: 50%;
+  width: 80%;
+  height: 2px;
+  background: var(--red);
+  transform: rotate(-15deg);
+  border-radius: 2px;
+}
+
+
+
 /* MP journal tabs */
 .journal-mp{display:none}
 .journal-mp.visible{display:block}
@@ -893,10 +930,10 @@ async function loadPuzzle() {
     }));
 
     WEAPONS = Object.keys(d.weaponMap).map(key => ({
-      icon:  d.weaponIcons[key] || '🔪',
-      label: key.replace('$', '').replace(/_/g, ' ')
-                .toLowerCase().replace(/\b\w/g, c => c.toUpperCase()),
-      key:   key,
+      icon: d.weaponIcons[key],
+      label: key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+      key: key,
+      room: d.weaponMap[key],
     }));
 
     PERSONS = d.characterNames; // include victim so journal shows all characters
@@ -1031,13 +1068,9 @@ function buildJournal(mountEl, tableId, readonly) {
       nameCell.className = 'person-name';
       const isVictimPerson = VICTIM && (person.charAt(0).toUpperCase() + person.slice(1)) === (VICTIM.charAt(0).toUpperCase() + VICTIM.slice(1));
       if (isVictimPerson) {
-        nameCell.textContent = person + ' ☠';
-        nameCell.title = 'Victim (murdered)';
-        nameCell.style.color = 'var(--red)';
-        nameCell.style.opacity = '0.75';
-      } else {
-        nameCell.textContent = person;
+        nameCell.style.background = '#ffe8cc';
       }
+      nameCell.textContent = person;
       row.appendChild(nameCell);
       const timeCols = document.createElement('div');
       timeCols.className = 'time-cols';
@@ -1048,18 +1081,13 @@ function buildJournal(mountEl, tableId, readonly) {
         cell.className = 'time-cell ' + CYCLE_CLASS[st];
         cell.textContent = CYCLE[st];
         cell.title = TIMES[ti];
-        if (!readonly && !isVictimPerson) {
+        if (!readonly) {
           cell.addEventListener('click', () => {
             s.cells[li][pi][ti] = (s.cells[li][pi][ti] + 1) % 4;
             const ns = s.cells[li][pi][ti];
             cell.className = 'time-cell ' + CYCLE_CLASS[ns];
             cell.textContent = CYCLE[ns];
           });
-        }
-        if (isVictimPerson) {
-          cell.style.background = '#fef0f0';
-          cell.style.cursor = 'default';
-          cell.style.opacity = '0.6';
         }
         timeCols.appendChild(cell);
       });
@@ -1074,34 +1102,39 @@ function buildJournal(mountEl, tableId, readonly) {
   // Weapon/location icon strip
   const strip = document.createElement('div');
   strip.className = 'icon-strip';
-
   WEAPONS.forEach((w, wi) => {
-    const btn = document.createElement('div');
-    btn.className = 'strip-icon' + (s.weapStruck[wi] ? ' struck' : '');
-    btn.title = w.label;
-    btn.textContent = w.icon;
-    if (!readonly) {
-      btn.addEventListener('click', () => {
-        s.weapStruck[wi] = !s.weapStruck[wi];
-        btn.classList.toggle('struck', s.weapStruck[wi]);
-      });
-    }
-    strip.appendChild(btn);
-  });
+    // Find the matching location for this weapon
+    const matchedLoc = LOCATIONS.find(loc => loc.key === w.room);
+    const li = LOCATIONS.indexOf(matchedLoc);
 
-  LOCATIONS.forEach((loc, li) => {
-    const btn = document.createElement('div');
-    btn.className = 'strip-icon' + (s.locStruck[li] ? ' struck' : '');
-    btn.title = loc.label;
-    btn.textContent = loc.icon;
-    if (!readonly) {
-      btn.addEventListener('click', () => {
-        s.locStruck[li] = !s.locStruck[li];
-        btn.classList.toggle('struck', s.locStruck[li]);
-        buildJournal(mountEl, tableId, readonly);
-      });
-    }
-    strip.appendChild(btn);
+    const pair = document.createElement('div');
+    pair.className = 'strip-pair' + (s.weapStruck[wi] ? ' struck' : '');
+    pair.title = w.label + ' (from ' + (matchedLoc ? matchedLoc.label : '') + ')';
+
+    const weapSpan = document.createElement('span');
+    weapSpan.textContent = w.icon;
+
+    const locSpan = document.createElement('span');
+    locSpan.textContent = matchedLoc ? matchedLoc.icon : '';
+
+    pair.appendChild(weapSpan);
+    pair.appendChild(locSpan);
+
+    if (!readonly) pair.addEventListener('click', () => {
+      s.weapStruck[wi] = !s.weapStruck[wi];
+      pair.classList.toggle('struck', s.weapStruck[wi]);
+      // Also sync the location struck state
+      if (li >= 0) {
+        s.locStruck[li] = s.weapStruck[wi];
+        // Update the group icon cell in the journal too
+        const groupIconCells = mountEl.querySelectorAll('.group-icon-cell');
+        if (groupIconCells[li]) {
+          groupIconCells[li].classList.toggle('struck', s.locStruck[li]);
+        }
+      }
+    });
+
+    strip.appendChild(pair);
   });
 
   wrap.appendChild(strip);
