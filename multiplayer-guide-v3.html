@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mystery Matic — Multiplayer Guide</title>
+<style>
+:root {
+  --font: 'Courier New', monospace;
+  --serif: 'Georgia', serif;
+  --bg: #f5f5f0; --surface: #ffffff; --surface2: #f9f9f7;
+  --border: #d4d1ca; --divider: #e0ddd8;
+  --text: #1a1a18; --muted: #6a6a68; --faint: #aaa;
+  --red: #d32f2f; --red2: #b71c1c;
+  --teal: #00747a; --teal2: #005a5f; --teal-bg: #e0f0f0;
+  --r-sm: 4px; --r-md: 8px; --r-full: 999px;
+  --xs: .75rem; --sm: .875rem; --base: 1rem; --xl: 2.25rem;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{font-family:var(--font);font-size:var(--base);color:var(--text);background:var(--bg);min-height:100dvh;line-height:1.7}
+a{color:var(--teal);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.page-wrapper{max-width:780px;margin:0 auto;padding:2rem 1.25rem 4rem}
+
+/* HEADER */
+.site-header{text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid var(--border)}
+.site-title{font-family:var(--serif);font-size:var(--xl);font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+.site-tagline{font-style:italic;font-size:var(--sm);color:var(--muted);margin-top:.25rem}
+.guide-badge{display:inline-block;background:var(--teal);color:#fff;font-size:var(--xs);font-weight:700;padding:3px 12px;border-radius:var(--r-full);letter-spacing:.06em;margin-top:.6rem}
+
+/* TOC */
+.toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:1.25rem 1.5rem;margin-bottom:2.5rem}
+.toc-title{font-size:var(--sm);font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.75rem}
+.toc-list{list-style:none;display:flex;flex-direction:column;gap:.3rem;counter-reset:toc-counter}
+.toc-list li{display:flex;align-items:baseline;gap:.5rem;font-size:var(--sm)}
+.toc-list li::before{content:counter(toc-counter);counter-increment:toc-counter;min-width:18px;font-weight:700;color:var(--teal);font-size:var(--xs)}
+.toc-list a{color:var(--text)}
+.toc-list a:hover{color:var(--teal)}
+
+/* SECTIONS */
+.guide-section{margin-bottom:3rem;scroll-margin-top:1.5rem}
+.section-header{background:#e8e8e4;padding:.5rem .75rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;font-size:var(--sm);font-weight:700;border-radius:var(--r-sm)}
+.section-icon{font-size:1rem;min-width:22px;text-align:center}
+.section-number{font-size:var(--xs);color:var(--muted);font-weight:700;min-width:22px}
+
+.guide-section p{font-size:var(--sm);color:var(--text);margin-bottom:.85rem;line-height:1.8}
+.guide-section p:last-child{margin-bottom:0}
+
+/* CALLOUT BOXES */
+.callout{border-radius:var(--r-md);padding:1rem 1.25rem;margin:1rem 0;font-size:var(--sm);line-height:1.8}
+.callout-info{background:var(--teal-bg);border-left:3px solid var(--teal)}
+.callout-warn{background:#fff8e1;border-left:3px solid #f59e0b}
+.callout-tip{background:#f0f7f0;border-left:3px solid #5a9e6a}
+.callout-title{font-weight:700;margin-bottom:.35rem;display:flex;align-items:center;gap:.4rem}
+
+/* STEP FLOW */
+.step-flow{display:flex;flex-direction:column;gap:0;margin:1rem 0}
+.step-item{display:flex;gap:1rem;align-items:flex-start;padding:.75rem 0;border-bottom:1px dashed var(--divider)}
+.step-item:last-child{border-bottom:none}
+.step-num{width:28px;height:28px;min-width:28px;background:var(--teal);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:var(--xs);font-weight:700;margin-top:.1rem}
+.step-body{flex:1}
+.step-title{font-weight:700;font-size:var(--sm);margin-bottom:.2rem}
+.step-desc{font-size:var(--xs);color:var(--muted);line-height:1.7}
+
+/* MOCK UI */
+.mock-ui{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;margin:1rem 0;font-size:var(--xs)}
+.mock-header{background:#e8e8e4;padding:.4rem .75rem;font-weight:700;font-size:var(--xs);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem}
+.mock-body{padding:.75rem}
+
+/* PLAYER CHIPS MOCK */
+.mock-chips{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;padding:.6rem .75rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);margin:.75rem 0}
+.chip{display:inline-flex;align-items:center;gap:.25rem;padding:3px 10px;border-radius:var(--r-full);font-size:var(--xs);font-weight:600;border:1px solid #b0d4d4;background:var(--teal-bg)}
+.chip.you{background:var(--teal);color:#fff;border-color:var(--teal)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:#5a9e6a}
+.chip-badge{margin-left:auto;font-size:var(--xs);background:#f0ede8;padding:3px 10px;border-radius:var(--r-full);border:1px solid var(--border);font-weight:700;letter-spacing:.06em}
+
+/* JOURNAL MOCK */
+.mock-journal{font-size:var(--xs);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;margin:.75rem 0}
+.mock-tabs{display:flex;background:#e8e8e4;border-bottom:1px solid var(--border);overflow-x:auto}
+.mock-tab{padding:.35rem .75rem;font-size:.65rem;font-weight:600;color:var(--muted);border-right:1px solid var(--border);cursor:default;white-space:nowrap}
+.mock-tab.active{background:var(--surface);color:var(--text)}
+.mock-grid{padding:.5rem .75rem;overflow-x:auto}
+.mock-table{border-collapse:collapse;font-size:.65rem;width:100%}
+.mock-table th{background:#f0ede8;padding:3px 6px;border:1px solid var(--border);text-align:center;font-weight:700}
+.mock-table td{padding:3px 6px;border:1px solid var(--border);text-align:center}
+.mock-table td.loc{background:#f5f4f0;font-size:.75rem;text-align:center}
+.mock-table td.name{font-weight:600;text-align:left;padding-left:8px}
+.s-check{background:#e6f4ea;color:#2d6a4f;font-weight:700}
+.s-cross{background:#fdecea;color:#b71c1c;font-weight:700}
+.s-q{background:#fff8e1;color:#b45309;font-weight:700}
+.s-conflict-mock{background:#fff3cd;border:2px solid #f59e0b !important;position:relative}
+.s-conflict-mock::after{content:'⚡';position:absolute;top:-6px;right:-4px;font-size:8px}
+.mock-actions{display:flex;gap:.5rem;padding:.5rem .75rem;background:var(--surface2);border-top:1px solid var(--divider);flex-wrap:wrap;align-items:center}
+.mock-badge{font-size:.6rem;background:#f0ede8;padding:2px 8px;border-radius:var(--r-full);border:1px solid var(--border);color:var(--muted)}
+.btn-mock-ghost{padding:3px 10px;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);font-size:.65rem;font-family:var(--font);color:var(--muted)}
+.btn-mock-teal{padding:3px 10px;background:var(--teal);color:#fff;border:none;border-radius:var(--r-sm);font-size:.65rem;font-family:var(--font);font-weight:700}
+
+/* CONFLICT LOG MOCK */
+.conflict-log-mock{margin-top:.5rem;border:1px solid #f59e0b;border-radius:var(--r-sm);background:#fffbeb;font-size:.65rem;overflow:hidden}
+.conflict-log-mock-header{background:#fef3c7;padding:.3rem .6rem;font-weight:700;color:#92400e;border-bottom:1px solid #f59e0b}
+.conflict-log-mock-body{padding:.4rem .6rem;line-height:1.9}
+
+/* NOTES MOCK */
+.mock-textarea{width:100%;min-height:80px;padding:.5rem .75rem;background:var(--surface2);border:none;border-bottom:1px solid var(--divider);font-family:var(--font);font-size:.65rem;color:var(--muted);resize:none}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:.5rem;margin:.75rem 0}
+.legend-item{display:flex;align-items:center;gap:.35rem;font-size:var(--xs);padding:4px 10px;border-radius:var(--r-full);border:1px solid var(--border);background:var(--surface)}
+.legend-sym{font-weight:700;font-size:var(--sm);width:18px;text-align:center}
+
+/* TIPS LIST */
+.tips-list{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin:.75rem 0}
+.tips-list li{display:flex;gap:.75rem;font-size:var(--sm);align-items:flex-start;padding:.5rem .75rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm)}
+.tips-list .tip-icon{font-size:1rem;min-width:20px;text-align:center}
+
+/* TABLE */
+.guide-table{width:100%;border-collapse:collapse;font-size:var(--xs);margin:.75rem 0}
+.guide-table th{background:#e8e8e4;padding:.4rem .75rem;border:1px solid var(--border);text-align:left;font-weight:700}
+.guide-table td{padding:.4rem .75rem;border:1px solid var(--border)}
+.guide-table td.yes{color:#2d6a4f;font-weight:700}
+.guide-table td.no{color:#b71c1c;font-weight:700}
+
+/* CLUE MOCK */
+.clue-mock{border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);overflow:hidden;margin:.75rem 0}
+.clue-mock-header{background:#e8e8e4;padding:.4rem .75rem;font-size:var(--xs);font-weight:700;border-bottom:1px solid var(--divider);display:flex;justify-content:space-between}
+.clue-mock-body{padding:.75rem;font-size:var(--xs);line-height:1.8}
+.clue-tag{display:inline-block;background:var(--teal-bg);color:var(--teal);border:1px solid #b0d4d4;border-radius:var(--r-full);font-size:.65rem;font-weight:700;padding:1px 10px;margin-bottom:.4rem;letter-spacing:.04em}
+
+/* FLOW COMPARISON TABLE */
+.flow-table{width:100%;border-collapse:collapse;font-size:var(--xs);margin:.75rem 0}
+.flow-table th{background:#e8e8e4;padding:.45rem .75rem;border:1px solid var(--border);font-weight:700;text-align:left}
+.flow-table td{padding:.45rem .75rem;border:1px solid var(--border);vertical-align:top;line-height:1.7}
+.flow-table td.action{font-weight:700}
+.flow-table td.yes{color:#2d6a4f;font-weight:600}
+.flow-table td.no{color:var(--faint)}
+.flow-table tr:nth-child(even){background:var(--surface2)}
+
+/* CTA */
+.cta-bar{text-align:center;margin-top:3rem;padding-top:2rem;border-top:2px solid var(--border)}
+.btn-red{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.75rem;background:var(--red);color:#fff;border:none;border-radius:var(--r-sm);font-size:var(--sm);font-weight:700;font-family:var(--font);text-decoration:none;transition:background 150ms;cursor:pointer}
+.btn-red:hover{background:var(--red2);text-decoration:none;color:#fff}
+
+/* DIVIDER */
+.section-divider{border:none;border-top:1px solid var(--divider);margin:2.5rem 0}
+
+/* MOBILE */
+@media(max-width:600px){
+  .page-wrapper{padding:1rem .75rem 3rem}
+  .site-title{font-size:1.6rem}
+  .legend{gap:.35rem}
+  .step-item{gap:.6rem}
+  .guide-table,.flow-table{font-size:.65rem}
+  .tips-list li{font-size:var(--xs)}
+  .mock-chips{gap:.35rem}
+}
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+<!-- HEADER -->
+<header class="site-header">
+  <h1 class="site-title">Mystery Matic</h1>
+  <p class="site-tagline">A mystery a day, keeps a coroner away!</p>
+  <span class="guide-badge">Multiplayer Guide</span>
+  <button class="back-btn" onclick="history.back()">← Back to game</button>
+</header>
+
+<!-- TOC -->
+<nav class="toc" aria-label="Table of contents">
+  <div class="toc-title">In this guide</div>
+  <ol class="toc-list">
+    <li><a href="#s1">What is Multiplayer Mode?</a></li>
+    <li><a href="#s2">Setting Up a Room (Host)</a></li>
+    <li><a href="#s3">Joining a Room</a></li>
+    <li><a href="#s4">The Players Panel (Lobby)</a></li>
+    <li><a href="#s5">Your Clues — Reading &amp; Sharing</a></li>
+    <li><a href="#s6">The Journal Grid — Your Private Deduction Board</a></li>
+    <li><a href="#s7">💾 Save — Your Working Copy for Teammates</a></li>
+    <li><a href="#s8">🔗 Share Grid — Contributing to the Team Merge</a></li>
+    <li><a href="#s9">Loading a Teammate's Grid</a></li>
+    <li><a href="#s10">The Shared Journal — Merging &amp; Conflicts</a></li>
+    <li><a href="#s11">Notes — Private &amp; Shared</a></li>
+    <li><a href="#s12">Making Your Accusation</a></li>
+    <li><a href="#s13">Session Persistence &amp; Reconnecting</a></li>
+    <li><a href="#s14">Quick Tips for a Smooth Game</a></li>
+  </ol>
+</nav>
+
+<!-- SECTION 1 -->
+<section class="guide-section" id="s1">
+  <div class="section-header"><span class="section-icon">🕵️</span><span class="section-number">01</span><span>What is Multiplayer Mode?</span></div>
+  <p>Mystery-o-Matic Multiplayer turns the daily puzzle into a <strong>collaborative investigation</strong>. Instead of one player reading all the clues, each player receives their own <em>exclusive slice</em> of the evidence. You must talk to each other, compare notes, and piece the mystery together as a team.</p>
+  <p>Everyone is solving the <strong>same daily mystery</strong> — same victim, same locations, same suspects, same weapons. The only difference is that no single player can crack it alone. The clue deck is divided between players, and cooperation is the only path to the answer.</p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">🎭 Solo vs Multiplayer</div>
+    The puzzle is identical whether you play alone or with friends. Multiplayer splits the clue load and adds a shared investigation layer — the deduction logic stays the same. If you already know how to play Solo, the only new concepts are saving, sharing, and merging grids.
+  </div>
+
+  <div class="step-flow">
+    <div class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">Host creates a room &amp; shares the code</div><div class="step-desc">The host picks the player count, generates a room code, and sends it to everyone.</div></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">Everyone joins using the code</div><div class="step-desc">Each player enters their display name and the room code to enter the lobby.</div></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">Each player reads their unique clues</div><div class="step-desc">Clues are automatically split. You only see the clues assigned to your slot.</div></div></div>
+    <div class="step-item"><div class="step-num">4</div><div class="step-body"><div class="step-title">Fill your journal grid privately</div><div class="step-desc">Work through your clues and mark your deductions. No one can see your grid yet.</div></div></div>
+    <div class="step-item"><div class="step-num">5</div><div class="step-body"><div class="step-title">💾 Save so teammates can load your journal tab</div><div class="step-desc">Saving makes your grid visible when a teammate opens your named journal tab.</div></div></div>
+    <div class="step-item"><div class="step-num">6</div><div class="step-body"><div class="step-title">🔗 Share Grid to contribute to the team merge</div><div class="step-desc">When ready to collaborate, push your confident marks into the shared journal for everyone to merge.</div></div></div>
+    <div class="step-item"><div class="step-num">7</div><div class="step-body"><div class="step-title">Refresh Shared Journal, resolve conflicts, accuse!</div><div class="step-desc">Merge everyone's shared marks, discuss conflicts, then make your accusation.</div></div></div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 2 -->
+<section class="guide-section" id="s2">
+  <div class="section-header"><span class="section-icon">🏠</span><span class="section-number">02</span><span>Setting Up a Room (Host)</span></div>
+  <p>The host is the player who creates the room. Switch to <strong>Multiplayer</strong> mode using the toggle at the top of the page. The setup card appears with two options — create or join. As the host, use the <em>create</em> section.</p>
+
+  <div class="step-flow">
+    <div class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">Enter your display name</div><div class="step-desc">This is the name other players will see in the lobby chips and journal tabs. Pick something short and recognisable.</div></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">Select the number of players</div><div class="step-desc">Choose 2, 3, or 4. This determines how clues are divided and how many journal tabs appear. <strong>You cannot change this after generating the code.</strong> Agree with your group first!</div></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">Click "Generate Room Code →"</div><div class="step-desc">A unique room code appears. Copy and share it with everyone who needs to join.</div></div></div>
+  </div>
+
+  <div class="callout callout-warn">
+    <div class="callout-title">⚠️ Player count is locked after generation</div>
+    Once you generate the room code, the player count is fixed. If you need a different number, refresh the page to reset and generate a new code. Make sure everyone agrees before generating!
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 3 -->
+<section class="guide-section" id="s3">
+  <div class="section-header"><span class="section-icon">🚪</span><span class="section-number">03</span><span>Joining a Room</span></div>
+  <p>Everyone who is not the host uses the <em>Join</em> section of the setup card. You need the room code the host shared with you.</p>
+
+  <div class="step-flow">
+    <div class="step-item"><div class="step-num">1</div><div class="step-body"><div class="step-title">Enter your display name</div><div class="step-desc">Use any name you like — but remember it. You'll need the exact same name to reconnect if you refresh or switch devices.</div></div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-body"><div class="step-title">Enter the room code</div><div class="step-desc">Paste the code the host sent you. It is not case-sensitive.</div></div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-body"><div class="step-title">Click "Join Room →"</div><div class="step-desc">You'll be placed in the next available slot and the lobby will load automatically.</div></div></div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">💡 Rejoining from another device?</div>
+    Enter the <strong>same room code + same display name</strong> in the Join section. The game recognises you by this combination and restores your slot and any server-saved progress automatically.
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 4 -->
+<section class="guide-section" id="s4">
+  <div class="section-header"><span class="section-icon">👥</span><span class="section-number">04</span><span>The Players Panel (Lobby)</span></div>
+  <p>Once you create or join a room, a <strong>players panel</strong> appears at the top of the page. This is your lobby at a glance — it shows who is in, their display names, and the room code.</p>
+
+  <div class="mock-chips">
+    <span style="font-size:.65rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">In Room</span>
+    <span class="chip you"><span class="dot" style="background:#fff;opacity:.7"></span>Alice (you)</span>
+    <span class="chip"><span class="dot"></span>Bob</span>
+    <span class="chip"><span class="dot"></span>Carol</span>
+    <span class="chip-badge">Room: AB12CD34</span>
+  </div>
+
+  <ul class="tips-list">
+    <li><span class="tip-icon">🟢</span><div><strong>Your chip</strong> is highlighted in teal and labelled "(you)". You can always see which slot you occupy.</div></li>
+    <li><span class="tip-icon">👤</span><div><strong>Other players</strong> show their real display names once they've joined. Empty slots appear as grey placeholders until someone joins.</div></li>
+    <li><span class="tip-icon">🔑</span><div><strong>The room code badge</strong> is always visible on the right. Copy and share it any time for latecomers.</div></li>
+  </ul>
+
+  <p>The game sections — clues, journal, notes, and accusation — all unlock as soon as you enter the lobby. You do not need to wait for all players before starting to read your clues.</p>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 5 -->
+<section class="guide-section" id="s5">
+  <div class="section-header"><span class="section-icon">🔍</span><span class="section-number">05</span><span>Your Clues — Reading &amp; Sharing</span></div>
+  <p>This is the heart of the multiplayer experience. The clue deck is <strong>automatically divided</strong> between all players — no setup needed. Each clue belongs to exactly one player based on a round-robin split.</p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">📋 How clues are split</div>
+    Clues are assigned round-robin: clue 1 → player 1, clue 2 → player 2, clue 3 → player 3, clue 4 → player 1 again, and so on. The split is deterministic — everyone in the same room on the same day gets the same assignment. Your clue navigator only shows the clues assigned to you.
+  </div>
+
+  <div class="clue-mock">
+    <div class="clue-mock-header"><span>Clue #2 of 4 assigned to you</span><span style="color:var(--muted)">CLUE 4 OF 12 TOTAL</span></div>
+    <div class="clue-mock-body">
+      <span class="clue-tag">CLUE 4 OF 12</span>
+      <p>Bob was not in the monkey island (🐒) between 5:00 and 5:15. He can confirm this.</p>
+    </div>
+  </div>
+
+  <p>Use the <strong>← Previous Clue</strong> and <strong>Next Clue →</strong> buttons to navigate through your assigned clues. You will never see clues assigned to other players — you have to communicate!</p>
+
+  <div class="callout callout-warn">
+    <div class="callout-title">💬 You must communicate!</div>
+    No single player has enough clues to solve the mystery alone. Read your clues aloud to your group, share in a chat, or take turns calling out what you found. The initial puzzle setup (who was where at the final time, which weapons exist) is visible to all players — only the investigation clues are split.
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 6 -->
+<section class="guide-section" id="s6">
+  <div class="section-header"><span class="section-icon">📓</span><span class="section-number">06</span><span>The Journal Grid — Your Private Deduction Board</span></div>
+  <p>The journal grid is your personal deduction board. Use it to track what you know, what you've ruled out, and what you're uncertain about. <strong>Nobody else can see your grid until you choose to save or share it.</strong></p>
+
+  <div class="mock-journal">
+    <div class="mock-tabs">
+      <span class="mock-tab active">📓 My Journal</span>
+      <span class="mock-tab">📓 Bob</span>
+      <span class="mock-tab">📓 Carol</span>
+      <span class="mock-tab">📘 Shared Journal</span>
+    </div>
+    <div class="mock-grid">
+      <table class="mock-table">
+        <tr><th></th><th>Person</th><th>5:00</th><th>5:15</th><th>5:30</th><th>5:45</th><th>6:00</th><th>6:15</th></tr>
+        <tr><td class="loc" rowspan="3">🐒</td><td class="name">alice</td><td class="s-cross">✗</td><td class="s-check">✓</td><td class="s-check">✓</td><td class="s-q">?</td><td></td><td></td></tr>
+        <tr><td class="name">bob</td><td class="s-cross">✗</td><td class="s-cross">✗</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="name">carol</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="loc" rowspan="3">🦁</td><td class="name">alice</td><td class="s-check">✓</td><td class="s-cross">✗</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="name">bob</td><td></td><td class="s-check">✓</td><td></td><td></td><td></td><td></td></tr>
+        <tr><td class="name">carol</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </table>
+    </div>
+    <div class="mock-actions">
+      <span class="mock-badge">Only visible to you</span>
+      <button class="btn-mock-ghost">💾 Save</button>
+      <button class="btn-mock-teal">🔗 Share Grid</button>
+    </div>
+  </div>
+
+  <p>Each row is a person at a location. Each column is a time slot. Click any cell to cycle through the four states:</p>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-sym" style="color:#2d6a4f">✓</span> Confirmed — definitely here</div>
+    <div class="legend-item"><span class="legend-sym" style="color:#b71c1c">✗</span> Eliminated — ruled out</div>
+    <div class="legend-item"><span class="legend-sym" style="color:#b45309">?</span> Uncertain — possible</div>
+    <div class="legend-item"><span class="legend-sym" style="color:var(--faint)">—</span> Blank — not yet considered</div>
+  </div>
+
+  <p>You can also <strong>click the location icon</strong> on the left edge to strike out an entire room group when you've confirmed a person was never there. The <strong>weapon strip</strong> at the bottom works the same way — click a weapon icon to eliminate it.</p>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 7 — CORRECTED -->
+<section class="guide-section" id="s7">
+  <div class="section-header"><span class="section-icon">💾</span><span class="section-number">07</span><span>Save — Your Working Copy for Teammates</span></div>
+
+  <p>Clicking <strong>💾 Save</strong> stores your current grid marks to your browser's local storage and to your private server copy (<code>my_grid_marks</code>). This is your <em>working copy</em> — the version of your grid that teammates will see when they open your named journal tab (📓 Alice, 📓 Bob, etc.) and click <strong>🔄 Load [Your Name]'s Grid</strong>.</p>
+
+  <p>Think of Save as saying: <em>"Here is my current progress — teammates who want to follow along can load my tab and see where I am."</em> This includes all your marks — confirmed ✓, eliminated ✗, and even uncertain ? ones — because a teammate loading your tab is specifically interested in your personal working state, not just your final confident conclusions.</p>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">💡 Save early, save often</div>
+    Save protects your work if the tab refreshes or closes unexpectedly. It also keeps your named journal tab up to date for teammates who want to peek at your progress. Make it a habit to save after every few deductions — it costs nothing and protects everything.
+  </div>
+
+  <div class="callout callout-warn">
+    <div class="callout-title">⚠️ Save ≠ Share Grid</div>
+    Saving does <strong>not</strong> push your marks into the collaborative Shared Journal merge. For that, you need <strong>🔗 Share Grid</strong> (next section). The two actions serve two different audiences — your named tab readers (Save) vs the team merge (Share Grid).
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 8 — CORRECTED -->
+<section class="guide-section" id="s8">
+  <div class="section-header"><span class="section-icon">🔗</span><span class="section-number">08</span><span>Share Grid — Contributing to the Team Merge</span></div>
+
+  <p>Clicking <strong>🔗 Share Grid</strong> uploads your current marks to the shared grid server (<code>shared_grid_marks</code>). These marks feed directly into the <strong>📘 Shared Journal</strong> tab, where all players' contributions are merged and conflicts are highlighted.</p>
+
+  <p>Think of Share Grid as saying: <em>"I am confident enough in these deductions to put them into the team's combined picture."</em> Unlike Save, Share Grid does not update your named journal tab — it targets the collaborative merge specifically.</p>
+
+  <table class="flow-table">
+    <tr><th>Action</th><th>Updates your named tab (📓)?</th><th>Updates Shared Journal (📘)?</th></tr>
+    <tr><td class="action">💾 Save</td><td class="yes">✓ Yes — teammates can Load your tab</td><td class="no">✗ No</td></tr>
+    <tr><td class="action">🔗 Share Grid</td><td class="no">✗ No</td><td class="yes">✓ Yes — feeds the team merge</td></tr>
+  </table>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">🎯 What to put in the shared merge</div>
+    Share your <strong>confident</strong> deductions — cells you've confirmed ✓ or definitively ruled out ✗. Hold back uncertain ? marks that you're still processing. The shared merge works best when everyone contributes only well-founded conclusions, keeping conflict noise low.
+  </div>
+
+  <p>You can share your grid multiple times. Each time you click Share Grid, your previous shared marks are replaced with your current state. So refine your deductions over time and re-share as your confidence grows — the shared journal always reflects your latest push.</p>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 9 -->
+<section class="guide-section" id="s9">
+  <div class="section-header"><span class="section-icon">📂</span><span class="section-number">09</span><span>Loading a Teammate's Grid</span></div>
+  <p>The journal tabs for other players (📓 Bob, 📓 Carol, etc.) are read-only views of their <strong>saved</strong> working copies. To see what a teammate has been working on, navigate to their tab and click <strong>🔄 Load [Name]'s Grid</strong>.</p>
+
+  <div class="mock-journal">
+    <div class="mock-tabs">
+      <span class="mock-tab">📓 My Journal</span>
+      <span class="mock-tab active">📓 Bob</span>
+      <span class="mock-tab">📓 Carol</span>
+      <span class="mock-tab">📘 Shared Journal</span>
+    </div>
+    <div class="mock-grid">
+      <table class="mock-table">
+        <tr><th></th><th>Person</th><th>5:00</th><th>5:15</th><th>5:30</th><th>5:45</th><th>6:00</th><th>6:15</th></tr>
+        <tr><td class="loc" rowspan="3">🐒</td><td class="name">alice</td><td></td><td class="s-cross">✗</td><td></td><td></td><td></td><td class="s-check">✓</td></tr>
+        <tr><td class="name">bob</td><td></td><td class="s-cross">✗</td><td></td><td class="s-cross">✗</td><td class="s-cross">✗</td><td class="s-cross">✗</td></tr>
+        <tr><td class="name">carol</td><td class="s-check">✓</td><td></td><td class="s-q">?</td><td></td><td></td><td></td></tr>
+      </table>
+    </div>
+    <div class="mock-actions">
+      <span class="mock-badge">Read only — Bob's working copy</span>
+      <button class="btn-mock-ghost">🔄 Load Bob's Grid</button>
+    </div>
+  </div>
+
+  <p>Bob's grid is <strong>read-only</strong> — you can study his deductions but cannot edit them. Notice you can see his ? marks too — this is his full working state, not just his confident marks. If Bob saves new marks later, click Load again to pull the update.</p>
+
+  <div class="callout callout-info">
+    <div class="callout-title">📌 This shows their saved work, not their shared marks</div>
+    Loading a teammate's named tab shows what they last clicked <strong>💾 Save</strong> on — their full working copy including uncertain marks. The <strong>📘 Shared Journal</strong> tab is different — it only includes what each player explicitly pushed via <strong>🔗 Share Grid</strong>.
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 10 -->
+<section class="guide-section" id="s10">
+  <div class="section-header"><span class="section-icon">📘</span><span class="section-number">10</span><span>The Shared Journal — Merging &amp; Conflicts</span></div>
+  <p>The <strong>📘 Shared Journal</strong> tab is your team's combined deduction board. It merges all players' <em>shared</em> marks (pushed via 🔗 Share Grid) into a single grid, highlights disagreements, and gives you a conflict log to resolve together.</p>
+
+  <p>Click <strong>🔄 Refresh Shared Grid</strong> to pull the latest marks from all players and rebuild the merged view. Do this whenever a teammate announces they've shared their grid.</p>
+
+  <div class="mock-journal">
+    <div class="mock-tabs">
+      <span class="mock-tab">📓 My Journal</span>
+      <span class="mock-tab">📓 Bob</span>
+      <span class="mock-tab">📓 Carol</span>
+      <span class="mock-tab active">📘 Shared Journal</span>
+    </div>
+    <div class="mock-grid">
+      <table class="mock-table">
+        <tr><th></th><th>Person</th><th>5:00</th><th>5:15</th><th>5:30</th><th>5:45</th><th>6:00</th><th>6:15</th></tr>
+        <tr><td class="loc" rowspan="3">🐒</td><td class="name">alice</td><td class="s-cross">✗</td><td class="s-check">✓</td><td class="s-conflict-mock s-check" style="position:relative">✓</td><td></td><td></td><td class="s-check">✓</td></tr>
+        <tr><td class="name">bob</td><td class="s-cross">✗</td><td class="s-cross">✗</td><td class="s-cross">✗</td><td class="s-cross">✗</td><td class="s-cross">✗</td><td class="s-cross">✗</td></tr>
+        <tr><td class="name">carol</td><td class="s-check">✓</td><td></td><td></td><td></td><td></td><td></td></tr>
+      </table>
+    </div>
+    <div class="mock-actions">
+      <span class="mock-badge">Merged from all shared grids</span>
+      <button class="btn-mock-ghost">🔄 Refresh Shared Grid</button>
+    </div>
+    <div class="conflict-log-mock">
+      <div class="conflict-log-mock-header">⚡ Conflict Log — 1 conflict found</div>
+      <div class="conflict-log-mock-body">
+        📍 Monkey Island → alice → 5:30 &nbsp;—&nbsp; <strong>Alice</strong>: ✓ &nbsp;vs&nbsp; <strong>Bob</strong>: ✗
+      </div>
+    </div>
+  </div>
+
+  <p><strong>How merging works:</strong> For each cell, the mark from the player who shared most recently wins. If two players have different marks for the same cell, it is flagged as a conflict — shown with a yellow ⚡ highlight in the grid and listed in the Conflict Log below.</p>
+
+  <p>The <strong>⚡ Conflict Log</strong> lists every disagreement in the format:<br>
+  <code>📍 Location → Person → Time — PlayerA: ✓ vs PlayerB: ✗</code></p>
+
+  <p>Conflicts are not errors — they are discussion points. Talk through each one with your team and figure out whose deduction is supported by the evidence. Once one side is convinced and updates their grid, they click <strong>🔗 Share Grid</strong> again with the corrected mark. When everyone is in agreement and pushes updated shared grids, <strong>the conflict flag disappears automatically</strong> the next time anyone refreshes the Shared Journal — because the two players now agree on that cell.</p>
+
+  <div class="callout callout-warn">
+    <div class="callout-title">⚠️ Refresh does not auto-update</div>
+    The Shared Journal does not live-sync. You must click <strong>🔄 Refresh Shared Grid</strong> manually each time you want to pull the latest state. When a teammate shares their grid, they should let the group know so everyone can refresh and see the updated merge.
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 11 -->
+<section class="guide-section" id="s11">
+  <div class="section-header"><span class="section-icon">📝</span><span class="section-number">11</span><span>Notes — Private &amp; Shared</span></div>
+  <p>The Notes section works similarly to the journal, but for free-form text. There are two tabs: <strong>📓 My Notes</strong> and <strong>📘 Shared Notes</strong>.</p>
+
+  <div class="mock-journal" style="margin-bottom:.75rem">
+    <div class="mock-tabs">
+      <span class="mock-tab active">📓 My Notes</span>
+      <span class="mock-tab">📘 Shared Notes</span>
+    </div>
+    <textarea class="mock-textarea" readonly>Alice timeline: confirmed monkey island 5:15–5:30.
+Bob's clue says he was NOT in monkey island 5:00–5:15.
+→ If victim died at 5:30, only Alice had opportunity?
+Weapon: pistol seems most likely — check aviary connection.</textarea>
+    <div class="mock-actions">
+      <span class="mock-badge">Only visible to you</span>
+      <button class="btn-mock-ghost">💾 Save</button>
+      <button class="btn-mock-teal">🔗 Share Note</button>
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <div class="callout-title">💾 Save vs 🔗 Share Note — Notes Edition</div>
+    <strong>💾 Save</strong> stores your note in your browser's local storage only — completely private, just for you. Teammates cannot see your saved note at all.<br><br>
+    <strong>🔗 Share Note</strong> pushes your current note text to the Shared Notes feed. Unlike the grid, notes <strong>accumulate</strong> — each push adds a new entry rather than replacing old ones. This creates a running log of everyone's observations over the course of the game.
+  </div>
+
+  <p>The <strong>📘 Shared Notes</strong> tab shows all pushed notes in chronological order, newest at the bottom — like a team investigation log. Each entry is labelled with the player's name and the time they shared it. Click <strong>🔄 Refresh</strong> to load the latest entries.</p>
+
+  <div class="mock-journal">
+    <div class="mock-tabs">
+      <span class="mock-tab">📓 My Notes</span>
+      <span class="mock-tab active">📘 Shared Notes</span>
+    </div>
+    <textarea class="mock-textarea" readonly>--- Alice (5:12 PM) ---
+I can confirm monkey island 5:15. Bob's clue must mean he arrived later.
+
+--- Bob (5:18 PM) ---
+My clue says I was NOT in monkey island at 5:00. But I could have arrived at 5:15.
+Cross-ref with Carol — what does her clue say about the aviary?
+
+--- Carol (5:24 PM) ---
+I was in aviary from 5:00 to 5:45 per my clue. Pistol came from aviary — I would have seen someone take it!</textarea>
+    <div class="mock-actions">
+      <span class="mock-badge">All players' pushed notes</span>
+      <button class="btn-mock-ghost">🔄 Refresh</button>
+    </div>
+  </div>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">💡 Use Shared Notes as your team's reasoning trail</div>
+    Push a note whenever you have a key insight or want to flag something for the team. Since notes accumulate rather than overwrite, the feed becomes a record of your group's evolving theory — useful to scroll back through when resolving conflicts or making your final accusation.
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 12 -->
+<section class="guide-section" id="s12">
+  <div class="section-header"><span class="section-icon">⚖️</span><span class="section-number">12</span><span>Making Your Accusation</span></div>
+  <p>Once you have enough evidence, use the <strong>Accusation</strong> section at the bottom of the page. Select the suspect, time of murder, and weapon, then click <strong>Accuse!</strong></p>
+  <p>The answer is verified against a cryptographic hash — wrong answers are penalised by reducing your final score rank on the Sleuth-o-Meter™, but you can keep trying. Each wrong guess costs you a point, so use your deductions carefully before committing.</p>
+
+  <div class="callout callout-tip">
+    <div class="callout-title">🎯 Team accusation strategy</div>
+    In multiplayer, each player accuses independently — there is no shared accusation screen. For the best team experience, align your final deductions in the Shared Notes before anyone accuses, so you can go in together with the same answer.
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 13 -->
+<section class="guide-section" id="s13">
+  <div class="section-header"><span class="section-icon">🔄</span><span class="section-number">13</span><span>Session Persistence &amp; Reconnecting</span></div>
+  <p>Sessions are tied to <strong>today's date</strong>. If you reload the page or come back later the same day, the game automatically detects your saved session and drops you back into the lobby — no need to re-enter your name or room code.</p>
+
+  <table class="guide-table">
+    <tr><th>What</th><th>Survives page refresh?</th><th>Still there tomorrow?</th></tr>
+    <tr><td>Room &amp; player name</td><td class="yes">✓ Yes</td><td class="no">✗ No</td></tr>
+    <tr><td>Your journal grid marks (if saved)</td><td class="yes">✓ Yes</td><td class="no">✗ No</td></tr>
+    <tr><td>Your notes (if saved locally)</td><td class="yes">✓ Yes</td><td class="no">✗ No</td></tr>
+    <tr><td>Other players' saved grids (server)</td><td class="yes">✓ Yes</td><td class="no">✗ No</td></tr>
+    <tr><td>Shared journal merge (server)</td><td class="yes">✓ Yes</td><td class="no">✗ No</td></tr>
+    <tr><td>Shared notes feed (server)</td><td class="yes">✓ Yes</td><td class="no">✗ No</td></tr>
+  </table>
+
+  <div class="callout callout-warn">
+    <div class="callout-title">📅 New day = fresh start</div>
+    Each day is a new puzzle with a new room. Your session from yesterday will not carry over. The game detects this automatically and clears old session data.
+  </div>
+
+  <p>To reconnect from a <strong>different device</strong> mid-session, go to the Join section and enter your original display name and room code. The server recognises you and restores your slot. Your grid marks will be restored from your most recent server save.</p>
+</section>
+
+<hr class="section-divider">
+
+<!-- SECTION 14 -->
+<section class="guide-section" id="s14">
+  <div class="section-header"><span class="section-icon">✨</span><span class="section-number">14</span><span>Quick Tips for a Smooth Game</span></div>
+  <ul class="tips-list">
+    <li><span class="tip-icon">🔑</span><div><strong>Agree on player count before the host generates the code.</strong> It cannot be changed after. A quick message to your group before starting saves a lot of confusion.</div></li>
+    <li><span class="tip-icon">💬</span><div><strong>Read your clues aloud</strong> — don't just share grid marks, narrate what you found. Hearing the full clue text helps everyone reason together.</div></li>
+    <li><span class="tip-icon">💾</span><div><strong>Save your grid often.</strong> It protects your work from browser refreshes and keeps your named journal tab up to date for teammates who want to follow your progress.</div></li>
+    <li><span class="tip-icon">🔗</span><div><strong>Share Grid when you have confident deductions.</strong> Your uncertain ? marks are great for your own thinking but can generate unnecessary conflicts in the shared merge. Share your ✓ and ✗ marks when you're ready for team input.</div></li>
+    <li><span class="tip-icon">🔄</span><div><strong>Refresh Shared Grid whenever a teammate announces they've shared.</strong> The shared journal does not auto-update — it's manual so you control when you pull new information.</div></li>
+    <li><span class="tip-icon">⚡</span><div><strong>Treat conflict log entries as conversation starters.</strong> A conflict means two players disagree — that's useful! Talk through each one. Once the disagreeing player is convinced and re-shares with the corrected mark, the conflict flag disappears on the next refresh.</div></li>
+    <li><span class="tip-icon">📝</span><div><strong>Use Shared Notes to build a running theory.</strong> Push a note whenever you have a key insight. The chronological feed builds a record of your team's reasoning that everyone can scroll back through.</div></li>
+    <li><span class="tip-icon">🕐</span><div><strong>Same room code + same display name = same session.</strong> Use this to reconnect from another device or a fresh browser tab mid-game.</div></li>
+    <li><span class="tip-icon">🧩</span><div><strong>The shared journal is a collaboration tool, not the final answer.</strong> Use it to consolidate team knowledge, but keep your private journal for deductions you're still working through.</div></li>
+  </ul>
+</section>
+
+<!-- CTA -->
+<div class="cta-bar">
+  <p style="font-size:var(--sm);color:var(--muted);margin-bottom:1rem">Ready to investigate? Go back and start today's mystery with your team.</p>
+  <a href="index.html" class="btn-red">← Back to the Game</a>
+</div>
+
+</div>
+</body>
+</html>
