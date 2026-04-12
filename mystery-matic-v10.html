@@ -426,6 +426,55 @@ a{color:var(--text)}
   .mp-form-row { flex-direction: column; }
   .accuse-selectors { flex-direction: column; }
 }
+
+/* ===== CONFLICT HIGHLIGHTING ===== */
+.time-cell.s-conflict {
+  background: #fff3cd !important;
+  border: 2px solid #f59e0b !important;
+  position: relative;
+}
+.time-cell.s-conflict::after {
+  content: '⚡';
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  font-size: 9px;
+  line-height: 1;
+  pointer-events: none;
+}
+#conflict-log-panel {
+  margin-top: .75rem;
+  border: 1px solid #f59e0b;
+  border-radius: var(--r-md);
+  background: #fffbeb;
+  overflow: hidden;
+  display: none;
+}
+#conflict-log-panel.visible { display: block; }
+.conflict-log-header {
+  background: #fef3c7;
+  padding: .5rem .85rem;
+  font-size: var(--sm);
+  font-weight: 700;
+  border-bottom: 1px solid #f59e0b;
+  color: #92400e;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.conflict-log-list {
+  padding: .5rem .85rem;
+  font-size: var(--xs);
+  color: var(--text);
+  line-height: 1.8;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.conflict-log-item {
+  padding: .2rem 0;
+  border-bottom: 1px solid #fde68a;
+}
+.conflict-log-item:last-child { border-bottom: none; }
 </style>
 </head>
 <body>
@@ -493,7 +542,7 @@ a{color:var(--text)}
 <p class="story-intro">A group of friends stumbles upon an eerie abandoned mansion. Now confined within its sinister grasp, they find themselves thrust into a chilling series of murders. Each day brings a fresh enigma.</p>
 <div class="action-bar">
   <button class="btn-red">No Time To Explain</button>
-  <button onclick="window.location.href='tutorialv2.html'" class="btn-outline">First Time?git add .</button>
+  <button onclick="window.location.href='tutorialv2.html'" class="btn-outline">First Time?</button>
 </div>
 
 <!-- PUZZLE (all modes; F2 stops here) -->
@@ -607,8 +656,8 @@ a{color:var(--text)}
         <div id="mpJournalMount-mine"></div>
         <div class="journal-actions">
           <span class="shared-badge">Only visible to you</span>
-          <button class="btn-ghost" onclick="saveLocalOnly()">💾 Save Locally</button>
-          <button class="btn-teal"  onclick="saveAndShareGrid()">💾 Save &amp; Share My Grid</button>
+          <button class="btn-ghost" onclick="saveGrid()">💾 Save</button>
+          <button class="btn-teal"  onclick="shareGrid()">🔗 Share Grid</button>
         </div>
       </div>
 
@@ -652,6 +701,10 @@ a{color:var(--text)}
           <span class="shared-badge">Visible to all players</span>
           <button class="btn-ghost" onclick="refreshSharedGrid()">🔄 Refresh Shared Grid</button>
         </div>
+        <div id="conflict-log-panel">
+          <div class="conflict-log-header">⚡ Conflict Log</div>
+          <div class="conflict-log-list" id="conflict-log-list"></div>
+        </div>
       </div>
 
     </div>
@@ -683,8 +736,8 @@ a{color:var(--text)}
         <textarea id="myNoteTextarea" style="width:100%;min-height:130px;padding:.75rem;border:none;font-family:var(--font);font-size:var(--sm);resize:vertical;outline:none;background:var(--surface2)" placeholder="Your quick notes — suspects, timelines, contradictions..."></textarea>
         <div class="journal-actions">
           <span class="shared-badge">Only visible to you</span>
-          <button class="btn-ghost" onclick="saveNoteLocalOnly()">💾 Save Locally</button>
-          <button class="btn-teal"  onclick="saveAndShareNote()">💾 Save &amp; Share My Note</button>
+          <button class="btn-ghost" onclick="saveNote()">💾 Save</button>
+          <button class="btn-teal"  onclick="shareNote()">🔗 Share Note</button>
         </div>
       </div>
 
@@ -1516,97 +1569,82 @@ function switchNotesTab(btn, paneId) {
   document.getElementById('pane-' + paneId).classList.add('active');
 }
 
-// ===== SAVE LOCALLY =====
-function saveLocalOnly() {
-  if (!currentRoom) return;
-  localStorage.setItem('my_grid_' + currentRoom, JSON.stringify(states['mine']));
-  showToast('Grid saved locally ✓');
-}
-function saveNoteLocalOnly() {
-  if (!currentRoom) return;
-  const val = document.getElementById('myNoteTextarea').value;
-  localStorage.setItem('my_note_' + currentRoom, val);
-  showToast('Note saved locally ✓');
-}
-
-// ===== SAVE & SHARE GRID =====
-async function saveAndShareGrid() {
+// ===== SAVE GRID (localStorage + Supabase) =====
+async function saveGrid() {
   if (!currentRoom || !currentPlayer) { showMpError('Not in a room.'); return; }
-
-  // Save locally first
   localStorage.setItem('my_grid_' + currentRoom, JSON.stringify(states['mine']));
-
   const s = states['mine'];
-  const marksToInsert = [];
-
+  const rows = [];
   LOCATIONS.forEach((loc, li) => {
-    if (s.locStruck[li]) {
-      marksToInsert.push({
-        room_id: currentRoom, player_name: currentPlayer,
-        section_name: 'loc_struck', character_name: loc.key,
-        time_slot: '-', mark: 'struck',
-      });
-    }
+    if (s.locStruck[li]) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: 'loc_struck', character_name: loc.key, time_slot: '-', mark: 'struck' });
     PERSONS.forEach((person, pi) => {
       TIMES.forEach((time, ti) => {
         const st = s.cells[li][pi][ti];
-        if (st !== 0) {
-          marksToInsert.push({
-            room_id: currentRoom, player_name: currentPlayer,
-            section_name: loc.key, character_name: person,
-            time_slot: time, mark: CYCLE[st],
-          });
-        }
+        if (st !== 0) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: loc.key, character_name: person, time_slot: time, mark: CYCLE[st] });
       });
     });
   });
-
   WEAPONS.forEach((w, wi) => {
-    if (s.weapStruck[wi]) {
-      marksToInsert.push({
-        room_id: currentRoom, player_name: currentPlayer,
-        section_name: 'weap_struck', character_name: w.label.toLowerCase(),
-        time_slot: '-', mark: 'struck',
-      });
-    }
+    if (s.weapStruck[wi]) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: 'weap_struck', character_name: w.label.toLowerCase(), time_slot: '-', mark: 'struck' });
   });
-
-  if (marksToInsert.length === 0) {
-    showMpError('No marks to save — fill in your grid first.');
-    return;
+  await sb.from('shared_grid_marks').delete().eq('room_id', currentRoom).eq('player_name', currentPlayer);
+  if (rows.length > 0) {
+    const { error } = await sb.from('shared_grid_marks').insert(rows);
+    if (error) { showMpError('Save failed: ' + error.message); return; }
   }
-
-  await sb.from('shared_grid_marks')
-    .delete()
-    .eq('room_id', currentRoom)
-    .eq('player_name', currentPlayer);
-
-  const { error } = await sb.from('shared_grid_marks').insert(marksToInsert);
-  if (error) { showMpError('Save failed: ' + error.message); return; }
-  showMpSuccess('Grid saved & shared ✓');
+  showMpSuccess('Grid saved ✓');
 }
 
-// ===== SAVE & SHARE NOTE =====
-async function saveAndShareNote() {
+// ===== SHARE GRID (saves your marks so teammates can load them) =====
+async function shareGrid() {
   if (!currentRoom || !currentPlayer) { showMpError('Not in a room.'); return; }
-  const myText = document.getElementById('myNoteTextarea').value.trim();
-  if (!myText) { showMpError('Write a note first.'); return; }
-
-  localStorage.setItem('my_note_' + currentRoom, myText);
-
-  await sb.from('shared_notes')
-    .delete()
-    .eq('room_id', currentRoom)
-    .eq('player_name', currentPlayer);
-
-  const { error } = await sb.from('shared_notes').insert({
-    room_id:     currentRoom,
-    player_name: currentPlayer,
-    note_text:   myText,
+  localStorage.setItem('my_grid_' + currentRoom, JSON.stringify(states['mine']));
+  const s = states['mine'];
+  const rows = [];
+  LOCATIONS.forEach((loc, li) => {
+    if (s.locStruck[li]) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: 'loc_struck', character_name: loc.key, time_slot: '-', mark: 'struck' });
+    PERSONS.forEach((person, pi) => {
+      TIMES.forEach((time, ti) => {
+        const st = s.cells[li][pi][ti];
+        if (st !== 0) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: loc.key, character_name: person, time_slot: time, mark: CYCLE[st] });
+      });
+    });
   });
+  WEAPONS.forEach((w, wi) => {
+    if (s.weapStruck[wi]) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: 'weap_struck', character_name: w.label.toLowerCase(), time_slot: '-', mark: 'struck' });
+  });
+  await sb.from('shared_grid_marks').delete().eq('room_id', currentRoom).eq('player_name', currentPlayer);
+  if (rows.length > 0) {
+    const { error } = await sb.from('shared_grid_marks').insert(rows);
+    if (error) { showMpError('Share failed: ' + error.message); return; }
+  }
+  showMpSuccess('Grid shared ✓ — teammates can now load your grid');
+}
 
-  if (error) { showMpError('Save failed: ' + error.message); return; }
-  showMpSuccess('Note saved & shared ✓');
+// ===== SAVE NOTE (localStorage + Supabase) =====
+async function saveNote() {
+  if (!currentRoom || !currentPlayer) { showMpError('Not in a room.'); return; }
+  const myText = document.getElementById('myNoteTextarea').value;
+  localStorage.setItem('my_note_' + currentRoom, myText);
+  await sb.from('shared_notes').delete().eq('room_id', currentRoom).eq('player_name', currentPlayer);
+  if (myText.trim()) {
+    const { error } = await sb.from('shared_notes').insert({ room_id: currentRoom, player_name: currentPlayer, note_text: myText });
+    if (error) { showMpError('Save failed: ' + error.message); return; }
+  }
+  showMpSuccess('Note saved ✓');
+}
+
+// ===== SHARE NOTE (saves note so teammates can load it) =====
+async function shareNote() {
+  if (!currentRoom || !currentPlayer) { showMpError('Not in a room.'); return; }
+  const myText = document.getElementById('myNoteTextarea').value;
+  localStorage.setItem('my_note_' + currentRoom, myText);
+  await sb.from('shared_notes').delete().eq('room_id', currentRoom).eq('player_name', currentPlayer);
+  if (myText.trim()) {
+    const { error } = await sb.from('shared_notes').insert({ room_id: currentRoom, player_name: currentPlayer, note_text: myText });
+    if (error) { showMpError('Share failed: ' + error.message); return; }
+  }
+  showMpSuccess('Note shared ✓ — teammates can now load your notes');
 }
 
 // ===== LOAD PLAYER GRID (readonly, for P2/P3/P4 tabs) =====
@@ -1677,13 +1715,14 @@ async function loadPlayerNotes(playerName, targetId) {
   showMpSuccess(playerName + "'s notes loaded ✓");
 }
 
-// ===== REFRESH SHARED GRID (merges ALL players) =====
+// ===== REFRESH SHARED GRID (latest-wins merge + conflict detection) =====
 async function refreshSharedGrid() {
   if (!currentRoom) { showMpError('Not in a room.'); return; }
 
   const { data, error } = await sb.from('shared_grid_marks')
     .select('*')
-    .eq('room_id', currentRoom);
+    .eq('room_id', currentRoom)
+    .order('marked_at', { ascending: true });
 
   if (error) { showMpError('Load failed: ' + error.message); return; }
   if (!data || data.length === 0) { showMpError('No shared grids yet — players need to share first.'); return; }
@@ -1693,8 +1732,9 @@ async function refreshSharedGrid() {
   s.locStruck  = LOCATIONS.map(() => false);
   s.weapStruck = WEAPONS.map(() => false);
 
-  // Merge priority: check/cross (1,2) > question (3) > blank (0)
-  const PRIORITY = [0, 3, 3, 1]; // blank=0 priority, check=3, cross=3, question=1
+  const cellMap = {};   // cellKey -> { val, player, marked_at }
+  const conflicts = []; // { cellKey, locLabel, personName, timeSlot, playerA, markA, playerB, markB }
+
   data.forEach(row => {
     if (row.section_name === 'loc_struck') {
       const li = LOCATIONS.findIndex(l => l.key === row.character_name);
@@ -1706,18 +1746,97 @@ async function refreshSharedGrid() {
       const li = LOCATIONS.findIndex(l => l.key === row.section_name);
       const pi = PERSONS.indexOf(row.character_name);
       const ti = TIMES.indexOf(row.time_slot);
-      if (li !== -1 && pi !== -1 && ti !== -1) {
-        const incoming = CYCLE.indexOf(row.mark);
-        const existing = s.cells[li][pi][ti];
-        if (PRIORITY[incoming] >= PRIORITY[existing]) {
-          s.cells[li][pi][ti] = incoming;
+      if (li === -1 || pi === -1 || ti === -1) return;
+
+      const incomingVal = CYCLE.indexOf(row.mark);
+      if (incomingVal === 0) return;
+
+      const cellKey = row.section_name + '|' + row.character_name + '|' + row.time_slot;
+      const existing = cellMap[cellKey];
+
+      if (!existing) {
+        cellMap[cellKey] = { val: incomingVal, player: row.player_name, marked_at: row.marked_at };
+        s.cells[li][pi][ti] = incomingVal;
+      } else if (existing.player !== row.player_name && existing.val !== incomingVal) {
+        // Conflict: different players, different marks
+        const alreadyLogged = conflicts.some(c =>
+          c.cellKey === cellKey &&
+          ((c.playerA === existing.player && c.playerB === row.player_name) ||
+           (c.playerA === row.player_name && c.playerB === existing.player))
+        );
+        if (!alreadyLogged) {
+          conflicts.push({
+            cellKey,
+            locLabel:   LOCATIONS[li] ? LOCATIONS[li].label : row.section_name,
+            personName: row.character_name,
+            timeSlot:   row.time_slot,
+            playerA:    existing.player,
+            markA:      CYCLE[existing.val],
+            playerB:    row.player_name,
+            markB:      CYCLE[incomingVal],
+          });
+        }
+        // Latest marked_at wins
+        if (new Date(row.marked_at) >= new Date(existing.marked_at)) {
+          cellMap[cellKey] = { val: incomingVal, player: row.player_name, marked_at: row.marked_at };
+          s.cells[li][pi][ti] = incomingVal;
+        }
+      } else {
+        // Same player update or same mark — latest wins, no conflict
+        if (new Date(row.marked_at) >= new Date(existing.marked_at)) {
+          cellMap[cellKey] = { val: incomingVal, player: row.player_name, marked_at: row.marked_at };
+          s.cells[li][pi][ti] = incomingVal;
         }
       }
     }
   });
 
-  buildJournal(document.getElementById('mpJournalMount-shared'), 'shared', true);
-  showMpSuccess('Shared grid refreshed ✓');
+  // Render merged grid
+  const mountEl = document.getElementById('mpJournalMount-shared');
+  buildJournal(mountEl, 'shared', true);
+
+  // Highlight conflicted cells
+  const conflictKeys = new Set(conflicts.map(c => c.cellKey));
+  LOCATIONS.forEach((loc, li) => {
+    PERSONS.forEach((person, pi) => {
+      TIMES.forEach((time, ti) => {
+        const cellKey = loc.key + '|' + person + '|' + time;
+        if (!conflictKeys.has(cellKey)) return;
+        const cf = conflicts.find(c => c.cellKey === cellKey);
+        const tooltip = cf ? cf.playerA + ': ' + cf.markA + ' vs ' + cf.playerB + ': ' + cf.markB : '';
+        const groups = mountEl.querySelectorAll('.journal-group');
+        if (!groups[li]) return;
+        const personRows = groups[li].querySelectorAll('.person-row');
+        if (!personRows[pi]) return;
+        const timeCells = personRows[pi].querySelectorAll('.time-cell');
+        if (!timeCells[ti]) return;
+        timeCells[ti].classList.add('s-conflict');
+        timeCells[ti].title = tooltip;
+      });
+    });
+  });
+
+  // Conflict log panel
+  const panel   = document.getElementById('conflict-log-panel');
+  const logList = document.getElementById('conflict-log-list');
+  if (conflicts.length > 0) {
+    logList.innerHTML = conflicts.map(c =>
+      '<div class="conflict-log-item">?? ' +
+      c.locLabel + ' → ' + c.personName + ' → ' + c.timeSlot +
+      ' &nbsp;—&nbsp; <strong>' + c.playerA + '</strong>: ' + c.markA +
+      ' vs <strong>' + c.playerB + '</strong>: ' + c.markB +
+      '</div>'
+    ).join('');
+    panel.classList.add('visible');
+  } else {
+    logList.innerHTML = '';
+    panel.classList.remove('visible');
+  }
+
+  const msg = conflicts.length > 0
+    ? 'Shared grid refreshed ✓ — ' + conflicts.length + ' conflict' + (conflicts.length > 1 ? 's' : '') + ' found'
+    : 'Shared grid refreshed ✓ — no conflicts';
+  showMpSuccess(msg);
 }
 
 // ===== REFRESH SHARED NOTES (all players concatenated) =====
