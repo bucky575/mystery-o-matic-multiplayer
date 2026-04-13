@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mystery Matic — Multiplayer</title>
+<style>
+:root {
+  --font: 'Courier New', monospace;
+  --serif: 'Georgia', serif;
+  --bg: #f5f5f0; --surface: #ffffff; --surface2: #f9f9f7;
+  --border: #d4d1ca; --divider: #e0ddd8;
+  --text: #1a1a18; --muted: #6a6a68; --faint: #aaa;
+  --red: #d32f2f; --red2: #b71c1c;
+  --teal: #00747a; --teal2: #005a5f; --teal-bg: #e0f0f0;
+  --pill-bg: #e8e8e4;
+  --r-sm: 4px; --r-md: 8px; --r-full: 999px;
+  --xs: .75rem; --sm: .875rem; --base: 1rem; --xl: 2.25rem;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);font-size:var(--base);color:var(--text);background:var(--bg);min-height:100dvh;line-height:1.6}
+button{cursor:pointer;font-family:inherit}
+input,textarea,select{font-family:inherit}
+a{color:var(--text)}
+
+.page-wrapper{max-width:900px;margin:0 auto;padding:2rem 1rem}
+
+/* HEADER */
+.site-header{text-align:center;margin-bottom:1.5rem;position:relative}
+.site-title{font-family:var(--serif);font-size:var(--xl);font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+.site-tagline{font-style:italic;font-size:var(--sm);color:var(--muted);margin-top:.25rem}
+.go-back-btn{position:absolute;right:0;top:0;padding:.25rem .75rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);font-size:var(--sm);display:none}
+.go-back-btn:hover{background:var(--divider)}
+
+/* TOGGLE */
+.mode-toggle-wrapper{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin-bottom:1.25rem}
+.mode-toggle{display:inline-flex;background:var(--pill-bg);border-radius:var(--r-full);padding:3px;gap:2px;align-items:center}
+.mode-toggle button{border:none;background:transparent;padding:6px 18px;border-radius:var(--r-full);font-size:var(--sm);font-family:var(--font);color:var(--muted);transition:all 180ms;font-weight:500}
+.mode-toggle button.active{background:var(--red);color:#fff;font-weight:700}
+.new-badge{background:#5a9e6a;color:#fff;font-size:var(--xs);font-weight:700;padding:2px 7px;border-radius:var(--r-full);letter-spacing:.05em}
+.toggle-hint{font-size:var(--xs);color:var(--muted);background:#f0ede8;padding:3px 12px;border-radius:var(--r-full)}
+
+/* MP SETUP */
+.mp-setup-card{background:var(--teal-bg);border:1px solid #b0d4d4;border-radius:var(--r-md);padding:1.25rem;margin-bottom:1.5rem;display:none}
+.mp-setup-card.visible{display:block}
+.mp-section-title{font-size:var(--base);font-weight:700;margin-bottom:.25rem;display:flex;align-items:center;gap:.5rem}
+.mp-section-subtitle{font-size:var(--sm);color:var(--muted);margin-bottom:1rem}
+.mp-form-row{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:.75rem}
+.mp-field{display:flex;flex-direction:column;gap:.25rem;flex:1;min-width:180px}
+.mp-field label{font-size:var(--sm);font-weight:600}
+.mp-field input{padding:.5rem .75rem;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);font-size:var(--sm);outline:none;transition:border-color 150ms}
+.mp-field input:focus{border-color:var(--teal)}
+.mp-field input::placeholder{color:var(--faint)}
+.player-count-picker{display:flex;gap:.5rem;margin-top:.25rem}
+.count-btn{width:38px;height:38px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);font-size:var(--sm);font-weight:600;transition:all 150ms}
+.count-btn.active,.count-btn:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+.mp-actions{display:flex;align-items:center;gap:.75rem;margin-top:.75rem;flex-wrap:wrap}
+.btn-teal{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:var(--teal);color:#fff;border:none;border-radius:var(--r-sm);font-size:var(--sm);font-weight:700;font-family:var(--font);transition:background 150ms}
+.btn-teal:hover{background:var(--teal2)}
+.btn-ghost{padding:.5rem .75rem;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);font-size:var(--sm);font-family:var(--font);color:var(--muted);transition:all 150ms}
+.btn-ghost:hover{background:var(--divider);color:var(--text)}
+.room-code-display{font-size:var(--sm);color:var(--teal);font-weight:700;letter-spacing:.08em;margin-left:.5rem;display:none}
+.mp-divider{border:none;border-top:1px dashed #b0c8c8;margin:1.25rem 0}
+
+/* PLAYERS PANEL */
+.players-panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:.75rem 1rem;margin-bottom:1.25rem;align-items:center;gap:1rem;flex-wrap:wrap}
+.players-panel.visible{display:flex}
+.players-panel-label{font-size:var(--xs);font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.player-chips{display:flex;gap:.5rem;flex-wrap:wrap;flex:1}
+.player-chip{display:flex;align-items:center;gap:.25rem;padding:3px 10px;background:var(--teal-bg);border:1px solid #b0d4d4;border-radius:var(--r-full);font-size:var(--xs);font-weight:600}
+.player-chip .dot{width:7px;height:7px;border-radius:50%;background:#5a9e6a}
+.player-chip.you{background:var(--teal);color:#fff;border-color:var(--teal)}
+.room-code-badge{font-size:var(--xs);font-weight:700;background:#f0ede8;padding:3px 10px;border-radius:var(--r-full);border:1px solid var(--border);letter-spacing:.06em;margin-left:auto}
+
+/* SECTION HEADER */
+.section-header{background:#e8e8e4;padding:.5rem .75rem;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem;font-size:var(--sm);font-weight:600}
+.section-header .sq{width:14px;height:14px;background:#333;flex-shrink:0}
+
+/* STORY */
+.story-intro{font-size:var(--sm);text-align:center;margin-bottom:1rem;line-height:1.7;color:var(--muted)}
+.action-bar{display:flex;align-items:center;gap:.75rem;justify-content:center;margin-bottom:1rem}
+.btn-red{padding:.5rem 1.25rem;background:var(--red);color:#fff;border:none;border-radius:var(--r-sm);font-size:var(--sm);font-weight:700;font-family:var(--font);transition:background 150ms}
+.btn-red:hover{background:var(--red2)}
+.btn-outline{padding:.5rem 1rem;background:transparent;border:1px solid var(--border);border-radius:var(--r-sm);font-size:var(--sm);font-family:var(--font);transition:all 150ms}
+.btn-outline:hover{background:var(--divider)}
+.announcement{background:#e8e8e4;padding:.5rem .75rem;font-size:var(--sm);display:flex;align-items:center;gap:.5rem;margin-bottom:1rem}
+.announcement .dot{width:12px;height:12px;background:#333;flex-shrink:0}
+.puzzle-date{font-size:var(--sm);font-weight:700;margin-bottom:.75rem}
+.puzzle-text{font-size:var(--sm);line-height:1.8;margin-bottom:.75rem}
+.puzzle-text p{margin-bottom:.5rem}
+.puzzle-text ul{padding-left:1.25rem}
+.puzzle-text ul ul{padding-left:1rem}
+.puzzle-text li{margin-bottom:.25rem}
+.icon-sq{display:inline-block;width:13px;height:13px;background:#444;vertical-align:middle;margin:0 2px}
+
+/* GAME SECTIONS */
+.game-sections{display:none}
+.game-sections.visible{display:block}
+
+/* LIE TOGGLE */
+.lie-toggle-card{border:1px solid var(--border);border-radius:var(--r-sm);padding:1.25rem;text-align:center;font-size:var(--sm);background:var(--surface)}
+.lie-toggle-card p{margin-bottom:.75rem;color:var(--muted)}
+.lie-toggle-btns{display:flex;justify-content:center;gap:.75rem}
+.lie-btn{padding:6px 20px;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);font-size:var(--sm);font-family:var(--font);transition:all 150ms}
+.lie-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
+.lie-btn:hover:not(.active){background:var(--divider)}
+
+/* CLUE NAVIGATOR */
+.clues-section{margin-bottom:1.5rem}
+.clues-subtitle{font-size:var(--sm);color:var(--muted);margin-bottom:.75rem}
+.clue-navigator{border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface)}
+.clue-nav-header{padding:.75rem 1rem;border-bottom:1px solid var(--divider);font-weight:700;font-size:var(--sm);display:flex;align-items:center;justify-content:space-between}
+.clue-counter{font-size:var(--xs);color:var(--muted)}
+.clue-body{padding:1rem;font-size:var(--sm);min-height:80px;line-height:1.7;border-bottom:1px solid var(--divider)}
+.clue-tag{display:inline-block;background:var(--teal-bg);color:var(--teal);border:1px solid #b0d4d4;border-radius:var(--r-full);font-size:var(--xs);font-weight:700;padding:1px 10px;margin-bottom:.5rem;letter-spacing:.04em}
+.clue-footer{padding:.75rem 1rem;display:flex;gap:.75rem}
+
+.puzzle-main {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+#location-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 180px;
+  flex-shrink: 0;
+}
+
+.map-node {
+  background: #a8d5d5;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  text-align: center;
+  width: 160px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+}
+
+#location-map {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 220px;
+  flex-shrink: 0;
+}
+
+#location-map img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ===== DEDUCTION JOURNAL TABLE ===== */
+.journal-section{margin-bottom:1.5rem}
+.journal-subtitle{font-size:var(--sm);color:var(--muted);margin-bottom:.75rem}
+
+/* The outer wrapper for the whole journal (groups + icon strip) */
+.journal-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden}
+
+/* Group block = one location section */
+.journal-group{display:flex;border-bottom:1px solid var(--border)}
+.journal-group:last-of-type{border-bottom:none}
+
+/* Left icon cell spanning all person rows */
+.group-icon-cell{
+  width:48px;min-width:48px;
+  display:flex;align-items:center;justify-content:center;
+  background:#f5f4f0;
+  border-right:1px solid var(--border);
+  font-size:1.4rem;
+  cursor:pointer;
+  user-select:none;
+  transition:background 150ms;
+  position:relative;
+}
+.group-icon-cell:hover{background:#ede9e2}
+.group-icon-cell.struck .icon-emoji{opacity:.35;text-decoration:line-through}
+.group-icon-cell .strike-line{
+  display:none;position:absolute;
+  left:50%;top:50%;transform:translate(-50%,-50%) rotate(-20deg);
+  width:70%;height:2px;background:var(--red);border-radius:2px;
+}
+.group-icon-cell.struck .strike-line{display:block}
+
+/* Person rows inside group */
+.group-rows{flex:1;display:flex;flex-direction:column}
+.person-row{display:flex;align-items:stretch;border-bottom:1px solid var(--divider)}
+.person-row:last-child{border-bottom:none}
+.person-name{
+  width:60px;min-width:60px;padding:.35rem .5rem;
+  font-size:var(--xs);font-weight:600;
+  background:#f9f9f7;border-right:1px solid var(--divider);
+  display:flex;align-items:center;
+}
+
+/* Time cells */
+.time-cols{display:flex;flex:1}
+.time-cell{
+  flex:1;min-width:32px;
+  border-right:1px solid var(--divider);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  font-size:.9rem;
+  height:36px;
+  transition:background 150ms;
+  user-select:none;
+  position:relative;
+}
+.time-cell:last-child{border-right:none}
+.time-cell:hover{background:#f0ede8}
+.time-cell.s-blank{color:var(--faint)}
+.time-cell.s-check{color:#2d6a4f;background:#edf7f0}
+.time-cell.s-cross{color:var(--red);background:#fef0f0}
+.time-cell.s-q{color:#b07d00;background:#fffbe6}
+
+/* Header row */
+.journal-header{display:flex;background:#eceae5;border-bottom:2px solid var(--border)}
+.journal-header .th-icon{width:48px;min-width:48px;border-right:1px solid var(--border);display:flex;align-items:center;justify-content:center;padding:.35rem 0;font-size:var(--xs);font-weight:700}
+.journal-header .th-name{width:60px;min-width:60px;border-right:1px solid var(--divider);padding:.35rem .5rem;font-size:var(--xs);font-weight:700;display:flex;align-items:center}
+.journal-header .th-times{display:flex;flex:1}
+.journal-header .th-time{flex:1;min-width:32px;border-right:1px solid var(--divider);text-align:center;padding:.35rem .1rem;font-size:var(--xs);font-weight:700;white-space:nowrap}
+.journal-header .th-time:last-child{border-right:none}
+
+/* Weapon/icon strip at bottom */
+.icon-strip{
+  display:flex;flex-wrap:wrap;gap:.5rem;
+  padding:.75rem 1rem;
+  background:#f0ede8;
+  border-top:2px solid var(--border);
+}
+.strip-icon{
+  display:flex;align-items:center;justify-content:center;
+  width:44px;height:44px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r-sm);
+  font-size:1.3rem;
+  cursor:pointer;
+  transition:all 150ms;
+  user-select:none;
+  position:relative;
+}
+.strip-icon:hover{background:#f5f3ef}
+.strip-icon.struck{background:#fef0f0;border-color:#e0a0a0}
+.strip-icon.struck::after{
+  content:'';position:absolute;left:10%;top:50%;
+  width:80%;height:2px;background:var(--red);
+  transform:rotate(-15deg);border-radius:2px;
+}
+
+.strip-pair {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 150ms;
+  user-select: none;
+  position: relative;
+}
+.strip-pair:hover {
+  background: #f5f3ef;
+}
+.strip-pair.struck {
+  background: #fef0f0;
+  border-color: #e0a0a0;
+  opacity: 0.5;
+}
+.strip-pair.struck::after {
+  content: '';
+  position: absolute;
+  left: 10%;
+  top: 50%;
+  width: 80%;
+  height: 2px;
+  background: var(--red);
+  transform: rotate(-15deg);
+  border-radius: 2px;
+}
+
+
+
+/* MP journal tabs */
+.journal-mp{display:none}
+.journal-mp.visible{display:block}
+.journal-tabs-bar{display:flex;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.journal-tab{padding:.5rem .75rem;background:transparent;border:none;border-bottom:2px solid transparent;font-size:var(--sm);font-family:var(--font);color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:.25rem;transition:all 150ms;white-space:nowrap}
+.journal-tab:hover{color:var(--text)}
+.journal-tab.active{color:var(--text);border-bottom-color:var(--teal);font-weight:700}
+.journal-pane-wrapper{border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r-sm) var(--r-sm);background:var(--surface)}
+.journal-pane{display:none}
+.journal-pane.active{display:block}
+.journal-actions{padding:.5rem .75rem;border-top:1px solid var(--divider);display:flex;justify-content:flex-end;gap:.5rem;align-items:center}
+.shared-badge{font-size:var(--xs);color:var(--muted);font-style:italic;margin-right:auto}
+
+/* readonly overlay */
+.pane-readonly{position:relative;pointer-events:none;opacity:.7}
+
+/* NOTES */
+.notes-section{margin-bottom:1.5rem}
+.notes-textarea{width:100%;min-height:150px;padding:.75rem;border:1px solid var(--border);border-radius:var(--r-sm);font-family:var(--font);font-size:var(--sm);color:var(--text);background:var(--surface);resize:vertical;line-height:1.7;outline:none;transition:border-color 150ms}
+.notes-textarea:focus{border-color:var(--teal)}
+.notes-mp{display:none}
+.notes-mp.visible{display:block}
+.notes-mp .journal-pane textarea{width:100%;min-height:130px;padding:.75rem;border:none;font-family:var(--font);font-size:var(--sm);color:var(--text);background:transparent;resize:vertical;line-height:1.7;outline:none}
+.notes-mp .journal-pane textarea[readonly]{background:var(--surface2);color:var(--muted);cursor:not-allowed}
+
+/* ACCUSATION */
+.accuse-section{margin-bottom:3rem}
+.accuse-intro{font-size:var(--sm);margin-bottom:1rem;line-height:1.7}
+.accuse-selectors{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.accuse-field{flex:1;min-width:160px;display:flex;flex-direction:column;gap:.25rem}
+.accuse-field label{font-size:var(--sm);font-weight:700}
+.accuse-field select{padding:.5rem .75rem;border:1px solid var(--border);border-radius:var(--r-sm);background:var(--surface);font-size:var(--sm);font-family:var(--font);outline:none}
+.accuse-bar{background:var(--red);border-radius:var(--r-sm);overflow:hidden}
+.accuse-bar button{width:100%;padding:.75rem;background:transparent;border:none;color:#fff;font-size:var(--base);font-weight:700;font-family:var(--font);letter-spacing:.05em;transition:background 150ms}
+.accuse-bar button:hover{background:rgba(0,0,0,.1)}
+
+/* FOOTER */
+.site-footer{text-align:center;border-top:1px solid var(--divider);padding-top:1.25rem;margin-top:2rem}
+.footer-nav{display:flex;gap:1.25rem;justify-content:center;margin-bottom:.75rem;flex-wrap:wrap}
+.footer-nav a{font-size:var(--sm);text-decoration:none}
+.footer-nav a:hover{text-decoration:underline}
+.footer-copy{font-size:var(--xs);color:var(--muted)}
+
+.hidden{display:none!important}
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .page-wrapper { padding: 0 .75rem; }
+
+  .journal-tabs-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+  }
+  .journal-tab {
+    font-size: .7rem;
+    padding: .3rem .5rem;
+    flex: 1 1 auto;
+    text-align: center;
+  }
+
+  .journal-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .5rem;
+  }
+  .journal-actions button {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Journal grid — make it horizontally scrollable on mobile */
+  .journal-pane-wrapper,
+  .pane-readonly,
+  #pane-mine {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mp-setup-card,
+  .players-panel {
+    padding: 1rem;
+  }
+
+  .count-row { gap: .5rem; }
+  .count-btn { width: 2.5rem; height: 2.5rem; font-size: 1rem; }
+
+  .player-chip { font-size: .75rem; padding: .3rem .6rem; }
+
+  .accuse-selectors { flex-direction: column; gap: .75rem; }
+  .accuse-field select { width: 100%; }
+
+  .clue-navigator { padding: .75rem; }
+}
+
+@media (max-width: 600px) {
+  .page-wrapper { padding: 0 .5rem; }
+
+  /* Scrollable grid wrapper */
+  .journal-pane-wrapper { overflow: hidden; }
+  .journal-pane { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Grid table itself — don't shrink below its natural size */
+  .journal-pane table {
+    min-width: 520px;  /* adjust to match your actual grid width */
+    font-size: .65rem;
+  }
+  .journal-pane table td,
+  .journal-pane table th {
+    padding: 2px 4px;
+    min-width: 28px;
+  }
+
+  /* Tabs wrap instead of overflow */
+  .journal-tabs-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .2rem;
+  }
+  .journal-tab {
+    font-size: .65rem;
+    padding: .25rem .4rem;
+    flex: 1 1 auto;
+    min-width: 60px;
+    text-align: center;
+  }
+
+  /* Actions stack vertically */
+  .journal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .journal-actions button { width: 100%; }
+
+  /* Setup card */
+  .mp-form-row { flex-direction: column; }
+  .accuse-selectors { flex-direction: column; }
+}
+
+/* ===== CONFLICT HIGHLIGHTING ===== */
+.time-cell.s-conflict {
+  background: #fff3cd !important;
+  border: 2px solid #f59e0b !important;
+  position: relative;
+}
+.time-cell.s-conflict::after {
+  content: '⚡';
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  font-size: 9px;
+  line-height: 1;
+  pointer-events: none;
+}
+#conflict-log-panel {
+  margin-top: .75rem;
+  border: 1px solid #f59e0b;
+  border-radius: var(--r-md);
+  background: #fffbeb;
+  overflow: hidden;
+  display: none;
+}
+#conflict-log-panel.visible { display: block; }
+.conflict-log-header {
+  background: #fef3c7;
+  padding: .5rem .85rem;
+  font-size: var(--sm);
+  font-weight: 700;
+  border-bottom: 1px solid #f59e0b;
+  color: #92400e;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+.conflict-log-list {
+  padding: .5rem .85rem;
+  font-size: var(--xs);
+  color: var(--text);
+  line-height: 1.8;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.conflict-log-item {
+  padding: .2rem 0;
+  border-bottom: 1px solid #fde68a;
+}
+.conflict-log-item:last-child { border-bottom: none; }
+
+/* ══════════════════════════════════════════
+   V12: ACCUSATION COUNTER + HISTORY + POPUP
+══════════════════════════════════════════ */
+.accuse-counter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 16px;
+  margin-bottom: 1rem;
+}
+.accuse-dots { display: flex; gap: 7px; align-items: center; }
+.accuse-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--border); border: 2px solid #c8c4be;
+  transition: all 300ms; display: flex; align-items: center;
+  justify-content: center; font-size: 10px; color: #fff;
+  flex-shrink: 0;
+}
+.accuse-dot.used   { background: var(--red);  border-color: var(--red2); }
+.accuse-dot.solved { background: #2d6a4f; border-color: #1b4332; font-size: 12px; }
+.accuse-dot.pulse  { animation: pulse-dot .9s infinite; }
+@keyframes pulse-dot {
+  0%,100% { transform:scale(1); box-shadow:0 0 0 0 rgba(211,47,47,.45); }
+  50%     { transform:scale(1.2); box-shadow:0 0 0 6px rgba(211,47,47,0); }
+}
+.accuse-counter-label { font-size: var(--xs); color: var(--muted); flex: 1; }
+.accuse-counter-label strong { color: var(--text); }
+.accuse-counter-label.warn strong { color: var(--red); }
+
+.accuse-history { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+.accuse-block {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 14px; border-radius: var(--r-sm);
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: var(--sm); animation: ablock-in .22s ease;
+}
+.accuse-block.wrong   { background: #fff0f0; border-color: #e0a0a0; }
+.accuse-block.correct { background: #edf7f0; border-color: #7bc8a4; }
+@keyframes ablock-in {
+  from { opacity:0; transform:translateY(-6px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.accuse-block-num  { font-weight:700; font-size:var(--xs); min-width:22px; color:var(--muted); }
+.accuse-block.wrong  .accuse-block-num { color: var(--red); }
+.accuse-block.correct .accuse-block-num { color: #2d6a4f; }
+.accuse-block-icon { font-size: 1rem; }
+.accuse-block-text { flex: 1; }
+.accuse-block-player { font-size: var(--xs); color: var(--muted); margin-left: auto; white-space: nowrap; }
+
+.room-locked-banner {
+  display: none;
+  background: #fff0f0; border: 1px solid #e0a0a0;
+  border-left: 4px solid var(--red);
+  border-radius: var(--r-sm); padding: 12px 16px;
+  font-size: var(--sm); color: #7f1d1d;
+  margin-bottom: 1rem; line-height: 1.6;
+}
+.room-locked-banner.visible { display: block; }
+.room-locked-banner strong  { display: block; margin-bottom: 2px; font-size: var(--base); }
+.accuse-section.locked .accuse-selectors,
+.accuse-section.locked .accuse-bar { opacity: .4; pointer-events: none; }
+
+.solution-reveal {
+  margin-top: 10px; padding: 14px 16px;
+  background: #fff3cd; border: 1px solid #f0c550;
+  border-radius: var(--r-sm); font-size: var(--sm); line-height: 1.8;
+}
+
+/* ── SUCCESS OVERLAY ── */
+#success-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(26,26,24,.68); backdrop-filter: blur(4px);
+  z-index: 10000; align-items: center; justify-content: center; padding: 16px;
+}
+#success-overlay.visible { display: flex; }
+
+.success-popup {
+  background: var(--surface); border-radius: var(--r-md);
+  padding: 40px 32px 30px; max-width: 440px; width: 100%;
+  text-align: center; position: relative;
+  box-shadow: 0 24px 64px rgba(0,0,0,.3);
+  animation: popup-in .38s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popup-in {
+  from { opacity:0; transform:scale(.82) translateY(24px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+.success-close-btn {
+  position: absolute; top: 12px; right: 14px;
+  background: none; border: none; font-size: 1.2rem;
+  color: var(--muted); cursor: pointer; font-family: var(--font);
+  padding: 3px 7px; border-radius: var(--r-sm); line-height: 1;
+  transition: background 150ms;
+}
+.success-close-btn:hover { background: var(--divider); }
+
+.success-detective-icon {
+  font-size: 3.4rem; margin-bottom: 6px;
+  display: block;
+  animation: det-bounce .55s ease .1s both;
+}
+@keyframes det-bounce {
+  0%   { transform:translateY(-12px); opacity:0; }
+  65%  { transform:translateY(4px); }
+  100% { transform:translateY(0); opacity:1; }
+}
+.success-headline {
+  font-family: var(--serif); font-size: 2.2rem; color: var(--red);
+  letter-spacing: -.5px; margin-bottom: 2px; line-height: 1.1;
+}
+.success-subheadline { font-size: var(--sm); color: var(--muted); margin-bottom: 2px; }
+
+.success-solution {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 12px 14px; margin: 14px 0 10px;
+}
+.success-solution-row {
+  display: flex; align-items: center; gap: 8px;
+  justify-content: center; flex-wrap: wrap;
+}
+.sol-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 4px 12px;
+  font-weight: 700; font-size: var(--xs); letter-spacing: .04em;
+}
+.sol-sep { color: var(--muted); font-size: 1.1rem; }
+
+.success-room-row {
+  align-items: center; justify-content: center;
+  gap: 8px; margin: 8px 0 4px; font-size: var(--xs); color: var(--muted);
+}
+.success-room-code {
+  font-weight: 700; color: var(--teal); letter-spacing: .1em;
+  background: var(--teal-bg); padding: 2px 10px;
+  border-radius: var(--r-full); border: 1px solid #b0d4d4;
+}
+
+/* Streak box — big centred number */
+.success-streak-box {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 20px 16px 16px;
+  margin: 14px 0 20px;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.success-streak-flame {
+  font-size: 3rem; line-height: 1;
+  animation: flame-flicker 1.4s ease-in-out infinite;
+}
+@keyframes flame-flicker {
+  0%,100% { transform: scale(1) rotate(-4deg); }
+  50%     { transform: scale(1.1) rotate(4deg); }
+}
+.success-streak-content { text-align: center; }
+.success-streak-num {
+  font-family: var(--serif); font-size: 4rem; font-weight: 900;
+  color: #c8860a; line-height: 1; display: block;
+  animation: streak-pop .5s cubic-bezier(.34,1.56,.64,1) .25s both;
+}
+@keyframes streak-pop {
+  from { transform:scale(.4); opacity:0; }
+  to   { transform:scale(1);  opacity:1; }
+}
+.success-streak-label {
+  font-size: var(--xs); color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  margin-top: 4px; display: block;
+}
+.success-streak-sublabel {
+  font-size: var(--sm); color: var(--muted); margin-top: 2px;
+}
+
+.success-actions { display: flex; gap: 10px; justify-content: center; }
+.success-share-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--teal); color: #fff; border: none;
+  border-radius: var(--r-sm); padding: 11px 24px;
+  font-family: var(--font); font-size: var(--sm); font-weight: 700;
+  cursor: pointer; letter-spacing: .04em; transition: background 150ms;
+}
+.success-share-btn:hover { background: var(--teal2); }
+.success-dismiss-btn {
+  background: transparent; border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 11px 20px;
+  font-family: var(--font); font-size: var(--sm); color: var(--muted);
+  cursor: pointer; transition: all 150ms;
+}
+.success-dismiss-btn:hover { background: var(--divider); color: var(--text); }
+
+/* streak badge in header */
+.streak-header-badge {
+  display: none; align-items: center; gap: 5px;
+  background: #fff3cd; border: 1px solid #f0c550; border-radius: var(--r-full);
+  padding: 3px 12px; font-size: var(--xs); color: #7a5000; font-weight: 700;
+  position: absolute; left: 0; top: 6px; cursor: default;
+}
+.streak-header-badge.visible { display: inline-flex; }
+
+@media (max-width: 600px) {
+  .success-popup { padding: 28px 16px 22px; }
+  .success-headline { font-size: 1.6rem; }
+  .success-streak-num { font-size: 3rem; }
+  .success-actions { flex-direction: column; }
+  .success-share-btn, .success-dismiss-btn { width: 100%; justify-content: center; }
+}
+
+</style>
+</head>
+<body>
+<div class="page-wrapper">
+
+<!-- HEADER -->
+<header class="site-header">
+  <span class="streak-header-badge" id="streakHeaderBadge"></span>
+    <h1 class="site-title">Mystery Matic</h1>
+  <p class="site-tagline">A mystery a day, keeps a coroner away!</p>
+  <button class="go-back-btn" id="goBackBtn" onclick="goBack()">Go Back</button>
+</header>
+
+<!-- MODE TOGGLE -->
+<div class="mode-toggle-wrapper" id="modeToggleWrapper">
+  <div class="mode-toggle">
+    <button id="btnSolo" class="active" onclick="switchMode('solo')">Solo</button>
+    <button id="btnMulti" onclick="switchMode('multi')">Multiplayer</button>
+    <span class="new-badge">NEW</span>
+  </div>
+  <span class="toggle-hint">Toggle switches between Solo (existing game) and Multiplayer mode</span>
+</div>
+
+<!-- F2: MULTIPLAYER SETUP CARD -->
+<div class="mp-setup-card" id="mpSetupCard">
+  <div class="mp-section-title"><span>👥</span> Setup your multiplayer room</div>
+  <p class="mp-section-subtitle">Set up today's mystery for your group. Each player gets a unique clue shard</p>
+  <div class="mp-form-row">
+    <div class="mp-field">
+      <label for="createName">Your Display Name</label>
+      <input type="text" id="createName" placeholder="Eg. Sherlock">
+    </div>
+    <div class="mp-field">
+      <label>Number of Players</label>
+      <div class="player-count-picker">
+        <button class="count-btn active" onclick="selectCount(this,2)">2</button>
+        <button class="count-btn" onclick="selectCount(this,3)">3</button>
+        <button class="count-btn" onclick="selectCount(this,4)">4</button>
+      </div>
+    </div>
+  </div>
+  <div class="mp-actions">
+    <button class="btn-teal" onclick="generateRoom()">Generate Room Code →</button>
+    <button class="btn-ghost" onclick="refreshRoom()">Refresh</button>
+    <span class="room-code-display" id="roomCodeDisplay"></span>
+  </div>
+  <hr class="mp-divider">
+  <div class="mp-section-title"><span>🖥️</span> or join an existing room</div>
+  <div class="mp-form-row">
+    <div class="mp-field">
+      <label for="joinName">Your Display Name</label>
+      <input type="text" id="joinName" placeholder="Eg. Sherlock">
+    </div>
+    <div class="mp-field">
+      <label for="joinCode">Enter the Room Code</label>
+      <input type="text" id="joinCode" placeholder="Eg. AJPW34L" style="text-transform:uppercase;letter-spacing:.08em">
+    </div>
+  </div>
+  <div class="mp-actions">
+    <button class="btn-teal" onclick="joinRoom()">Join Room →</button>
+    <button class="btn-ghost">Refresh</button>
+  </div>
+</div>
+
+<!-- multiplayer-guide-v3 -->
+<!-- STORY (all modes) -->
+<p class="story-intro">A group of friends stumbles upon an eerie abandoned mansion. Now confined within its sinister grasp, they find themselves thrust into a chilling series of murders. Each day brings a fresh enigma.</p>
+<div class="action-bar">
+  <button onclick="window.location.href='multiplayer-guide-v3.html'"class="btn-red">How to play with friends?</button>
+  <button onclick="window.location.href='tutorialv2.html'" class="btn-outline">How to Solve?</button>
+</div>
+
+<!-- PUZZLE (all modes; F2 stops here) -->
+<div id="puzzleBlock">
+  <div class="announcement"><div class="dot"></div><span>beep boop, a new mystery is up</span></div>
+  <div class="puzzle-date">Sunday, April 5, 2026</div>
+  <div class="puzzle-main">  
+    <div class="puzzle-text">
+      <p>Get ready to solve a fresh murder mystery! Your goal is to figure out who did it, when it happened, and what weapon was used.</p>
+      <p>Eddie, Frida and Alice are transported into an abandoned zoo at night!</p>
+      <p>Help them solve this mystery checking out these initial clues:</p>
+      <ul>
+        <li><a href="#">Frida</a> was murdered in the monkey island (<span class="icon-sq"></span>) at some time between 4:00 and 6:15</li>
+        <li>The murderer was alone with their victim, and the body remained unmoved</li>
+        <li>The murderer wasn't caught with the body</li>
+        <li>The killer retrieved the murder weapon from one of these places:
+          <ul>
+            <li>The pistol (<span class="icon-sq"></span>) from the monkey island (<span class="icon-sq"></span>)</li>
+            <li>The poison (<span class="icon-sq"></span>) from the aviary (<span class="icon-sq"></span>)</li>
+            <li>The wire extension (<span class="icon-sq"></span>) from the lion enclosure (<span class="icon-sq"></span>)</li>
+            <li>The hammer (<span class="icon-sq"></span>) from the reptile house (<span class="icon-sq"></span>)</li>
+          </ul>
+        </li>
+        <li>No one saw the killer retrieving the murder weapon</li>
+        <li>We know where everyone was at 6:15:
+          <ul>
+            <li><a href="#">Eddie</a> was in the aviary (<span class="icon-sq"></span>)</li>
+            <li><a href="#">Frida</a>'s body was in the monkey island (<span class="icon-sq"></span>)</li>
+            <li><a href="#">Alice</a> was in the lion enclosure (<span class="icon-sq"></span>)</li>
+          </ul>
+        </li>
+        <li>No one else was present in the location.</li>
+      </ul>
+    </div>
+    <div id="location-map"></div> 
+  </div>  
+</div>
+
+<!-- LIE TOGGLE WRAPPER (solo only, before game starts) -->
+<div id="lieToggleWrapper">
+  <div class="section-header"><span class="sq"></span><span>Detective's Journal &amp; Clues</span></div>
+  <p class="clues-subtitle" style="font-size:var(--sm);color:var(--muted);margin-bottom:.75rem">Use this table to keep track of your facts, clues and deductions. You can check the <a href="#">how to play section</a> if you need it.</p>
+  <div class="lie-toggle-card">
+    <p>Start choosing whether the killer never lies (easier) or is allowed to lie (harder).</p>
+    <div class="lie-toggle-btns">
+      <button class="lie-btn" id="btnNoLies" onclick="chooseLie(this)">No Lies</button>
+      <button class="lie-btn" id="btnLie" onclick="chooseLie(this)">Lie to me</button>
+    </div>
+  </div>
+</div>
+
+<!-- PLAYERS PANEL (lobby only) -->
+<div class="players-panel" id="playersPanel">
+  <span class="players-panel-label">In Room</span>
+  <div class="player-chips" id="playerChips"></div>
+  <span class="room-code-badge" id="roomCodeBadge"></span>
+</div>
+
+<!-- GAME SECTIONS (revealed after lie choice in solo, or on lobby entry) -->
+<div class="game-sections" id="gameSections">
+
+  <div class="announcement" style="margin-bottom:1rem"><div class="dot"></div><span>Let the game begin!</span></div>
+  <div class="puzzle-text" style="margin-bottom:1.25rem">
+    <p>Get ready to solve this puzzle! You'll get clues that slowly uncover the truth behind the murder. In easy mode everyone tells the truth; optionally the killer can lie for a harder challenge.</p>
+    <p style="margin-top:.5rem">Each clue you read will affect your score. When you crack it, you'll get a rank from the wonderful <a href="#">sleuth-o-meter™</a>.</p>
+  </div>
+
+  <!-- CLUES -->
+  <section class="clues-section">
+    <div class="section-header"><span class="sq"></span><span>Detective's Journal &amp; Clues</span></div>
+    <p class="clues-subtitle">Use this table to keep track of your facts, clues and deductions. You can check the <a href="#">how to play section</a> if you need it.</p>
+    <div class="clue-navigator" id="clueNavigator">
+      <div class="clue-nav-header">
+        <span>Clue #<span id="clueNum">1</span></span>
+        <span class="clue-counter"><span id="clueProgress">1</span> of <span id="clueTotal">5</span> clues revealed</span>
+      </div>
+      <div class="clue-body">
+        <span class="clue-tag" id="clueTag">YOUR CLUE</span>
+        <p id="clueText">Eddie was not in the monkey island between 4:00 and 5:00. He can confirm this.</p>
+      </div>
+      <div class="clue-footer">
+        <button class="btn-ghost" onclick="mode === 'lobby' ? prevMyClue() : prevClue()">← Previous Clue</button>
+        <button class="btn-teal" onclick="mode === 'lobby' ? nextMyClue() : nextClue()">Next Clue →</button>
+      </div>
+    </div>
+  </section>
+
+<!-- JOURNAL SECTION -->
+<section class="journal-section">
+  <div class="section-header"><span class="sq"></span><span id="journalSectionTitle">Detective's Journal</span></div>
+  <p class="journal-subtitle">Click cells to cycle: blank → ✓ → ✗ → ? → blank. Click location/weapon icons to strike them out.</p>
+
+  <!-- SOLO journal -->
+  <div id="journalSolo">
+    <div id="soloJournalMount"></div>
+  </div>
+
+  <!-- MP journal tabs -->
+  <div class="journal-mp" id="journalMp">
+    <div class="journal-tabs-bar">
+      <button class="journal-tab active" onclick="switchJournalTab(this,'mine')"   data-pane="mine">📓 My Journal</button>
+      <button class="journal-tab"        onclick="switchJournalTab(this,'p2')"     data-pane="p2">📓 <span class="p2name">Player 2</span></button>
+      <button class="journal-tab"        onclick="switchJournalTab(this,'p3')"     data-pane="p3"  id="tab-p3"  style="display:none">📓 <span class="p3name">Player 3</span></button>
+      <button class="journal-tab"        onclick="switchJournalTab(this,'p4')"     data-pane="p4"  id="tab-p4"  style="display:none">📓 <span class="p4name">Player 4</span></button>
+      <button class="journal-tab"        onclick="switchJournalTab(this,'shared')" data-pane="shared">📘 Shared Journal</button>
+    </div>
+    <div class="journal-pane-wrapper">
+
+      <!-- MY JOURNAL -->
+      <div class="journal-pane active" id="pane-mine">
+        <div id="mpJournalMount-mine"></div>
+        <div class="journal-actions">
+          <span class="shared-badge">Only visible to you</span>
+          <button class="btn-ghost" onclick="saveGrid()">💾 Save</button>
+          <button class="btn-teal"  onclick="shareGrid()">🔗 Share Grid</button>
+        </div>
+      </div>
+
+      <!-- PLAYER 2 JOURNAL -->
+      <div class="journal-pane" id="pane-p2">
+        <div id="mpJournalMount-p2" class="pane-readonly"></div>
+        <div class="journal-actions">
+          <span class="shared-badge">Read only — <span class="p2name">Player 2</span>'s journal</span>
+          <button class="btn-ghost" onclick="loadPlayerGrid(window.p2Name,'mpJournalMount-p2',true)">🔄 Load <span class="p2name">Player 2</span>'s Grid</button>
+          <!-- <button class="btn-ghost" onclick="loadPlayerNotes(window.p2Name,'p2-notes-inline')">🔄 Load <span class="p2name">Player 2</span>'s Notes</button> -->
+        </div>
+        <div id="p2-notes-inline" class="inline-notes-feed"></div>
+      </div>
+
+      <!-- PLAYER 3 JOURNAL -->
+      <div class="journal-pane" id="pane-p3">
+        <div id="mpJournalMount-p3" class="pane-readonly"></div>
+        <div class="journal-actions">
+          <span class="shared-badge">Read only — <span class="p3name">Player 3</span>'s journal</span>
+          <button class="btn-ghost" onclick="loadPlayerGrid(window.p3Name,'mpJournalMount-p3',true)">🔄 Load <span class="p3name">Player 3</span>'s Grid</button>
+          <!-- <button class="btn-ghost" onclick="loadPlayerNotes(window.p3Name,'p3-notes-inline')">🔄 Load <span class="p3name">Player 3</span>'s Notes</button> -->
+        </div>
+        <div id="p3-notes-inline" class="inline-notes-feed"></div>
+      </div>
+
+      <!-- PLAYER 4 JOURNAL -->
+      <div class="journal-pane" id="pane-p4">
+        <div id="mpJournalMount-p4" class="pane-readonly"></div>
+        <div class="journal-actions">
+          <span class="shared-badge">Read only — <span class="p4name">Player 4</span>'s journal</span>
+          <button class="btn-ghost" onclick="loadPlayerGrid(window.p4Name,'mpJournalMount-p4',true)">🔄 Load <span class="p4name">Player 4</span>'s Grid</button>
+          <!-- <button class="btn-ghost" onclick="loadPlayerNotes(window.p4Name,'p4-notes-inline')">🔄 Load <span class="p4name">Player 4</span>'s Notes</button> -->
+        </div>
+        <div id="p4-notes-inline" class="inline-notes-feed"></div>
+      </div>
+
+      <!-- SHARED JOURNAL -->
+      <div class="journal-pane" id="pane-shared">
+        <div id="mpJournalMount-shared" class="pane-readonly"></div>
+        <div class="journal-actions">
+          <span class="shared-badge">Visible to all players</span>
+          <button class="btn-ghost" onclick="refreshSharedGrid()">🔄 Refresh Shared Grid</button>
+        </div>
+        <div id="conflict-log-panel">
+          <div class="conflict-log-header">⚡ Conflict Log</div>
+          <div class="conflict-log-list" id="conflict-log-list"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- NOTES SECTION -->
+<section class="notes-section">
+  <div class="section-header"><span class="sq"></span><span>Notes</span></div>
+
+  <!-- SOLO notes -->
+  <div id="notesSolo">
+    <textarea class="notes-textarea" placeholder="Write your deductions, observations and theories here...&#10;&#10;e.g. Alice was in the lion enclosure at 6:15. If the weapon came from there..."></textarea>
+  </div>
+
+  <!-- MP notes tabs -->
+  <div class="notes-mp" id="notesMp">
+    <div class="journal-tabs-bar">
+      <button class="journal-tab active" onclick="switchNotesTab(this,'notes-mine')"   data-pane="notes-mine">📓 My Notes</button>
+      <button class="journal-tab"        onclick="switchNotesTab(this,'notes-shared')" data-pane="notes-shared">📘 Shared Notes</button>
+    </div>
+    <div class="journal-pane-wrapper">
+
+      <!-- MY NOTES -->
+      <div class="journal-pane active" id="pane-notes-mine">
+        <textarea id="myNoteTextarea" style="width:100%;min-height:130px;padding:.75rem;border:none;font-family:var(--font);font-size:var(--sm);resize:vertical;outline:none;background:var(--surface2)" placeholder="Your quick notes — suspects, timelines, contradictions..."></textarea>
+        <div class="journal-actions">
+          <span class="shared-badge">Only visible to you</span>
+          <button class="btn-ghost" onclick="saveNote()">💾 Save</button>
+          <button class="btn-teal"  onclick="shareNote()">🔗 Share Note</button>
+        </div>
+      </div>
+
+      
+
+      <!-- SHARED NOTES -->
+      <div class="journal-pane" id="pane-notes-shared">
+        <textarea id="sharedNoteTextarea" readonly style="width:100%;min-height:130px;padding:.75rem;border:none;font-family:var(--font);font-size:var(--sm);resize:vertical;outline:none;background:var(--surface2);color:var(--muted)" placeholder="Nothing shared yet..."></textarea>
+        <div class="journal-actions">
+          <span class="shared-badge">Visible to all players</span>
+          <button class="btn-ghost" onclick="refreshSharedNotes()">🔄 Refresh Shared Notes</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  <!-- ACCUSATION -->
+  <section class="accuse-section" id="accuseSection">
+    <div class="section-header"><span class="sq"></span><span>Time for accusations</span></div>
+
+    <div class="room-locked-banner" id="roomLockedBanner">
+      <strong>🔒 Room locked for today</strong>
+      All 5 accusations were used — the mystery remains unsolved. Come back tomorrow for a fresh start!
+    </div>
+
+    <p class="accuse-intro">Choose carefully — your room gets <strong>5 accusations total</strong>. Each wrong accusation costs one attempt. On the 5th wrong accusation the streak resets, the room locks, and the solution is revealed.</p>
+
+    <div class="accuse-counter-bar" id="accuseCounterBar">
+      <div class="accuse-dots">
+        <div class="accuse-dot" id="adot-1"></div>
+        <div class="accuse-dot" id="adot-2"></div>
+        <div class="accuse-dot" id="adot-3"></div>
+        <div class="accuse-dot" id="adot-4"></div>
+        <div class="accuse-dot" id="adot-5"></div>
+      </div>
+      <div class="accuse-counter-label" id="accuseCounterLabel"><strong>5</strong> accusations remaining</div>
+    </div>
+
+    <div class="accuse-history" id="accuseHistory"></div>
+
+    <div class="accuse-selectors">
+      <div class="accuse-field">
+        <label>Suspect</label>
+        <select id="suspectSelect">
+          <option value="">— Choose —</option>
+          <option>Eddie</option><option>Alice</option>
+        </select>
+      </div>
+      <div class="accuse-field">
+        <label>Time of Murder</label>
+        <select id="timeSelect">
+          <option value="">— Choose —</option>
+          <option>4:00</option><option>4:15</option><option>4:30</option><option>4:45</option>
+          <option>5:00</option><option>5:15</option><option>5:30</option><option>5:45</option>
+          <option>6:00</option><option>6:15</option>
+        </select>
+      </div>
+      <div class="accuse-field">
+        <label>Weapon</label>
+        <select id="weaponSelect">
+          <option value="">— Choose —</option>
+          <option>Pistol</option><option>Poison</option>
+          <option>Wire Extension</option><option>Hammer</option>
+        </select>
+      </div>
+    </div>
+    <div class="accuse-bar"><button onclick="accuse()">Accuse!</button></div>
+  </section>
+
+</div><!-- end #gameSections -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <nav class="footer-nav">
+    <a href="#">Daily Mystery</a><a href="#">Old Mysteries</a>
+    <a href="#">How to Play</a><a href="#">About</a><a href="#">Shop</a>
+  </nav>
+  <p class="footer-copy">© 2024 Gabbo Industries <span class="icon-sq" style="width:10px;height:10px;background:#333"></span> Inc.</p>
+</footer>
+
+</div><!-- end page-wrapper -->
+
+<!-- Add this line just before your existing <script> tag -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// ===== SUPABASE INIT (inside DOMContentLoaded to avoid CDN timing issues) =====
+let sb;
+
+// ===== PUZZLE DATA =====
+const DATA_JS_URL = 'https://bucky575.github.io/mystery-o-matic-multiplayer/out/data.js';
+
+let LOCATIONS = [];
+let PERSONS   = [];
+let TIMES     = [];
+let WEAPONS   = [];
+let CLUES     = [];
+let CORRECT_ANSWER_HASH = '';
+let VICTIM    = '';
+
+// ===== STATE GLOBALS =====
+let mode = 'solo';
+let playerCount = 2;
+let currentClue = 0;
+let currentRoom  = null;
+let currentPlayer = null;
+let mySlot = 0;
+window.p2Name = 'Player 2';
+window.p3Name = 'Player 3';
+window.p4Name = 'Player 4';
+
+// TODO (Job 4b): generateRoom() should also insert a row into Supabase rooms table
+// so other players can fetch player_count when joining. Currently only localStorage is used.
+
+const CYCLE       = ['', '✓', '✗', '?'];
+const CYCLE_CLASS = ['s-blank','s-check','s-cross','s-q'];
+
+// Clue assignment state
+let myClueIndices    = [];
+let myCurrentCluePos = 0;
+
+// States — initialised empty, rebuildStateMaps() fills after puzzle loads
+const states = {
+  solo:   { cells: [], locStruck: [], weapStruck: [] },
+  mine:   { cells: [], locStruck: [], weapStruck: [] },
+  p2:     { cells: [], locStruck: [], weapStruck: [] },
+  p3:     { cells: [], locStruck: [], weapStruck: [] },
+  p4:     { cells: [], locStruck: [], weapStruck: [] },
+  shared: { cells: [], locStruck: [], weapStruck: [] },
+};
+
+function buildPuzzleText(d) {
+  // Build icon lookups
+  const locIcon = {};
+  Object.entries(d.locationIcons).forEach(([name, emoji]) => {
+    locIcon[name.toLowerCase()] = emoji;
+  });
+  const weapIcon = {};
+  Object.entries(d.weaponIcons).forEach(([key, emoji]) => {
+    const name = key.replace('$','').replace(/_/g,' ').toLowerCase();
+    weapIcon[name] = emoji;
+  });
+
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+  // Victim info
+  const victimName = cap(d.victim);
+  const victimLoc  = d.locationMap[d.victim];
+  const victimIcon = locIcon[victimLoc] || '📍';
+  const startTime  = `${Math.floor((d.timeOffset)/3600)}:${String(((d.timeOffset)%3600)/60).padStart(2,'0')}`;
+  const endTime    = `${Math.floor((d.timeOffset + d.numIntervals*900)/3600)}:${String(((d.timeOffset + d.numIntervals*900)%3600)/60).padStart(2,'0')}`;
+
+  // Suspects
+  const suspects = d.characterNames.filter(n => n !== d.victim);
+
+  // Weapon list items
+  const weaponItems = Object.entries(d.weaponMap).map(([key, room]) => {
+    const wName = key.replace('$','').replace(/_/g,' ').toLowerCase();
+    const wIcon = weapIcon[wName] || '🔪';
+    const rIcon = locIcon[room] || '📍';
+    return `<li>The ${wName} (${wIcon}) from the ${room} (${rIcon})</li>`;
+  }).join('\n');
+
+  // Final positions
+  const positionItems = d.characterNames.map(name => {
+    const room = d.locationMap[name];
+    const rIcon = locIcon[room] || '📍';
+    if (name === d.victim) {
+      return `<li><a href="#">${cap(name)}</a>'s body was in the ${room} (${rIcon})</li>`;
+    }
+    return `<li><a href="#">${cap(name)}</a> was in the ${room} (${rIcon})</li>`;
+  }).join('\n');
+
+  // Theme sentence — use scenario from static text or generic
+  const suspectNames = suspects.map(cap).join(', ').replace(/,([^,]*)$/, ' and$1');
+  const allNames = d.characterNames.map(cap).join(', ').replace(/,([^,]*)$/, ' and$1');
+
+  const html = `
+    <p>Get ready to solve a fresh murder mystery! Your goal is to figure out <strong>who</strong> did it, <strong>when</strong> it happened, and <strong>what</strong> weapon was used.</p>
+    <p>${allNames} are the characters in today's mystery.</p>
+    <p>Help them solve this mystery checking out these initial clues:</p>
+    <ul>
+      <li><a href="#">${victimName}</a> was murdered in the ${victimLoc} (${victimIcon}) at some time between ${startTime} and ${endTime}</li>
+      <li>The murderer was alone with their victim, and the body remained unmoved</li>
+      <li>The murderer wasn't caught with the body</li>
+      <li>The killer retrieved the murder weapon from one of these places:
+        <ul>${weaponItems}</ul>
+      </li>
+      <li>No one saw the killer retrieving the murder weapon</li>
+      <li>We know where everyone was at ${endTime}:
+        <ul>${positionItems}</ul>
+      </li>
+      <li>No one else was present in the location.</li>
+    </ul>
+  `;
+
+  const el = document.querySelector('.puzzle-text');
+  if (el) el.innerHTML = html;
+
+  // Also update the date
+  const dateEl = document.querySelector('.puzzle-date');
+  if (dateEl) {
+    const today = new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+    dateEl.textContent = today;
+  }
+}
+
+function renderLocationMap(imgUrl) {
+  const container = document.getElementById('location-map');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  const img = document.createElement('img');
+  img.src = imgUrl;
+  img.alt = 'Location map';
+  img.style.maxWidth = '100%';
+  img.style.height = 'auto';
+  img.style.display = 'block';
+
+  container.appendChild(img);
+}
+
+// ===== PUZZLE LOADER =====
+async function loadPuzzle() {
+  try {
+    const res  = await fetch(DATA_JS_URL);
+    const text = await res.text();
+    const jsonStr = text.replace(/^\s*data\s*=\s*/, '').replace(/;?\s*$/, '');
+    const d = JSON.parse(jsonStr);
+
+    LOCATIONS = d.locationOrder.map(([, name]) => ({
+      icon:  d.locationIcons[name] || '📍',
+      label: name.charAt(0).toUpperCase() + name.slice(1),
+      key:   name,
+    }));
+
+    WEAPONS = Object.keys(d.weaponMap).map(key => ({
+      icon: d.weaponIcons[key],
+      label: key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+      key: key,
+      room: d.weaponMap[key],
+    }));
+
+    PERSONS = d.characterNames; // include victim so journal shows all characters
+    VICTIM  = d.victim;
+
+    TIMES = [];
+    for (let i = 0; i <= d.numIntervals; i++) {
+      const totalSec = d.timeOffset + i * 15 * 60;
+      const h = Math.floor(totalSec / 3600);
+      const m = (totalSec % 3600) / 60;
+      TIMES.push(`${h}:${m.toString().padStart(2, '0')}`);
+    }
+
+    const rawClues = d.additionalClues?.en || [];
+    CLUES = rawClues.map((html, i) => ({
+      tag:  'CLUE ' + (i + 1),
+      text: html.replace(/<[^>]+>/g, ''),
+      html: html,
+    }));
+
+    CORRECT_ANSWER_HASH = d.correctAnswer;
+
+    rebuildStateMaps();
+    populateAccuseDropdowns();
+    buildPuzzleText(d);
+    buildPuzzleText(d);
+  const svgBase = DATA_JS_URL.replace('/data.js', '');
+  const svgUrls = [
+    svgBase + '/en/locations_big.svg',
+    svgBase + '/locations_big.svg',
+    svgBase + '/en/locations_small.svg',
+    svgBase + '/locations_small.svg',
+  ];
+
+  let mapUrl = svgUrls[0];
+
+  for (const url of svgUrls) {
+    try {
+      const r = await fetch(url);
+      if (r.ok) {
+        mapUrl = url;
+        break;
+      }
+    } catch (e) { /* try next */ }
+  }
+
+  renderLocationMap(mapUrl);
+  } catch (err) {
+    console.error('Failed to load puzzle:', err);
+    document.body.innerHTML = `<div style="padding:2rem;font-family:monospace;color:#c00"><strong>Failed to load today's puzzle.</strong><br>${err.message}</div>`;
+  }
+  
+}
+
+// ===== Basic clues RENDERER =====
+
+function rebuildStateMaps() {
+  const fresh = () => LOCATIONS.map(() => PERSONS.map(() => TIMES.map(() => 0)));
+  ['solo','mine','p2','p3','p4','shared'].forEach(key => {
+    states[key] = {
+      cells:      fresh(),
+      locStruck:  LOCATIONS.map(() => false),
+      weapStruck: WEAPONS.map(()   => false),
+    };
+  });
+}
+
+
+
+// ===== JOURNAL RENDERER =====
+function buildJournal(mountEl, tableId, readonly) {
+  mountEl.innerHTML = '';
+  const s = states[tableId];
+  if (!s || !s.cells || s.cells.length === 0) return;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'journal-wrap';
+
+  // Header
+  const hdr = document.createElement('div');
+  hdr.className = 'journal-header';
+  const thIcon = document.createElement('div');
+  thIcon.className = 'th-icon';
+  thIcon.textContent = '📍';
+  hdr.appendChild(thIcon);
+  const thName = document.createElement('div');
+  thName.className = 'th-name';
+  thName.textContent = 'Person';
+  hdr.appendChild(thName);
+  const thTimes = document.createElement('div');
+  thTimes.className = 'th-times';
+  TIMES.forEach(t => {
+    const th = document.createElement('div');
+    th.className = 'th-time';
+    th.textContent = t;
+    thTimes.appendChild(th);
+  });
+  hdr.appendChild(thTimes);
+  wrap.appendChild(hdr);
+
+  // Groups
+  LOCATIONS.forEach((loc, li) => {
+    const group = document.createElement('div');
+    group.className = 'journal-group';
+
+    const iconCell = document.createElement('div');
+    iconCell.className = 'group-icon-cell' + (s.locStruck[li] ? ' struck' : '');
+    iconCell.title = loc.label + ' — click to eliminate';
+    const emojiSpan = document.createElement('span');
+    emojiSpan.className = 'icon-emoji';
+    emojiSpan.textContent = loc.icon;
+    iconCell.appendChild(emojiSpan);
+    const strikeLine = document.createElement('span');
+    strikeLine.className = 'strike-line';
+    iconCell.appendChild(strikeLine);
+
+    if (!readonly) {
+      iconCell.addEventListener('click', () => {
+        s.locStruck[li] = !s.locStruck[li];
+        iconCell.classList.toggle('struck', s.locStruck[li]);
+      });
+    }
+    group.appendChild(iconCell);
+
+    const rows = document.createElement('div');
+    rows.className = 'group-rows';
+
+    PERSONS.forEach((person, pi) => {
+      const row = document.createElement('div');
+      row.className = 'person-row';
+      const nameCell = document.createElement('div');
+      nameCell.className = 'person-name';
+      const isVictimPerson = VICTIM && (person.charAt(0).toUpperCase() + person.slice(1)) === (VICTIM.charAt(0).toUpperCase() + VICTIM.slice(1));
+      if (isVictimPerson) {
+        nameCell.style.background = '#ffe8cc';
+      }
+      nameCell.textContent = person;
+      row.appendChild(nameCell);
+      const timeCols = document.createElement('div');
+      timeCols.className = 'time-cols';
+
+      TIMES.forEach((_, ti) => {
+        const cell = document.createElement('div');
+        const st = s.cells[li][pi][ti];
+        cell.className = 'time-cell ' + CYCLE_CLASS[st];
+        cell.textContent = CYCLE[st];
+        cell.title = TIMES[ti];
+        if (!readonly) {
+          cell.addEventListener('click', () => {
+            s.cells[li][pi][ti] = (s.cells[li][pi][ti] + 1) % 4;
+            const ns = s.cells[li][pi][ti];
+            cell.className = 'time-cell ' + CYCLE_CLASS[ns];
+            cell.textContent = CYCLE[ns];
+          });
+        }
+        timeCols.appendChild(cell);
+      });
+
+      row.appendChild(timeCols);
+      rows.appendChild(row);
+    });
+    group.appendChild(rows);
+    wrap.appendChild(group);
+  });
+
+  // Weapon/location icon strip
+  const strip = document.createElement('div');
+  strip.className = 'icon-strip';
+  WEAPONS.forEach((w, wi) => {
+    // Find the matching location for this weapon
+    const matchedLoc = LOCATIONS.find(loc => loc.key === w.room);
+    const li = LOCATIONS.indexOf(matchedLoc);
+
+    const pair = document.createElement('div');
+    pair.className = 'strip-pair' + (s.weapStruck[wi] ? ' struck' : '');
+    pair.title = w.label + ' (from ' + (matchedLoc ? matchedLoc.label : '') + ')';
+
+    const weapSpan = document.createElement('span');
+    weapSpan.textContent = w.icon;
+
+    const locSpan = document.createElement('span');
+    locSpan.textContent = matchedLoc ? matchedLoc.icon : '';
+
+    pair.appendChild(weapSpan);
+    pair.appendChild(locSpan);
+
+    if (!readonly) pair.addEventListener('click', () => {
+      s.weapStruck[wi] = !s.weapStruck[wi];
+      pair.classList.toggle('struck', s.weapStruck[wi]);
+      // Also sync the location struck state
+      if (li >= 0) {
+        s.locStruck[li] = s.weapStruck[wi];
+        // Update the group icon cell in the journal too
+        const groupIconCells = mountEl.querySelectorAll('.group-icon-cell');
+        if (groupIconCells[li]) {
+          groupIconCells[li].classList.toggle('struck', s.locStruck[li]);
+        }
+      }
+    });
+
+    strip.appendChild(pair);
+  });
+
+  wrap.appendChild(strip);
+  mountEl.appendChild(wrap);
+}
+
+// ===== MODE SWITCH =====
+function switchMode(m) {
+  mode = m;
+  document.getElementById('btnSolo').classList.toggle('active', m === 'solo');
+  document.getElementById('btnMulti').classList.toggle('active', m === 'multi');
+  document.getElementById('mpSetupCard').classList.toggle('visible', m === 'multi');
+
+  if (m === 'multi') {
+    document.getElementById('gameSections').classList.remove('visible');
+    document.getElementById('lieToggleWrapper').classList.add('hidden');
+  } else {
+    document.getElementById('lieToggleWrapper').classList.remove('hidden');
+    document.getElementById('gameSections').classList.remove('visible');
+  }
+  document.getElementById('journalSolo').style.display = 'block';
+  document.getElementById('journalMp').classList.remove('visible');
+  document.getElementById('notesSolo').style.display = 'block';
+  document.getElementById('notesMp').classList.remove('visible');
+  document.getElementById('playersPanel').classList.remove('visible');
+  document.getElementById('journalSectionTitle').textContent = "Detective's Journal";
+}
+
+// ===== LIE CHOICE =====
+function chooseLie(btn) {
+  document.querySelectorAll('.lie-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('lieToggleWrapper').classList.add('hidden');
+  document.getElementById('gameSections').classList.add('visible');
+  buildJournal(document.getElementById('soloJournalMount'), 'solo', false);
+}
+
+// ===== ROOM SETUP =====
+function randomCode() {
+  // Use crypto.randomUUID() so room id is a valid UUID for Supabase
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  // Fallback UUID v4
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
+function shortCode(uuid) {
+  // Show last 8 chars (uppercase) as the display code
+  return uuid.replace(/-/g,'').slice(-8).toUpperCase();
+}
+
+function generateRoom() {
+  const name = document.getElementById('createName').value.trim();
+  if (!name) { document.getElementById('createName').focus(); return; }
+  const code = randomCode();
+  currentRoom   = code;
+  currentPlayer = name;
+  mySlot        = 0;
+
+  const today = new Date().toISOString().split('T')[0];
+  localStorage.setItem('mp_room_id',      code);
+  localStorage.setItem('mp_player_name',  name);
+  localStorage.setItem('mp_puzzle_date',  today);
+  localStorage.setItem('mp_slot',         '0');
+  localStorage.setItem('mp_player_count', String(playerCount));
+
+  // Write registry entry for slot 0
+  const registry = {};
+  registry[0] = name;
+  localStorage.setItem('room_registry_' + code, JSON.stringify(registry));
+
+  const el = document.getElementById('roomCodeDisplay');
+  el.style.display = 'inline';
+  el.textContent = 'Code: ' + shortCode(code) + ' (share this)';
+  el.title = 'Full room ID: ' + code;
+
+  // Insert into Supabase rooms table so joiners can fetch player_count
+  sb.from('rooms').insert({
+    id:           code,
+    puzzle_date:  today,
+    player_count: playerCount,
+    created_by:   name,
+  }).then(({ error }) => {
+    if (error) console.warn('Supabase rooms insert error:', error.message);
+  });
+
+  setTimeout(() => enterLobby(code), 500);
+}
+
+function joinRoom() {
+  const nameVal = document.getElementById('joinName').value.trim();
+  const codeVal = document.getElementById('joinCode').value.trim().toUpperCase();
+  if (!nameVal || !codeVal) return;
+  currentPlayer = nameVal;
+
+  // Support both full UUID (pasted) and 8-char short code
+  const isShortCode = codeVal.length <= 8 && !codeVal.includes('-');
+  const roomQuery = isShortCode
+    ? sb.from('rooms').select('id, player_count, locked_date').ilike('id', '%' + codeVal.toLowerCase())
+    : sb.from('rooms').select('id, player_count, locked_date').eq('id', codeVal.toLowerCase()).limit(1);
+
+  roomQuery.then(({ data: roomRows, error }) => {
+    const roomRow = roomRows?.[0];
+    if (error || !roomRow) {
+      showMpError('Room not found. Check the room code and try again.');
+      return;
+    }
+    // V12: block entry if room is locked today
+    const _todayStr = new Date().toISOString().slice(0, 10);
+    if (roomRow.locked_date === _todayStr) {
+      showMpError('This room failed today\'s mystery and is locked until tomorrow. Come back then!');
+      return;
+    }
+    // Use canonical UUID from DB
+    currentRoom  = roomRow.id;
+    playerCount  = roomRow.player_count || 2;
+    localStorage.setItem('mp_player_count', String(playerCount));
+
+    // Get next available slot from room_players
+    sb.from('room_players')
+      .select('slot')
+      .eq('room_id', currentRoom)
+      .then(({ data: players }) => {
+        const usedSlots = (players || []).map(p => p.slot);
+        let slot = 1;
+        while (usedSlots.includes(slot)) slot++;
+        mySlot = slot;
+
+        const today = new Date().toISOString().split('T')[0];
+        localStorage.setItem('mp_room_id',      currentRoom);
+        localStorage.setItem('mp_player_name',  nameVal);
+        localStorage.setItem('mp_puzzle_date',  today);
+        localStorage.setItem('mp_slot',         String(slot));
+
+        const registry = JSON.parse(localStorage.getItem('room_registry_' + currentRoom) || '{}');
+        registry[slot] = nameVal;
+        localStorage.setItem('room_registry_' + currentRoom, JSON.stringify(registry));
+
+        enterLobby(currentRoom);
+      });
+  });
+}
+
+function refreshRoom() {
+  document.getElementById('roomCodeDisplay').style.display = 'none';
+  document.getElementById('createName').value = '';
+}
+
+function selectCount(btn, count) {
+  document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  playerCount = count;
+}
+
+// ===== ENTER LOBBY =====
+async function enterLobby(roomCode) {
+  mode = 'lobby';
+  document.getElementById('modeToggleWrapper').style.display = 'none';
+  document.getElementById('mpSetupCard').classList.remove('visible');
+  document.getElementById('goBackBtn').style.display = 'inline-block';
+  document.getElementById('lieToggleWrapper').classList.add('hidden');
+
+  const storedCount = parseInt(localStorage.getItem('mp_player_count') || '2');
+  playerCount = storedCount;
+  mySlot      = parseInt(localStorage.getItem('mp_slot') || '0');
+  currentRoom   = currentRoom   || roomCode;
+  currentPlayer = currentPlayer || localStorage.getItem('mp_player_name') || '';
+
+  // Fetch real player names from Supabase room_players
+  let allPlayers = Array.from({ length: playerCount }, (_, i) => `Player ${i + 1}`);
+  try {
+    const { data: rpRows } = await sb.from('room_players')
+      .select('slot, player_name')
+      .eq('room_id', roomCode)
+      .order('slot');
+
+    if (rpRows && rpRows.length > 0) {
+      // Build registry from Supabase data
+      const registry = {};
+      rpRows.forEach(r => { registry[r.slot] = r.player_name; });
+      // Merge with local registry so we see ourselves even before insert completes
+      const localReg = JSON.parse(localStorage.getItem('room_registry_' + roomCode) || '{}');
+      Object.assign(registry, localReg);
+      localStorage.setItem('room_registry_' + roomCode, JSON.stringify(registry));
+      allPlayers = Array.from({ length: playerCount }, (_, i) => registry[i] || `Player ${i + 1}`);
+    } else {
+      // Fall back to local registry
+      const registry = JSON.parse(localStorage.getItem('room_registry_' + roomCode) || '{}');
+      registry[mySlot] = currentPlayer;
+      localStorage.setItem('room_registry_' + roomCode, JSON.stringify(registry));
+      allPlayers = Array.from({ length: playerCount }, (_, i) => registry[i] || `Player ${i + 1}`);
+    }
+  } catch(e) {
+    console.warn('Could not fetch room_players from Supabase:', e);
+    const registry = JSON.parse(localStorage.getItem('room_registry_' + roomCode) || '{}');
+    registry[mySlot] = currentPlayer;
+    allPlayers = Array.from({ length: playerCount }, (_, i) => registry[i] || `Player ${i + 1}`);
+  }
+
+  // Insert self into room_players if not already there
+  try {
+    const { data: existing } = await sb.from('room_players')
+      .select('id')
+      .eq('room_id', roomCode)
+      .eq('player_name', currentPlayer)
+      .maybeSingle();
+    if (!existing) {
+      await sb.from('room_players').insert({
+        room_id:     roomCode,
+        player_name: currentPlayer,
+        slot:        mySlot,
+      });
+    }
+  } catch(e) { console.warn('room_players insert error:', e); }
+
+  // "Other players" tabs — everyone except me, in slot order
+  const otherPlayers = allPlayers.filter((_, i) => i !== mySlot);
+  window.p2Name = otherPlayers[0] || 'Player 2';
+  window.p3Name = otherPlayers[1] || 'Player 3';
+  window.p4Name = otherPlayers[2] || 'Player 4';
+
+  document.querySelectorAll('.p2name').forEach(el => el.textContent = window.p2Name);
+  document.querySelectorAll('.p3name').forEach(el => el.textContent = window.p3Name);
+  document.querySelectorAll('.p4name').forEach(el => el.textContent = window.p4Name);
+
+  // Player chips
+  const chips = document.getElementById('playerChips');
+  chips.innerHTML = '';
+  allPlayers.forEach((p, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'player-chip' + (i === mySlot ? ' you' : '');
+    chip.innerHTML = `<span class="dot"></span>${p}${i === mySlot ? ' (you)' : ''}`;
+    chips.appendChild(chip);
+  });
+
+  document.getElementById('roomCodeBadge').textContent = 'Room: ' + roomCode;
+  // Store full UUID in a copy-able span for sharing
+  const badge = document.getElementById('roomCodeBadge');
+  badge.title = 'Click to copy full room ID';
+  badge.style.cursor = 'pointer';
+  badge.onclick = () => {
+    navigator.clipboard.writeText(roomCode).then(() => showToast('Room code copied! Share with teammates ✓'));
+  };
+  document.getElementById('playersPanel').classList.add('visible');
+  document.getElementById('gameSections').classList.add('visible');
+  document.getElementById('journalSolo').style.display = 'none';
+  document.getElementById('journalMp').classList.add('visible');
+  document.getElementById('journalSectionTitle').textContent = "Detective's Journals";
+  document.getElementById('notesSolo').style.display = 'none';
+  document.getElementById('notesMp').classList.add('visible');
+
+  // Show/hide P3 and P4 tabs
+  document.getElementById('tab-p3').style.display       = playerCount >= 3 ? '' : 'none';
+  document.getElementById('tab-p4').style.display       = playerCount >= 4 ? '' : 'none';
+
+  // Assign clues for multiplayer — each player gets every Nth clue
+  assignCluesForPlayer(mySlot, playerCount);
+
+  // Restore my grid from localStorage
+  const savedGrid = localStorage.getItem('my_grid_' + roomCode);
+  if (savedGrid) {
+    try { states['mine'] = JSON.parse(savedGrid); } catch(e) {}
+  }
+  const savedNote = localStorage.getItem('my_note_' + roomCode);
+  if (savedNote) {
+    const ta = document.getElementById('myNoteTextarea');
+    if (ta) ta.value = savedNote;
+  }
+
+  buildJournal(document.getElementById('mpJournalMount-mine'),   'mine',   false);
+  buildJournal(document.getElementById('mpJournalMount-p2'),     'p2',     true);
+  buildJournal(document.getElementById('mpJournalMount-p3'),     'p3',     true);
+  buildJournal(document.getElementById('mpJournalMount-p4'),     'p4',     true);
+  buildJournal(document.getElementById('mpJournalMount-shared'), 'shared', true);
+}
+
+// ===== CLUE ASSIGNMENT (multiplayer) =====
+function assignCluesForPlayer(slot, numPlayers) {
+  myClueIndices    = [];
+  myCurrentCluePos = 0;
+  const total = CLUES.length;
+  for (let i = slot; i < total; i += numPlayers) {
+    myClueIndices.push(i);
+  }
+  renderMyClues();
+}
+
+function renderMyClues() {
+  if (myClueIndices.length === 0) { renderClue(); return; }
+  myCurrentCluePos = Math.max(0, Math.min(myCurrentCluePos, myClueIndices.length - 1));
+  const globalIdx = myClueIndices[myCurrentCluePos];
+  const clue      = CLUES[globalIdx];
+  document.getElementById('clueNum').textContent      = myCurrentCluePos + 1;
+  document.getElementById('clueProgress').textContent = myCurrentCluePos + 1;
+  document.getElementById('clueTotal').textContent    = myClueIndices.length;
+  document.getElementById('clueTag').textContent      = `CLUE ${globalIdx + 1} OF ${CLUES.length}`;
+  document.getElementById('clueText').textContent     = clue.text;
+}
+
+function prevMyClue() {
+  if (myCurrentCluePos > 0) { myCurrentCluePos--; renderMyClues(); }
+}
+function nextMyClue() {
+  if (myCurrentCluePos < myClueIndices.length - 1) { myCurrentCluePos++; renderMyClues(); }
+}
+
+// ===== GO BACK =====
+function goBack() {
+  mode = 'solo';
+  myClueIndices    = [];
+  myCurrentCluePos = 0;
+  document.getElementById('modeToggleWrapper').style.display = '';
+  document.getElementById('goBackBtn').style.display = 'none';
+  document.getElementById('gameSections').classList.remove('visible');
+  document.getElementById('lieToggleWrapper').classList.remove('hidden');
+  document.getElementById('journalSolo').style.display = 'block';
+  document.getElementById('journalMp').classList.remove('visible');
+  document.getElementById('notesSolo').style.display = 'block';
+  document.getElementById('notesMp').classList.remove('visible');
+  document.getElementById('playersPanel').classList.remove('visible');
+  document.getElementById('mpSetupCard').classList.remove('visible');
+  document.getElementById('btnSolo').classList.add('active');
+  document.getElementById('btnMulti').classList.remove('active');
+  document.getElementById('journalSectionTitle').textContent = "Detective's Journal";
+  document.querySelectorAll('.lie-btn').forEach(b => b.classList.remove('active'));
+  currentClue = 0;
+  renderClue();
+}
+
+// ===== TOAST / FEEDBACK =====
+function showToast(msg, isError) {
+  let el = document.getElementById('toast-msg');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'toast-msg';
+    el.style.cssText = 'position:fixed;bottom:1.25rem;right:1.25rem;padding:.6rem 1.1rem;border-radius:6px;font-size:.85rem;z-index:9999;transition:opacity .3s;pointer-events:none;';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.background = isError ? '#b71c1c' : '#2d6a4f';
+  el.style.color = '#fff';
+  el.style.opacity = '1';
+  el.style.display = 'block';
+  setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.style.display = 'none', 300); }, 2800);
+}
+
+function showMpError(msg)   { showToast(msg, true); }
+function showMpSuccess(msg) { showToast(msg, false); }
+
+// ===== CLUE NAV (solo mode) =====
+function renderClue() {
+  if (!CLUES.length) return;
+  const c = CLUES[currentClue];
+  document.getElementById('clueNum').textContent      = currentClue + 1;
+  document.getElementById('clueProgress').textContent = currentClue + 1;
+  document.getElementById('clueTotal').textContent    = CLUES.length;
+  document.getElementById('clueTag').textContent      = c.tag;
+  document.getElementById('clueText').textContent     = c.text;
+}
+function prevClue() {
+  if (mode === 'lobby') { prevMyClue(); return; }
+  if (currentClue > 0) { currentClue--; renderClue(); }
+}
+function nextClue() {
+  if (mode === 'lobby') { nextMyClue(); return; }
+  if (currentClue < CLUES.length - 1) { currentClue++; renderClue(); }
+}
+
+// ===== TABS =====
+function switchJournalTab(btn, paneId) {
+  document.querySelectorAll('#journalMp .journal-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#journalMp .journal-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-' + paneId).classList.add('active');
+}
+function switchNotesTab(btn, paneId) {
+  document.querySelectorAll('#notesMp .journal-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#notesMp .journal-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-' + paneId).classList.add('active');
+}
+
+// ===== SAVE GRID (localStorage + my_grid_marks — private scratch pad) =====
+async function saveGrid() {
+  if (!currentRoom || !currentPlayer) { showMpError('Not in a room.'); return; }
+  localStorage.setItem('my_grid_' + currentRoom, JSON.stringify(states['mine']));
+  const s = states['mine'];
+  const rows = [];
+  LOCATIONS.forEach((loc, li) => {
+    if (s.locStruck[li]) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: 'loc_struck', character_name: loc.key, time_slot: '-', mark: 'struck' });
+    PERSONS.forEach((person, pi) => {
+      TIMES.forEach((time, ti) => {
+        const st = s.cells[li][pi][ti];
+        if (st !== 0) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: loc.key, character_name: person, time_slot: time, mark: CYCLE[st] });
+      });
+    });
+  });
+  WEAPONS.forEach((w, wi) => {
+    if (s.weapStruck[wi]) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: 'weap_struck', character_name: w.label.toLowerCase(), time_slot: '-', mark: 'struck' });
+  });
+  await sb.from('my_grid_marks').delete().eq('room_id', currentRoom).eq('player_name', currentPlayer);
+  if (rows.length > 0) {
+    const { error } = await sb.from('my_grid_marks').insert(rows);
+    if (error) { showMpError('Save failed: ' + error.message); return; }
+  }
+  showMpSuccess('Grid saved ✓');
+}
+
+// ===== SHARE GRID (saves your marks so teammates can load them) =====
+async function shareGrid() {
+  if (!currentRoom || !currentPlayer) { showMpError('Not in a room.'); return; }
+  localStorage.setItem('my_grid_' + currentRoom, JSON.stringify(states['mine']));
+  const s = states['mine'];
+  const rows = [];
+  LOCATIONS.forEach((loc, li) => {
+    if (s.locStruck[li]) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: 'loc_struck', character_name: loc.key, time_slot: '-', mark: 'struck' });
+    PERSONS.forEach((person, pi) => {
+      TIMES.forEach((time, ti) => {
+        const st = s.cells[li][pi][ti];
+        if (st !== 0) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: loc.key, character_name: person, time_slot: time, mark: CYCLE[st] });
+      });
+    });
+  });
+  WEAPONS.forEach((w, wi) => {
+    if (s.weapStruck[wi]) rows.push({ room_id: currentRoom, player_name: currentPlayer, section_name: 'weap_struck', character_name: w.label.toLowerCase(), time_slot: '-', mark: 'struck' });
+  });
+  await sb.from('shared_grid_marks').delete().eq('room_id', currentRoom).eq('player_name', currentPlayer);
+  if (rows.length > 0) {
+    const { error } = await sb.from('shared_grid_marks').insert(rows);
+    if (error) { showMpError('Share failed: ' + error.message); return; }
+  }
+  showMpSuccess('Grid shared ✓ — teammates can now load your grid');
+}
+
+// ===== SAVE NOTE (localStorage + Supabase) =====
+// ===== SAVE NOTE (localStorage only — private) =====
+function saveNote() {
+  if (!currentRoom) return;
+  const myText = document.getElementById('myNoteTextarea').value;
+  localStorage.setItem('my_note_' + currentRoom, myText);
+  showMpSuccess('Note saved ✓');
+}
+
+// ===== SHARE NOTE (saves note so teammates can load it) =====
+// ===== SHARE NOTE (appends to shared_notes — accumulates, never overwrites) =====
+async function shareNote() {
+  if (!currentRoom || !currentPlayer) { showMpError('Not in a room.'); return; }
+  const myText = document.getElementById('myNoteTextarea').value.trim();
+  if (!myText) { showMpError('Write a note first.'); return; }
+  localStorage.setItem('my_note_' + currentRoom, document.getElementById('myNoteTextarea').value);
+  const { error } = await sb.from('shared_notes').insert({
+    room_id:     currentRoom,
+    player_name: currentPlayer,
+    note_text:   myText,
+  });
+  if (error) { showMpError('Share failed: ' + error.message); return; }
+  showMpSuccess('Note shared ✓');
+}
+
+// ===== LOAD PLAYER GRID (readonly, for P2/P3/P4 tabs) =====
+async function loadPlayerGrid(playerName, mountId, readonly) {
+  if (!currentRoom || !playerName) { showMpError('Room or player not set.'); return; }
+
+  const { data, error } = await sb.from('my_grid_marks')
+    .select('*')
+    .eq('room_id', currentRoom)
+    .eq('player_name', playerName);
+
+  if (error) { showMpError('Load failed: ' + error.message); return; }
+  if (!data || data.length === 0) { showMpError(playerName + " hasn't shared their grid yet."); return; }
+
+  // Determine stateKey from mountId
+  const stateKey = mountId.includes('p4') ? 'p4'
+                 : mountId.includes('p3') ? 'p3'
+                 : mountId.includes('p2') ? 'p2'
+                 : 'shared';
+
+  const s = states[stateKey];
+  s.cells      = LOCATIONS.map(() => PERSONS.map(() => TIMES.map(() => 0)));
+  s.locStruck  = LOCATIONS.map(() => false);
+  s.weapStruck = WEAPONS.map(() => false);
+
+  data.forEach(row => {
+    if (row.section_name === 'loc_struck') {
+      const li = LOCATIONS.findIndex(l => l.key === row.character_name);
+      if (li !== -1) s.locStruck[li] = true;
+    } else if (row.section_name === 'weap_struck') {
+      const wi = WEAPONS.findIndex(w => w.label.toLowerCase() === row.character_name);
+      if (wi !== -1) s.weapStruck[wi] = true;
+    } else {
+      const li = LOCATIONS.findIndex(l => l.key === row.section_name);
+      const pi = PERSONS.indexOf(row.character_name);
+      const ti = TIMES.indexOf(row.time_slot);
+      if (li !== -1 && pi !== -1 && ti !== -1) {
+        s.cells[li][pi][ti] = CYCLE.indexOf(row.mark);
+      }
+    }
+  });
+
+  buildJournal(document.getElementById(mountId), stateKey, readonly);
+  showMpSuccess(playerName + "'s grid loaded ✓");
+}
+
+// ===== LOAD PLAYER NOTES (readonly, for P2/P3/P4 tabs) =====
+async function loadPlayerNotes(playerName, targetId) {
+  if (!currentRoom || !playerName) return;
+
+  const { data, error } = await sb.from('shared_notes')
+    .select('note_text, posted_at')
+    .eq('room_id', currentRoom)
+    .eq('player_name', playerName)
+    .order('posted_at', { ascending: false })
+    .limit(1);
+
+  if (error) { showMpError('Load failed: ' + error.message); return; }
+
+  const el = document.getElementById(targetId);
+  if (!el) return;
+  const text = data?.[0]?.note_text || (playerName + " hasn't shared any notes yet.");
+  if (el.tagName === 'TEXTAREA') {
+    el.value = text;
+  } else {
+    el.textContent = text;
+  }
+  showMpSuccess(playerName + "'s notes loaded ✓");
+}
+
+// ===== REFRESH SHARED GRID (latest-wins merge + conflict detection) =====
+async function refreshSharedGrid() {
+  if (!currentRoom) { showMpError('Not in a room.'); return; }
+
+  const { data, error } = await sb.from('shared_grid_marks')
+    .select('*')
+    .eq('room_id', currentRoom)
+    .order('marked_at', { ascending: true });
+
+  if (error) { showMpError('Load failed: ' + error.message); return; }
+  if (!data || data.length === 0) { showMpError('No shared grids yet — players need to share first.'); return; }
+
+  const s = states['shared'];
+  s.cells      = LOCATIONS.map(() => PERSONS.map(() => TIMES.map(() => 0)));
+  s.locStruck  = LOCATIONS.map(() => false);
+  s.weapStruck = WEAPONS.map(() => false);
+
+  const cellMap = {};   // cellKey -> { val, player, marked_at }
+  const conflicts = []; // { cellKey, locLabel, personName, timeSlot, playerA, markA, playerB, markB }
+
+  data.forEach(row => {
+    if (row.section_name === 'loc_struck') {
+      const li = LOCATIONS.findIndex(l => l.key === row.character_name);
+      if (li !== -1) s.locStruck[li] = true;
+    } else if (row.section_name === 'weap_struck') {
+      const wi = WEAPONS.findIndex(w => w.label.toLowerCase() === row.character_name);
+      if (wi !== -1) s.weapStruck[wi] = true;
+    } else {
+      const li = LOCATIONS.findIndex(l => l.key === row.section_name);
+      const pi = PERSONS.indexOf(row.character_name);
+      const ti = TIMES.indexOf(row.time_slot);
+      if (li === -1 || pi === -1 || ti === -1) return;
+
+      const incomingVal = CYCLE.indexOf(row.mark);
+      if (incomingVal === 0) return;
+
+      const cellKey = row.section_name + '|' + row.character_name + '|' + row.time_slot;
+      const existing = cellMap[cellKey];
+
+      if (!existing) {
+        cellMap[cellKey] = { val: incomingVal, player: row.player_name, marked_at: row.marked_at };
+        s.cells[li][pi][ti] = incomingVal;
+      } else if (existing.player !== row.player_name && existing.val !== incomingVal) {
+        // Conflict: different players, different marks
+        const alreadyLogged = conflicts.some(c =>
+          c.cellKey === cellKey &&
+          ((c.playerA === existing.player && c.playerB === row.player_name) ||
+           (c.playerA === row.player_name && c.playerB === existing.player))
+        );
+        if (!alreadyLogged) {
+          conflicts.push({
+            cellKey,
+            locLabel:   LOCATIONS[li] ? LOCATIONS[li].label : row.section_name,
+            personName: row.character_name,
+            timeSlot:   row.time_slot,
+            playerA:    existing.player,
+            markA:      CYCLE[existing.val],
+            playerB:    row.player_name,
+            markB:      CYCLE[incomingVal],
+          });
+        }
+        // Latest marked_at wins
+        if (new Date(row.marked_at) >= new Date(existing.marked_at)) {
+          cellMap[cellKey] = { val: incomingVal, player: row.player_name, marked_at: row.marked_at };
+          s.cells[li][pi][ti] = incomingVal;
+        }
+      } else {
+        // Same player update or same mark — latest wins, no conflict
+        if (new Date(row.marked_at) >= new Date(existing.marked_at)) {
+          cellMap[cellKey] = { val: incomingVal, player: row.player_name, marked_at: row.marked_at };
+          s.cells[li][pi][ti] = incomingVal;
+        }
+      }
+    }
+  });
+
+  // Render merged grid
+  const mountEl = document.getElementById('mpJournalMount-shared');
+  buildJournal(mountEl, 'shared', true);
+
+  // Highlight conflicted cells
+  const conflictKeys = new Set(conflicts.map(c => c.cellKey));
+  LOCATIONS.forEach((loc, li) => {
+    PERSONS.forEach((person, pi) => {
+      TIMES.forEach((time, ti) => {
+        const cellKey = loc.key + '|' + person + '|' + time;
+        if (!conflictKeys.has(cellKey)) return;
+        const cf = conflicts.find(c => c.cellKey === cellKey);
+        const tooltip = cf ? cf.playerA + ': ' + cf.markA + ' vs ' + cf.playerB + ': ' + cf.markB : '';
+        const groups = mountEl.querySelectorAll('.journal-group');
+        if (!groups[li]) return;
+        const personRows = groups[li].querySelectorAll('.person-row');
+        if (!personRows[pi]) return;
+        const timeCells = personRows[pi].querySelectorAll('.time-cell');
+        if (!timeCells[ti]) return;
+        timeCells[ti].classList.add('s-conflict');
+        timeCells[ti].title = tooltip;
+      });
+    });
+  });
+
+  // Conflict log panel
+  const panel   = document.getElementById('conflict-log-panel');
+  const logList = document.getElementById('conflict-log-list');
+  if (conflicts.length > 0) {
+    logList.innerHTML = conflicts.map(c =>
+      '<div class="conflict-log-item">?? ' +
+      c.locLabel + ' → ' + c.personName + ' → ' + c.timeSlot +
+      ' &nbsp;—&nbsp; <strong>' + c.playerA + '</strong>: ' + c.markA +
+      ' vs <strong>' + c.playerB + '</strong>: ' + c.markB +
+      '</div>'
+    ).join('');
+    panel.classList.add('visible');
+  } else {
+    logList.innerHTML = '';
+    panel.classList.remove('visible');
+  }
+
+  const msg = conflicts.length > 0
+    ? 'Shared grid refreshed ✓ — ' + conflicts.length + ' conflict' + (conflicts.length > 1 ? 's' : '') + ' found'
+    : 'Shared grid refreshed ✓ — no conflicts';
+  showMpSuccess(msg);
+}
+
+// ===== REFRESH SHARED NOTES (all players concatenated) =====
+// ===== REFRESH SHARED NOTES (chronological, newest at bottom) =====
+async function refreshSharedNotes() {
+  if (!currentRoom) { showMpError('Not in a room.'); return; }
+
+  const { data, error } = await sb.from('shared_notes')
+    .select('player_name, note_text, posted_at')
+    .eq('room_id', currentRoom)
+    .order('posted_at', { ascending: true });
+
+  if (error) { showMpError('Load failed: ' + error.message); return; }
+  if (!data || data.length === 0) { showMpError('No shared notes yet.'); return; }
+
+  const ta = document.getElementById('sharedNoteTextarea');
+  if (!ta) return;
+
+  ta.value = data.map(row => {
+    const time = new Date(row.posted_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return '--- ' + row.player_name + ' (' + time + ') ---\n' + row.note_text;
+  }).join('\n\n');
+
+  ta.scrollTop = ta.scrollHeight;
+  showMpSuccess('Shared notes refreshed ✓');
+}
+
+// ===== ACCUSE =====
+// ===== JOB 5 — ACCUSATION WITH SHA256 HASH CHECK =====
+async function sha256hex(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function weaponKeyToLabel(key) {
+  // $ARCHERY_BOW → archery bow
+  return key.replace(/^\$/, '').replace(/_/g, ' ').toLowerCase();
+}
+
+// ── V12 ACCUSATION STATE ──────────────────────────────────────
+let _accusationsToday = 0;
+let _accusationsDate  = null;
+let _roomSolvedToday  = false;
+let _roomLockedToday  = false;
+
+async function accuse() {
+  const today = new Date().toISOString().slice(0, 10);
+
+  // lazy daily reset
+  if (_accusationsDate !== today) {
+    _accusationsToday = 0;
+    _accusationsDate  = today;
+    _roomSolvedToday  = false;
+    _roomLockedToday  = false;
+  }
+
+  if (_roomSolvedToday) { showToast('Already solved today! Come back tomorrow.'); return; }
+  if (_roomLockedToday) { showToast('Room is locked for today. Come back tomorrow.'); return; }
+  if (_accusationsToday >= 5) { _applyLock(); return; }
+
+  const suspectVal = document.getElementById('suspectSelect').value;
+  const timeVal    = document.getElementById('timeSelect').value;
+  const weaponVal  = document.getElementById('weaponSelect').value;
+
+  if (!suspectVal || !timeVal || !weaponVal) {
+    showToast('Choose a suspect, time, and weapon first.'); return;
+  }
+  if (!CORRECT_ANSWER_HASH) {
+    showToast('Puzzle not loaded yet — please wait a moment.'); return;
+  }
+
+  const hashInput = suspectVal + '-' + weaponVal + '-' + timeVal;
+  const computed  = await sha256hex(hashInput);
+  const isCorrect = computed === CORRECT_ANSWER_HASH.toLowerCase();
+
+  _accusationsToday++;
+  _accusationsDate = today;
+
+  _addAccusationBlock(_accusationsToday, suspectVal, timeVal, weaponVal, isCorrect);
+  _updateDots(_accusationsToday, isCorrect);
+
+  // log to Supabase in multiplayer
+  if (mode === 'lobby' && currentRoom && sb) {
+    sb.from('room_accusations').insert({
+      room_id:      currentRoom,
+      accused_date: today,
+      player_name:  currentPlayer || null,
+      suspect:      suspectVal,
+      time_slot:    timeVal,
+      weapon:       weaponVal,
+      was_correct:  isCorrect
+    }).then(({ error }) => { if (error) console.warn('accusation log:', error.message); });
+  }
+
+  if (isCorrect) {
+    _roomSolvedToday = true;
+    await _handleCorrectSolve(suspectVal, timeVal, weaponVal, _accusationsToday);
+  } else {
+    const rem = 5 - _accusationsToday;
+    _updateCounterLabel(rem);
+    if (_accusationsToday >= 5) {
+      await _handleAllWrong();
+    }
+  }
+}
+
+function _updateDots(count, lastCorrect) {
+  for (let i = 1; i <= 5; i++) {
+    const d = document.getElementById('adot-' + i);
+    if (!d) continue;
+    d.className = 'accuse-dot';
+    d.textContent = '';
+    if (i < count) {
+      d.classList.add('used');
+    } else if (i === count) {
+      if (lastCorrect) { d.classList.add('solved'); d.textContent = '✓'; }
+      else { d.classList.add('used'); }
+    } else if (i === count + 1 && !lastCorrect && count < 5) {
+      d.classList.add('pulse');
+    }
+  }
+}
+
+function _updateCounterLabel(remaining) {
+  const el = document.getElementById('accuseCounterLabel');
+  if (!el) return;
+  if (remaining <= 0) {
+    el.className = 'accuse-counter-label warn';
+    el.innerHTML = '<strong>Room locked</strong> — no more accusations today';
+  } else if (remaining === 1) {
+    el.className = 'accuse-counter-label warn';
+    el.innerHTML = '<strong>⚠️ Last accusation!</strong> Choose very carefully';
+  } else {
+    el.className = 'accuse-counter-label';
+    el.innerHTML = '<strong>' + remaining + '</strong> accusations remaining';
+  }
+}
+
+function _addAccusationBlock(num, suspect, time, weapon, correct) {
+  const history = document.getElementById('accuseHistory');
+  if (!history) return;
+  const block = document.createElement('div');
+  block.className = 'accuse-block ' + (correct ? 'correct' : 'wrong');
+  const playerTag = (mode === 'lobby' && currentPlayer)
+    ? '<span class="accuse-block-player">' + currentPlayer + '</span>' : '';
+  block.innerHTML =
+    '<span class="accuse-block-num">#' + num + '</span>' +
+    '<span class="accuse-block-icon">' + (correct ? '✅' : '❌') + '</span>' +
+    '<span class="accuse-block-text"><strong>' + suspect + '</strong> · ' + time + ' · ' + weapon + '</span>' +
+    playerTag;
+  history.appendChild(block);
+}
+
+function _applyLock() {
+  _roomLockedToday = true;
+  document.getElementById('roomLockedBanner').classList.add('visible');
+  document.getElementById('accuseSection').classList.add('locked');
+  _updateCounterLabel(0);
+}
+
+async function _handleCorrectSolve(suspect, time, weapon, attempts) {
+  const today     = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  let streak = 1;
+
+  if (mode === 'lobby' && currentRoom && sb) {
+    const { data: room } = await sb.from('rooms')
+      .select('streak, last_solved_date')
+      .eq('id', currentRoom).single();
+
+    if (room) {
+      if (room.last_solved_date === today) {
+        // already counted today — read existing streak
+        streak = room.streak || 1;
+      } else {
+        streak = (room.last_solved_date === yesterday) ? (room.streak || 0) + 1 : 1;
+
+        await sb.from('rooms').update({
+          streak:            streak,
+          last_solved_date:  today,
+          accusations_today: attempts,
+          accusations_date:  today
+        }).eq('id', currentRoom);
+
+        // write solve log
+        const { data: players } = await sb.from('room_players')
+          .select('player_name').eq('room_id', currentRoom);
+        sb.from('room_solve_log').insert({
+          room_id:          currentRoom,
+          solved_date:      today,
+          player_names:     (players || []).map(p => p.player_name),
+          streak_at_solve:  streak,
+          accusations_used: attempts
+        }).then(({ error }) => { if (error) console.warn('solve log:', error.message); });
+      }
+    }
+  }
+
+  // lock the section so no more accusations
+  document.getElementById('accuseSection').classList.add('locked');
+  _showSuccessPopup(suspect, time, weapon, streak, attempts);
+}
+
+async function _handleAllWrong() {
+  const today = new Date().toISOString().slice(0, 10);
+
+  if (mode === 'lobby' && currentRoom && sb) {
+    await sb.from('rooms').update({
+      streak:            0,
+      locked_date:       today,
+      accusations_today: 5,
+      accusations_date:  today
+    }).eq('id', currentRoom);
+  }
+
+  _applyLock();
+
+  const history = document.getElementById('accuseHistory');
+  if (history) {
+    const reveal = document.createElement('div');
+    reveal.className = 'solution-reveal';
+    reveal.innerHTML = '<strong>🔍 Mystery Unsolved</strong><br>' +
+      'Your team used all 5 accusations without cracking the case. ' +
+      'The room is locked for today — come back tomorrow for a fresh mystery!';
+    history.appendChild(reveal);
+  }
+}
+
+function _showSuccessPopup(suspect, time, weapon, streak, attempts) {
+  document.getElementById('solSuspect').textContent = '👤 ' + suspect;
+  document.getElementById('solTime').textContent    = '🕐 ' + time;
+  document.getElementById('solWeapon').textContent  = '🔪 ' + weapon;
+  document.getElementById('successStreakNum').textContent = streak;
+
+  const sub = attempts === 1 ? 'First try! Brilliant detective work.' :
+              attempts === 5 ? 'Just in the nick of time — phew!' :
+              'Outstanding detective work!';
+  document.getElementById('successSubheadline').textContent = sub;
+  document.getElementById('successStreakDays').textContent  =
+    streak + '-day streak';
+
+  // room row — multiplayer only
+  const roomRow = document.getElementById('successRoomRow');
+  if (roomRow) {
+    if (mode === 'lobby' && currentRoom) {
+      roomRow.style.display = 'flex';
+      document.getElementById('successRoomCode').textContent = shortCode(currentRoom);
+      document.getElementById('successAttemptLabel').textContent =
+        '· ' + attempts + ' of 5 accusation' + (attempts > 1 ? 's' : '');
+    } else {
+      roomRow.style.display = 'none';
+    }
+  }
+
+  // header badge
+  const badge = document.getElementById('streakHeaderBadge');
+  if (badge) {
+    badge.textContent = '🔥 ' + streak + '-day streak';
+    badge.classList.add('visible');
+  }
+
+  // stash for shareResult()
+  window._shareStreak   = streak;
+  window._shareAttempts = attempts;
+
+  document.getElementById('success-overlay').classList.add('visible');
+}
+
+function closeSuccessPopup() {
+  document.getElementById('success-overlay').classList.remove('visible');
+}
+
+function shareResult() {
+  const streak   = window._shareStreak   || 1;
+  const attempts = window._shareAttempts || 1;
+  const today    = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const dots     = Array.from({ length: 5 }, (_, i) =>
+    i < attempts - 1 ? '🟥' : i === attempts - 1 ? '🟩' : '⬜'
+  ).join('');
+  const text =
+    '🕵️ Mystery-o-Matic — ' + today + '\n\n' + dots +
+    '\n\n🔥 ' + streak + '-day streak · ' + attempts + '/5 accusations' +
+    '\n#MysteryOMatic\nmystery-o-matic.com/en/';
+  if (navigator.share) {
+    navigator.share({ text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => showToast('Result copied to clipboard! 📋'));
+  }
+}
+
+function showToast(msg) {
+  let t = document.getElementById('v12-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'v12-toast';
+    t.style.cssText =
+      'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);' +
+      'background:#1a1a18;color:#f5f5f0;padding:10px 22px;border-radius:4px;' +
+      'font-family:var(--font);font-size:var(--sm);z-index:20000;' +
+      'opacity:0;transition:opacity 220ms;pointer-events:none;white-space:nowrap;' +
+      'box-shadow:0 4px 16px rgba(0,0,0,.3);';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2800);
+}
+
+// kept so nothing breaks — no longer renders inline result
+function showAccuseResult(correct, headline, detail) {}
+
+
+function populateAccuseDropdowns() {
+  const suspectSel = document.getElementById('suspectSelect');
+  const timeSel    = document.getElementById('timeSelect');
+  const weaponSel  = document.getElementById('weaponSelect');
+
+  suspectSel.innerHTML = '<option value="">— Who did it? —</option>' +
+    PERSONS.map(p => `<option value="${p}">${p.charAt(0).toUpperCase()+p.slice(1)}</option>`).join('');
+
+  timeSel.innerHTML = '<option value="">— When? —</option>' +
+    TIMES.map(t => `<option value="${t}">${t}</option>`).join('');
+
+  weaponSel.innerHTML = '<option value="">— With what? —</option>' +
+    WEAPONS.map(w => `<option value="${w.label.toLowerCase()}">${w.icon} ${w.label}</option>`).join('');
+}
+
+// ===== INIT =====
+const states_ref = states; // keep reference
+
+document.addEventListener('DOMContentLoaded', function() {
+  const { createClient } = window.supabase;
+  sb = createClient('https://atjnnkqzwynurhfxtswq.supabase.co', 'sb_publishable_KHrysbPNgaYneARmgznUXw_bCNSjAZT');
+
+  loadPuzzle().then(() => {
+    renderClue();
+
+    // Reconnect returning multiplayer player (only if today's puzzle)
+    const today        = new Date().toISOString().split('T')[0];
+    const storedDate   = localStorage.getItem('mp_puzzle_date');
+    const storedRoom   = localStorage.getItem('mp_room_id');
+    const storedPlayer = localStorage.getItem('mp_player_name');
+    const storedSlot   = localStorage.getItem('mp_slot');
+    const storedCount  = localStorage.getItem('mp_player_count');
+
+    if (storedRoom && storedPlayer && storedDate === today) {
+      currentRoom   = storedRoom;
+      currentPlayer = storedPlayer;
+      mySlot        = parseInt(storedSlot  || '0');
+      playerCount   = parseInt(storedCount || '2');
+
+      document.querySelectorAll('.count-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.textContent) === playerCount);
+      });
+
+      switchMode('multi');
+      enterLobby(storedRoom);
+    }
+  });
+});
+</script>
+
+
+<!-- V12: SUCCESS POPUP OVERLAY -->
+<div id="success-overlay">
+  <div class="success-popup">
+    <button class="success-close-btn" onclick="closeSuccessPopup()">✕</button>
+
+    <span class="success-detective-icon">🕵️</span>
+    <div class="success-headline">Case Solved!</div>
+    <div class="success-subheadline" id="successSubheadline">Outstanding detective work.</div>
+
+    <div class="success-solution">
+      <div class="success-solution-row">
+        <span class="sol-badge" id="solSuspect">👤 —</span>
+        <span class="sol-sep">·</span>
+        <span class="sol-badge" id="solTime">🕐 —</span>
+        <span class="sol-sep">·</span>
+        <span class="sol-badge" id="solWeapon">🔪 —</span>
+      </div>
+    </div>
+
+    <div class="success-room-row" id="successRoomRow" style="display:none">
+      <span>Room</span>
+      <span class="success-room-code" id="successRoomCode"></span>
+      <span id="successAttemptLabel"></span>
+    </div>
+
+    <div class="success-streak-box">
+      <span class="success-streak-flame">🔥</span>
+      <div class="success-streak-content">
+        <span class="success-streak-num" id="successStreakNum">1</span>
+        <span class="success-streak-label" id="successStreakDays">day streak</span>
+        <span class="success-streak-sublabel">Keep the team going — come back tomorrow!</span>
+      </div>
+    </div>
+
+    <div class="success-actions">
+      <button class="success-share-btn" onclick="shareResult()">🔗 Share Result</button>
+      <button class="success-dismiss-btn" onclick="closeSuccessPopup()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
