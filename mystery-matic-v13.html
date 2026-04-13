@@ -1040,7 +1040,7 @@ async function loadPuzzle() {
 
     WEAPONS = Object.keys(d.weaponMap).map(key => ({
       icon: d.weaponIcons[key],
-      label: key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+      label: key.replace(/^\$/, '').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
       key: key,
       room: d.weaponMap[key],
     }));
