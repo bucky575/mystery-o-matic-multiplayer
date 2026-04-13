@@ -1431,19 +1431,19 @@
 
 				<p>¡Prepárate para resolver un nuevo asesinato misterioso! Tu objetivo es averiguar <b>quién</b> lo
 					hizo, <b>cuándo</b> sucedió y <b>qué</b> arma se utilizó.</p>
-				Eddie, Dave, Alice y Bob han sido transportados a <b>un zoológico abandonado</b> por la noche!
+				Carol, Alice, Dave y Bob han sido transportados a <b>una escuela abandonada</b> por la noche!
 				<p>Ayúdales a resolver este misterio revisando estas pistas iniciales:</p>
 				<div class="row align-items-center">
 					<div class="col">
 						<ul id="">
-  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'dave')">Dave</a> fue asesinado en el recinto de leones (🦁) en algún momento entre las 5:00 y las 7:00</li>
+  <li><a href="#/" class="link-dark" onClick="openModalChar(event, 'carol')">Carol</a> fue asesinado en el laboratorio de ciencias (🔬) en algún momento entre las 1:00 y las 3:15</li>
   <li>El asesino estaba a solas con la víctima y el cuerpo no se movió</li>
   <li>El asesino no fue encontrado con el cuerpo</li>
   <li>El asesino consiguió el arma homicida de uno de los siguientes lugares:
-<ul id="es"><li>El hacha (🪓) — el recinto de leones (🦁)</li><li>El veneno (⚗️) — la casa de reptiles (🦎)</li><li>La pistola (🔫) — el aviario (🦜)</li><li>La soga (🪢) — la isla de monos (🐒)</li></ul></li>
+<ul id="es"><li>El arco (🏹) — el laboratorio de ciencias (🔬)</li><li>La cadena (⛓️) — el gimnasio (💪)</li><li>El veneno (⚗️) — la biblioteca (📚)</li><li>El cuchillo (🔪) — el aula de arte (🎨)</li></ul></li>
   <li>Nadie vió al asesino tomar el arma homicida</li>
-  <li>Sabemos donde estaban todos a las 7:00:
-<ul id=""><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'eddie')">Eddie</a> estaba en la casa de reptiles (🦎)</li><li>El cuerpo de <a href="#/" class="link-dark" onClick="openModalChar(event, 'dave')">Dave</a> estaba en el recinto de leones (🦁)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'alice')">Alice</a> estaba en la casa de reptiles (🦎)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'bob')">Bob</a> estaba en el recinto de leones (🦁)</li></ul></li>
+  <li>Sabemos donde estaban todos a las 3:15:
+<ul id=""><li>El cuerpo de <a href="#/" class="link-dark" onClick="openModalChar(event, 'carol')">Carol</a> estaba en el laboratorio de ciencias (🔬)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'alice')">Alice</a> estaba en el aula de arte (🎨)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'dave')">Dave</a> estaba en el laboratorio de ciencias (🔬)</li><li><a href="#/" class="link-dark" onClick="openModalChar(event, 'bob')">Bob</a> estaba en la biblioteca (📚)</li></ul></li>
   <li>No había nadie más en el lugar</li>
 </ul>
 					</div>
@@ -1529,12 +1529,12 @@
 				</div>
     
 				<div class="col-12 text-center">
-					<canvas id="clues-table-room1" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room2" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
 				<div class="col-12 text-center">
-					<canvas id="clues-table-room2" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
+					<canvas id="clues-table-room1" oncontextmenu="return false" height="95" width="500" onclick="checkCellClicked(this, event.offsetX, event.offsetY)">
 						Your browser does not support the HTML canvas tag.</canvas>
 				</div>
     
@@ -1566,8 +1566,8 @@
 							<h6 class="sticky-notes">El asesino fue…</h6>
 							<select class="form-select sticky-notes" id="who-selector">
 								<option value="" disabled selected>...</option>
-								<option value="eddie">eddie</option>
-<option value="alice">alice</option>
+								<option value="alice">alice</option>
+<option value="dave">dave</option>
 <option value="bob">bob</option>
 							</select>
 						</a>
@@ -1578,10 +1578,10 @@
 							<h6 class="sticky-notes">El arma fue…</h6>
 							<select class="form-select sticky-notes" id="how-selector">
 								<option value="" disabled selected>...</option>
-								<option value="axe">el hacha</option>
+								<option value="archery bow">el arco</option>
+<option value="chain">la cadena</option>
 <option value="poison">el veneno</option>
-<option value="pistol">la pistola</option>
-<option value="rope">la soga</option>
+<option value="knife">el cuchillo</option>
 							</select>
 						</a>
 					</li>
@@ -1591,15 +1591,16 @@
 							<h6 class="sticky-notes">La hora del asesinato fue…</h6>
 							<select class="form-select sticky-notes" id="when-selector">
 								<option value="" disabled selected>...</option>
-								<option value="5:00">5:00</option>
-<option value="5:15">5:15</option>
-<option value="5:30">5:30</option>
-<option value="5:45">5:45</option>
-<option value="6:00">6:00</option>
-<option value="6:15">6:15</option>
-<option value="6:30">6:30</option>
-<option value="6:45">6:45</option>
-<option value="7:00">7:00</option>
+								<option value="1:00">1:00</option>
+<option value="1:15">1:15</option>
+<option value="1:30">1:30</option>
+<option value="1:45">1:45</option>
+<option value="2:00">2:00</option>
+<option value="2:15">2:15</option>
+<option value="2:30">2:30</option>
+<option value="2:45">2:45</option>
+<option value="3:00">3:00</option>
+<option value="3:15">3:15</option>
 							</select>
 						</a>
 					</li>

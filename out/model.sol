@@ -43,19 +43,18 @@ contract StoryModel {
 
     constructor() {
         // Places connections
-        connection[Place.ROOM0][Place.ROOM1] = true;
-	connection[Place.ROOM0][Place.ROOM2] = true;
+        connection[Place.ROOM0][Place.ROOM2] = true;
 	connection[Place.ROOM0][Place.ROOM3] = true;
-	connection[Place.ROOM1][Place.ROOM2] = true;
 	connection[Place.ROOM1][Place.ROOM3] = true;
+	connection[Place.ROOM2][Place.ROOM3] = true;
 
         // This should be randomly generated
-        currentLocation[Char.CHAR1] = Place.ROOM1;
-	currentLocation[Char.CHAR2] = Place.ROOM3;
-	currentLocation[Char.CHAR3] = Place.ROOM0;
+        currentLocation[Char.CHAR1] = Place.ROOM0;
+	currentLocation[Char.CHAR2] = Place.ROOM1;
+	currentLocation[Char.CHAR3] = Place.ROOM3;
 	currentLocation[Char.CHAR4] = Place.ROOM2;
 
-        locationWeapon = Place.ROOM1;
+        locationWeapon = Place.ROOM2;
         minNumberOfMoves = 1;
         // End of generated code
     }
